@@ -19,7 +19,7 @@ app.use(corsMiddleware());
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["https://next-league-client.vercel.app", "http://localhost:3000", "http://localhost:3001"],
+    origin: ["https://next-league-client.vercel.app", "https://next-league.vercel.app", "http://localhost:3000", "http://localhost:3001"],
     methods: ["GET", "POST"],
   },
   connectionStateRecovery: {},

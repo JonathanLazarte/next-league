@@ -2,6 +2,7 @@ import cors from 'cors'
 
 const ACCEPTED_ORIGINS = [
 			'https://next-league-client.vercel.app',
+			'https://next-league.vercel.app',
 			'http://localhost:3000',
 			'http://localhost:3001',
 			]
