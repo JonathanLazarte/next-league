@@ -1,0 +1,108 @@
+.lol-main-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    /*box-shadow: 1px 1px 1px black;*/
+    border-bottom-left-radius: 30px;
+    border-top-left-radius: 30px;
+    position: relative;
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    /*width: 185px;*/
+    width: 21rem;
+    /*height: 43px;*/
+    height: 10rem;
+    cursor: default;
+    position: relative;
+}
+.main-button-right-frame {
+    width: 90%;
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.container-frame {
+    width: 100%;
+    position: absolute;
+    right: 0;
+}
+.play-frame, .play-button-effect-video {
+    position: absolute;
+    right: -0.3rem;
+    z-index: 1;
+    width: 99%;
+}
+.videobg {
+    max-width: unset;
+    z-index: 3;
+    width: 37%;
+    left: -6%;
+    transform: translateY(-5%);
+    position: absolute;
+}
+.main-button-text {
+    font-family: Bold;
+    color: #efe5d1;
+    position: absolute;
+    z-index: 4;
+    font-size: 1.8rem;
+    transition: color 0.1s;
+    left: 50%;
+    transform: translateX(-35%);
+    line-height: 1;
+}
+.main-button-text.disabled {
+    color: #5c5b57;
+}
+.play-frame {
+    transition: opacity 0.5s;
+}
+.play-button-effect-video {
+    transition: opacity 1s;
+}
+
+@media (max-width: 767px) {
+    /* Wave animation */
+    @keyframes wave {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 200% 200%; /* Shift background to create wave motion */
+        }
+    }
+
+    .lol-main-button__action-box {
+    }
+
+    .lol-main-button__action-border {
+    }
+
+    /* Estilo base del botón */
+    .lol-main-button__action {
+    }
+    .lol-main-button__action::after {
+    }
+
+    /* Efecto de brillo al pasar el mouse */
+    .lol-main-button__action::before {
+    }
+
+    /* Efecto hover */
+    .lol-main-button__action:hover {
+    }
+
+    /* Efecto al hacer clic */
+    .lol-main-button__action:active {
+    }
+
+    /* Texto del botón */
+    .lol-main-button__text {
+    }
+
+    .header-circunferense {
+    }
+}

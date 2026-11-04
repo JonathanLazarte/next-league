@@ -1,0 +1,254 @@
+"use client";
+import ReactDOM from "react-dom";
+import { useState } from "react";
+import Image from "next/image";
+import { useMemo } from "react";
+import { LiaLongArrowAltUpSolid } from "react-icons/lia";
+import useLoadingDelay from "@/hooks/useLoadingDelay";
+import "./confirmPurchaseModal.css";
+import { usePurchase } from "@/hooks/usePurchase";
+
+
+
+export default function ConfirmPurchaseModal() {
+  const {
+    wallet: { RP: walletRP, BE: walletBE },
+    itemToBuy,
+    status,
+    error,
+    closeModal,
+    confirmPurchase,
+  } = usePurchase();
+
+  const isProcessing = status === "processing";
+  const showLoading = useLoadingDelay(isProcessing, { delay: 300, minDisplayTime: 1000 });
+  const isSuccess = status === "success";
+  const showSuccess = isSuccess && !showLoading
+  const [imageLoading, setImageLoading] = useState(true);
+  const delayedImageLoading = useLoadingDelay(imageLoading, { delay: 400 })
+
+  const productPrice = itemToBuy?.value;
+
+  const newBalance = useMemo(
+    () => ({
+      rp: walletRP - (productPrice?.rp || 0),
+      be: walletBE - (productPrice?.be || 0),
+    }),
+    [walletRP, walletBE, itemToBuy],
+  );
+
+  // Memoized button styles
+  const buttonStyles = useMemo(() => ({
+    rp:
+      walletRP - (productPrice?.rp ?? 0) >= 0
+        ? undefined
+        : { filter: "grayscale(0.5)", cursor: "default" },
+    be:
+      walletBE - (productPrice?.be ?? 0) >= 0
+        ? undefined
+        : { filter: "grayscale(0.5)", cursor: "default" },
+  }),
+    [walletRP, walletBE, productPrice],
+  );
+
+  // Optimized purchase function
+  const buyProduct = (coin: "RP" | "BE", price: number) => {
+    if (isProcessing) return;
+    confirmPurchase({ coin, price });
+  };
+  const closeWindow = () => {
+    closeModal();
+  };
+
+  const DefaultBottom = () => {
+    return (
+      <div className="product-actions">
+        <div className="license-info">
+          Esta compra otorga una licencia para este producto digital.{" "}
+          <a
+            className="more-info"
+            href="https://www.riotgames.com/es-419/terms-of-service-LATAM#:~:text=4.1."
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Mas información{" "}
+            <LiaLongArrowAltUpSolid className="more-info-icon" />
+          </a>
+        </div>
+
+        <div className="product-buy-buttons">
+          <div className="button-container">
+            <div
+              onClick={() => {
+                if (newBalance.rp >= 0) {
+                  buyProduct("RP", productPrice?.rp ?? 0);
+                }
+              }}
+              style={buttonStyles.rp}
+              className="buy-rp-button"
+              data-testid="buy-rp-button"
+            >
+              <>
+                <svg className="rp-icon" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#e3ba3d" fillRule="evenodd" clipRule="evenodd" d="M8.63343 2.25848L6.5001 0.600098L4.36676 2.25848V8.25781L6.5001 9.7405L8.63343 8.25781V2.25848ZM12.0468 6.1152L12.9001 5.49383L10.3401 3.11553V9.11486L7.35343 11.2575V13.4001L12.9001 9.68479L12.0468 8.68634V6.1152ZM2.6601 3.11553L0.100098 5.49383L0.953431 6.1152V8.68634L0.100098 9.68479L5.64676 13.4001V11.2575L2.6601 9.11486V3.11553Z" />
+                </svg>
+                {productPrice?.rp ?? 0}
+              </>
+              {newBalance.rp >= 0 ? (
+                <span className="new-balance">
+                  nuevo saldo: {newBalance.rp} RP
+                </span>
+              ) : (
+                <span className="new-balance" style={{ color: "red" }}>
+                  Saldo insuficiente
+                </span>
+              )}
+            </div>
+          </div>
+
+          {itemToBuy?.type === "champion" && (
+            <div className="button-container">
+              <div
+                onClick={() => {
+                  if (newBalance.be >= 0) {
+                    buyProduct("BE", productPrice?.be ?? 0);
+                  }
+                }}
+                style={buttonStyles.be}
+                className="buy-be-button"
+                data-testid="buy-be-button"
+              >
+                <>
+                  <svg className="be-icon" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#0acbe6" fillRule="evenodd" clipRule="evenodd" d="M6 16L9 12L0 8L6 16ZM9 3.2L6 0L0.75 6.4L5.25 8L9 3.2ZM9.75 5.6L6.75 8.8L9.75 10.4L12 8L9.75 5.6Z" />
+                  </svg>
+                  {productPrice?.be ?? 0}
+                </>
+                {newBalance.be >= 0 ? (
+                  <span className="new-balance">
+                    nuevo saldo: {newBalance.be} EA
+                  </span>
+                ) : (
+                  <span className="new-balance" style={{ color: "red" }}>
+                    Saldo insuficiente
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const SuccessBottom = () => {
+    return (
+      <div className="purchase-success-message" data-testid="purchase-success-message">
+        <span>
+          You have unlocked {itemToBuy?.name}! Check out champion detail page
+          for some quick tips on how to play {itemToBuy?.name}. GLHF!{" "}
+        </span>
+        <div
+          onClick={closeModal}
+          className="general-button done-purchase-modal-button"
+          data-testid="done-purchase-button"
+        >
+          Done
+        </div>
+      </div>
+    );
+  };
+
+  const ErrorBottom = () => {
+    return (
+      <div className="purchase-error-message" data-testid="purchase-error-message">
+        <span>
+          Something went wrong, try again later
+        </span>
+        <div
+          onClick={closeModal}
+          className="general-button done-purchase-modal-button"
+          data-testid="done-purchase-button"
+        >
+          Ok
+        </div>
+      </div>
+    );
+  };
+
+  if (!itemToBuy) return null
+
+
+  return (
+    typeof window !== "undefined" &&
+    ReactDOM.createPortal(
+      <>
+        {itemToBuy ? (
+          <div
+            className="confirm-purchase-screen"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="confirm-purchase-window">
+              <div className="confirm-purchase-window-content">
+                <button className="exit-button" onClick={closeWindow}>
+                  X
+                </button>
+
+                <div className="image-container">
+                  <Image
+                    className="product-image"
+                    src={itemToBuy?.img}
+                    alt={itemToBuy.name}
+                    fill
+                    onLoad={() => setImageLoading(false)}
+                    style={{
+                      visibility: !delayedImageLoading ? "visible" : "hidden",
+                    }}
+                  />
+                  {delayedImageLoading && <div className="loading-image">
+                    <div className={`loading-spinner medium`}>
+                      <img
+                        alt="loading spinner"
+                        className="spinner-ring"
+                        src="/general/loading-spinner-blue.png"
+                      />
+                    </div>
+                  </div>}
+                  <div className="gradient"></div>
+                </div>
+
+                <div className="product-title">
+                  <h2 className="product-name">
+                    {itemToBuy?.name?.toUpperCase()}
+                  </h2>
+                  {!showSuccess ? (
+                    <span className="product-subtitle">
+                      {itemToBuy?.subtitle}
+                    </span>
+                  ) : (
+                    <span className="product-subtitle">Item unlocked!</span>
+                  )}
+                </div>
+
+                {!showLoading ? (
+                  <>
+                    {showSuccess ? <SuccessBottom /> : !error ? <DefaultBottom /> : <ErrorBottom />}
+                  </>
+                ) : (
+                  <div className="purchase-loading-bottom">
+                    <div className={`loading-spinner small`} data-testid="purchase-loading-spinner">
+                      <img className="spinner-ring" src="/general/loading-spinner-blue.png"></img>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+      </>,
+      document.body,
+    )
+  );
+}

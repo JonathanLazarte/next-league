@@ -1,0 +1,65 @@
+.skins-grid-container {
+    flex-grow: 1;
+    overflow: auto;
+    padding-right: 3.3rem;
+    margin-top: 5rem;
+    padding-bottom: 5rem;
+    scrollbar-gutter: stable;
+}
+.champions-grid-container {
+    flex-grow: 1;
+    overflow: scroll;
+    scrollbar-gutter: stable;
+    padding-right: 3.5rem;
+}
+.skins-section-header {
+    font-family: Bold;
+    color: var(--color-secundary);
+    line-height: 1;
+    font-size: 2.3rem;
+    letter-spacing: 1px;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    height: 2rem;
+    text-transform: uppercase;
+}
+.champions-section-header {
+    font-family: Bold;
+    color: var(--color-secundary);
+    line-height: 1;
+    font-size: 2.3rem;
+    letter-spacing: 1px;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    height: 8rem;
+    padding-left: 1.5rem;
+    text-transform: uppercase;
+}
+
+.apologize-message {
+    align-self: center;
+    justify-self: center;
+    place-self: center;
+    text-align: center;
+    margin: auto;
+    font-family: Bold;
+    font-size: 1.8rem;
+    color: var(--color-secundary);
+    inset: 0;
+    display: grid;
+    position: absolute;
+}
+
+.virtual-store-grid {
+    flex-grow: 1;
+    overflow: auto;
+    padding-right: 2.85rem;
+    padding-bottom: 5rem;
+    scrollbar-gutter: stable;
+    overflow-x: hidden;
+}
+
+@media (max-width: 767px) {
+}

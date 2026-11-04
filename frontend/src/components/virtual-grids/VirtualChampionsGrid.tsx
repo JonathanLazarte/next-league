@@ -1,0 +1,217 @@
+"use client";
+import React from 'react'
+
+import { useVirtualizer } from "@tanstack/react-virtual";
+import {
+  useRef,
+  useMemo,
+  memo,
+  useState,
+  useCallback,
+  useLayoutEffect,
+} from "react";
+import ChampionCard from "@/components/cards/collection/Champion/Champion";
+import { useResizeObserver } from "@/hooks/useResizeObserver";
+import "./virtualGrid.css";
+import { useThrottledCallback } from "@/hooks/useThrottle";
+import type { Champion, AdquiredChampion } from '@/types/champion';
+import { ChampionGroupingOptionsValues } from '@/types/ui';
+
+
+interface VirtualSkinsGridProps {
+  onHoverStart: (champion: Champion, championCardRef: React.RefObject<HTMLDivElement>) => void,
+  onHoverEnd: () => void,
+  tooltipPosRef: React.MutableRefObject<{ x: number, y: number, rect: unknown }>,
+  groupedChampions: object,
+  handleChampionClick: (champion: Champion) => void,
+  userChampions: AdquiredChampion[],
+  groupedBy: ChampionGroupingOptionsValues | null,
+  tooltipRef: React.MutableRefObject<HTMLDivElement | null>,
+  handleScroll: () => void
+}
+
+export default memo(function VirtualChampionsGrid({
+  onHoverStart,
+  onHoverEnd,
+  tooltipPosRef,
+  groupedChampions,
+  handleChampionClick,
+  userChampions,
+  groupedBy,
+  handleScroll,
+}: VirtualSkinsGridProps) {
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [columns, setColumns] = useState<number>();
+
+  function getRem() {
+    return parseFloat(getComputedStyle(document.documentElement).fontSize);
+  }
+  const currentRem = getRem();
+  const gapValue = currentRem * 2.3;
+  const cardWidth = currentRem * 16;
+  const paddingRightValue = currentRem * 3.5;
+  const acquiredChampionIds = useMemo(
+    // eslint-disable-next-line no-undef
+    () => new Set(userChampions.map((uc) => uc.id)),
+    [userChampions]
+  );
+
+  const getAmountOfColumns = useCallback(
+    (containerWidth: number) => {
+      const amount =
+        (containerWidth + gapValue - paddingRightValue) /
+        (cardWidth + gapValue);
+      return Math.max(Math.min(Math.floor(amount), 6), 1);
+    },
+    [gapValue, cardWidth],
+  );
+  const throttledHandleScroll = useThrottledCallback(handleScroll, 500);
+
+  useLayoutEffect(() => {
+    if (parentRef.current) {
+      const rect = parentRef?.current?.getBoundingClientRect();
+      const rectWidth = rect.width;
+      const initialContainerWidth = getAmountOfColumns(rectWidth);
+      setColumns(initialContainerWidth);
+      parentRef.current.addEventListener("scroll", throttledHandleScroll, {
+        passive: true,
+      });
+    }
+    return () =>
+      parentRef?.current?.removeEventListener("scroll", throttledHandleScroll);
+  }, []);
+
+  const handleResize = useCallback(
+    (width: number) => {
+      const newCols = getAmountOfColumns(width);
+      if (newCols > 0 && newCols !== columns) {
+        setColumns(Math.min(newCols, 6));
+      }
+    },
+    [columns, getAmountOfColumns],
+  );
+  useResizeObserver(parentRef, handleResize);
+
+  //-----------------------------------------------------------------------------------------------
+  const groupedChampionsCopy: Record<string, Champion[]> = { ...groupedChampions };
+
+  interface Row {
+    type: string,
+    section?: string
+    champions?: Champion[]
+  }
+
+  // Construimos filas
+  const rows = useMemo(() => {
+    if (!columns) return []
+    const result: Row[] = [];
+
+    Object.keys(groupedChampionsCopy).forEach((section) => {
+      if (section !== "Todos") {
+        result.push({
+          type: "header",
+          section:
+            groupedBy === "possession" ? `Obtenido en ${section}` : section,
+        });
+      }
+
+      for (let i = 0; i < groupedChampionsCopy[section].length; i += columns) {
+        result.push({
+          type: "row",
+          champions: groupedChampionsCopy[section].slice(i, i + columns),
+        });
+      }
+    });
+
+    return result;
+  }, [groupedChampions, columns, groupedBy]);
+
+
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    // Altura dinámica según tipo
+    estimateSize: (index) => {
+      const row = rows[index];
+
+      if (row.type === "header") {
+        return 100;
+      }
+
+      return 400;
+    },
+    measureElement: (el) => el.getBoundingClientRect().height,
+    gap: 0,
+    overscan: 6,
+  });
+
+  return (
+    <div
+      ref={parentRef}
+      style={{
+        height: "100%",
+        overflow: "auto",
+      }}
+      className="champions-grid-container"
+    >
+      <div
+        style={{
+          height: rowVirtualizer.getTotalSize(),
+          width: "100%",
+          position: "relative",
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const row = rows[virtualRow.index];
+
+          return (
+            <div
+              key={virtualRow.key}
+              data-index={virtualRow.index}
+              ref={rowVirtualizer.measureElement}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              {/* HEADER */}
+              {row.type === "header" && (
+                <div className="champions-section-header">
+                  <span>{row.section}</span>
+                </div>
+              )}
+
+              {/* ROW */}
+              {row.type === "row" && (
+                <div
+                  style={{
+                    display: "grid",
+                    gap: `${gapValue}px`,
+                    gridTemplateColumns: `repeat(${columns}, 1fr)`,
+                    /*padding: `0 ${gapValue}px`,*/
+                  }}
+                >
+                  {row.champions?.map((c: Champion) => (
+                    <ChampionCard
+                      key={c.id}
+                      id={c.id}
+                      champion={c}
+                      adquired={acquiredChampionIds.has(c.id)}
+                      onClick={handleChampionClick}
+                      onHoverStart={onHoverStart}
+                      onHoverEnd={onHoverEnd}
+                      tooltipPosRef={tooltipPosRef}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+});

@@ -1,0 +1,305 @@
+@keyframes reduction {
+    from {
+        scale: 0.8;
+    }
+    to {
+        scale: 1;
+    }
+}
+
+@keyframes destellodeluz {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes brightnes {
+    from {
+        filter: brightness(2);
+    }
+    to {
+        filter: brightness(1);
+    }
+}
+
+.index-header {
+    grid-area: topbar;
+    width: 100%;
+    height: var(--dashboard-header-height);
+    padding-left: 4.1rem;
+    align-items: center;
+    border-bottom: 1px solid rgba(200, 200, 200, 0.3);
+    border-top: 2px solid rgb(120, 90, 40);
+    background-color: rgba(1, 10, 19, 0.5);
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0px;
+    user-select: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Safari */
+    z-index: 2;
+    transition: padding 0.3s;
+}
+.header-pointer {
+    width: 10rem;
+    position: absolute;
+    top: -2rem;
+    max-width: unset;
+}
+.header-sections {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    flex-grow: 1;
+    margin-right: 4.48rem;
+}
+@property --gradient-one {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: transparent;
+}
+.header-tab {
+    width: 6.4rem;
+    height: 100%;
+    font-size: 1.4rem;
+    color: var(--color-primary);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    background: linear-gradient(transparent 35%, var(--gradient-one));
+    transition: --gradient-one 0.5s;
+}
+
+.header-tab svg {
+    width: 2.8rem;
+    height: 50px;
+}
+
+.header-tab.main {
+    width: fit-content;
+    padding: 0px 1.3rem;
+    font-size: 1.9rem;
+    letter-spacing: 1px;
+    color: var(--color-primary);
+    font-family: Bold;
+    margin-left: 3.5rem;
+    height: 100%;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+    text-align: center;
+    z-index: 3;
+    position: relative;
+    justify-content: center;
+    display: flex;
+}
+
+.header-tab:hover,
+.header-tab.league:hover {
+    --gradient-one:  rgba(202, 187, 143, 0.3);
+    color: #f0e6d2;
+}
+.header-tab.selected {
+    background:
+    linear-gradient(rgba(9, 17, 30, 0) 35%, rgba(202, 187, 143, 0.3));
+    color: #F0E6D2;
+    cursor: default;
+    pointer-events: none;
+}
+.header-tab.actual-section {
+    background:
+      linear-gradient(rgba(9, 17, 30, 0) 35%, rgba(202, 187, 143, 0.3));
+      pointer-events: none;
+      cursor: default;
+      color: #F0E6D2;
+}
+
+.tab-separator {
+    width: 0.25rem; /*algunos tienen que ir con 2px*/
+    height: 75%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        #cdbe91,
+        rgba(255, 255, 255, 0)
+    );
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.account-coins {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 14.56rem;
+    margin-left: 3.52rem;
+    font-family: "Bold";
+    font-size: var(--font-xl);
+    font-size: 1.76rem;
+    letter-spacing: 1px;
+    color: var(--gold-one);
+    height: 100%;
+}
+
+.riot-points {
+    width: 100%;
+    border: 1px solid #4f524f;
+    border-radius: 20px;
+    white-space: nowrap;
+    background: #010a13;
+    padding-left: 9%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 35%;
+    margin-bottom: 3%;
+    margin-top: 13%;
+}
+
+.riot-points img {
+    width: 2rem;
+}
+
+.blue-essences img {
+    width: 1.8rem;
+}
+
+.blue-essences {
+    padding-left: 1.28rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.RP {
+    margin-left: 6.5%;
+}
+
+.BE {
+    margin-left: 8%;
+}
+
+.header-buy-rp-button {
+    position: relative;
+    width: 17%;
+    aspect-ratio: 1/1;
+    background-image: linear-gradient(
+        to bottom,
+        var(--gold-four),
+        var(--gold-five)
+    );
+    align-self: center;
+    margin-left: auto;
+    margin-right: 5%;
+    align-items: center;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    line-height: 1;
+    cursor: pointer;
+    clip-path: circle(50%);
+    color: var(--color-primary);
+    display: flex;
+}
+
+.header-buy-rp-button:hover {
+    color: var(--color-secundary);
+    background-image: linear-gradient(
+        to bottom,
+        var(--gold-one),
+        var(--gold-four)
+    );
+}
+
+.header-buy-rp-button::after {
+    position: absolute;
+    display: grid;
+    inset: 0;
+    content: "";
+    height: 90%;
+    width: 90%;
+    background: var(--blue-six);
+    clip-path: circle(50%);
+    z-index: 0;
+    align-self: center;
+    justify-self: center;
+    place-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+}
+
+.buy-rp-icon {
+    position: absolute;
+    z-index: 1;
+    align-self: center;
+    justify-self: center;
+    place-self: center;
+    display: grid;
+    inset: 0;
+    place-self: center;
+    line-height: 1;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.logout-button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+    background: linear-gradient(transparent, #ff4444);
+    color: #ff6666;
+}
+
+.logout-button:active {
+    animation-name: brightnes;
+    animation-duration: 0.5s;
+}
+
+@keyframes shimmer {
+    from {
+        filter: blur(0px);
+    }
+    to {
+        filter: blur(0.5px);
+    }
+}
+
+@media (max-width: 767px) {
+    .index-header {
+        height: var(--dashboard-header-height-mobile);
+    }
+
+    .header-sections {
+        margin-right: 0px;
+        width: 50%;
+    }
+
+    .header-sections .item {
+    }
+
+    .account-coins {
+        display: none;
+    }
+
+    .icon-separator {
+        width: 1px;
+        height: 65%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    .index-header {
+    }
+}

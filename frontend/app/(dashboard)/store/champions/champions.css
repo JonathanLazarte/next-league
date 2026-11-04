@@ -1,0 +1,65 @@
+@keyframes appearance {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+input {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 0px;
+    color: lightgray;
+    height: 100%;
+}
+
+input:focus {
+    outline: none;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+}
+
+.champion-store {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding-left: 4.4rem;
+    padding-right: 0.32rem;
+    padding-top: 5.6rem;
+}
+
+.unlock-skin-icon {
+    position: absolute;
+    display: none;
+    font-size: 2rem;
+    align-self: center;
+    color: var(--gold-two);
+}
+
+@media (max-width: 767px) {
+
+
+    .store .filter-nav {
+    }
+
+    .store .search-filter {
+    }
+
+    .store .search-filter input {
+    }
+
+    .checkbox.collection {
+    }
+
+    .custom-checkbox {
+    }
+}
+
+@media (min-width: 767px) and (max-width: 1400px) {
+}

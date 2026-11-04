@@ -1,0 +1,193 @@
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+  PayloadAction
+} from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import { Champion } from "@/types/champion";
+
+export type ItemType = "skin" | "champion"
+
+export interface SkinItem {
+  availability: string
+  champion: string
+  chromas: boolean
+  id: string
+  img: string
+  name: string
+  num: number
+  rarity: string
+  release: string
+  set: string[]
+  value: number
+}
+
+
+export interface ItemToBuy {
+  id: string,
+  name: string,
+  subtitle?: string,
+  type: ItemType,
+  img: string,
+  value: {
+    be?: number,
+    rp?: number
+  }
+}
+
+export type Coin = "BE" | "RP";
+
+interface PurchaseState {
+  isOpen: boolean,
+  itemToBuy: ItemToBuy | null,
+  currency: "RP" | "BE" | unknown,
+  price: number,
+  status: "idle" | "processing" | "success" | "error",
+  error: null | string,
+  purchaseSuccess: boolean,
+  purchasedItemId: null | string,
+}
+
+const initialState: PurchaseState = {
+  isOpen: false,
+  itemToBuy: null,
+  currency: null,
+  price: 0,
+  status: "idle",
+  error: null,
+  purchaseSuccess: false,
+  purchasedItemId: null,
+};
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export const confirmPurchase = createAsyncThunk<
+  {
+    type: ItemType;
+    newInventoryItem: SkinItem | Champion;
+    coin: Coin;
+    price: number;
+  },
+  { coin: Coin, price: number },
+  {
+    state: RootState;
+    rejectValue: string;
+  }
+>(
+  "purchase/confirm",
+  async ({ coin, price }, { getState, rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+    const state = getState() as RootState;
+    const { itemToBuy } = state.purchase;
+
+    if (!itemToBuy) return rejectWithValue("Ítem no encontrado");
+
+    const body =
+      itemToBuy.type === "champion"
+        ? {
+          userId: token,
+          championId: itemToBuy.id,
+          coin,
+          price,
+        }
+        : {
+          userId: token,
+          skinId: itemToBuy.id,
+          price,
+          coin,
+        };
+    const apiRoute =
+      itemToBuy.type === "champion" ? "/api/v1/store/champion" : "/api/v1/store/skin";
+
+
+    try {
+      const response = await fetch(`${API_URL}${apiRoute}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.log(errorBody)
+        throw new Error("Failed to buy item");
+      }
+
+      const data = await response.json();
+      return {
+        type: itemToBuy.type,
+        newInventoryItem: data,
+        coin,
+        price,
+      };
+    } catch (error) {
+      return rejectWithValue(error as string || "Error en la transacción");
+    }
+  },
+);
+
+const purchaseSlice = createSlice({
+  name: "purchase",
+  initialState,
+  reducers: {
+    openPurchaseModal: (state, action: PayloadAction<{
+      id: string,
+      type: ItemType,
+      name: string,
+      img: string,
+      subtitle?: string,
+      value: { be?: number, rp?: number }
+    }>) => {
+      const { id, type, name, img, subtitle, value } = action.payload;
+      state.itemToBuy = {
+        id: id,
+        type: type,
+        name: name,
+        img: img,
+        subtitle: subtitle,
+        value
+      };
+    },
+    closeModal: (state) => {
+      state.itemToBuy = null;
+      state.status = "idle";
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(confirmPurchase.pending, (state, action) => {
+        const coin = action.meta.arg.coin;
+        state.currency = coin;
+        state.status = "processing";
+      })
+      .addCase(confirmPurchase.fulfilled, (state) => {
+        state.currency = null;
+        state.status = "success";
+      })
+      .addCase(confirmPurchase.rejected, (state, action) => {
+        state.currency = null;
+        state.status = "error";
+        state.error = action.payload || "Error en la transacción";
+      });
+  },
+});
+
+export const { closeModal, openPurchaseModal } = purchaseSlice.actions;
+
+export const selectItemToBuy = (state: { purchase: PurchaseState }) => state.purchase.itemToBuy;
+export const selectCurrency = (state: { purchase: PurchaseState }) =>
+  state.purchase.currency;
+export const selectStatus = (state: { purchase: PurchaseState }) => state.purchase.status;
+export const selectError = (state: { purchase: PurchaseState }) => state.purchase.error;
+
+export const selectPurchaseData = createSelector(
+  [selectItemToBuy, selectCurrency, selectStatus, selectError],
+  (itemToBuy, currency, status, error) => ({
+    itemToBuy,
+    currency,
+    status,
+    error
+  }),
+);
+
+export default purchaseSlice.reducer;

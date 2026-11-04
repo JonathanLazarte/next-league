@@ -1,0 +1,144 @@
+.champion-card {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    height: 100%;
+    border: 0px;
+    /*min-height: 19.5vw;*/
+    width: 18rem;
+    width: 100%;
+    overflow: hidden;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.champion-card:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 6px rgba(200, 155, 60, 0.2);
+}
+.champion-name {
+    width: 100%;
+    transition: all 0.3s;
+    font-size: 1.8rem;
+    color: #949083;
+    height: 6.3rem;
+    align-content: center;
+    font-family: Spiegel-SemiBold;
+}
+.champion-sprites {
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+    border: 1px solid #1e2328;
+    border-radius: 0px;
+}
+.champion-sprites:hover {
+    border-image: linear-gradient(140deg, #f0e6d2, #c8aa6e, var(--gold-four)) 1;
+    /*box-shadow: 0 4px 12px rgba(200, 155, 60, 0.3);*/
+}
+.champion-sprites:hover .champion-image {
+    filter: brightness(1);
+}
+.champion-image {
+    filter: brightness(0.7);
+    object-fit: cover;
+    border-radius: 2px;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    object-position: 0% 0%;
+    aspect-ratio: 17 / 26;
+}
+
+.mastery-box {
+    position: absolute;
+    bottom: 0px;
+    height: 16.5%;
+    width: 100%;
+    background-color: rgb(1, 10, 19, 0.7);
+    border-top: 1px solid rgba(40, 40, 40, 1);
+    display: flex;
+    flex-direction: row;
+    padding-left: 1px;
+}
+.mastery {
+    width: 50%;
+    background: linear-gradient(to bottom, #292521, #24211f, #1e1c19);
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    display: flex;
+}
+.mastery-icon {
+    width: 45%;
+    fill: #0f0e0e;
+}
+.eternals {
+    width: 50%;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    display: flex;
+}
+.eternals-content {
+    display: flex;
+    width: 35%;
+    justify-content: space-between;
+    align-items: end;
+}
+.eternals-icon {
+    width: 1.5rem;
+    fill: #4e4e53;
+    display: grid;
+    place-self: center;
+}
+.eternals-value {
+    font-size: 1.5rem;
+    color: #4e4e53;
+    font-family: Spiegel-Regular;
+    line-height: 1;
+}
+
+.unlock-champion-button {
+    width: 1.9rem;
+    height: 1.9rem;
+    transform: translateY(50%) translateX(-50%) rotate(45deg) ;
+    border: 1px solid var(--gold-five);
+    border-image: linear-gradient(-45deg, var(--gold-five), var(--gold-four))1;
+    position: absolute;
+    bottom: 0px;
+    margin-left: 5px;
+    background-color: #1c2227;
+    cursor: pointer;
+    justify-self: center;
+    font-size: 1.2rem;
+    color: var(--gold-five);
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    left: 50%;
+}
+.unlock-champion-button:hover {
+    border-image: linear-gradient(-45deg, var(--gold-two), var(--gold-one))1;
+    color: var(--gold-one);
+}
+
+@media (max-width: 767px) {
+    .champion-name {
+    }
+    .champion-sprites {
+    }
+    .mastery-box {
+        height: 18%;
+    }
+}

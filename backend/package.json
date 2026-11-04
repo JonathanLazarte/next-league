@@ -1,0 +1,32 @@
+{
+  "name": "nextleagueapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "nextleagueapi.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch nextleagueapi.js",
+    "start": "node nextleagueapi.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mcp": "tsx mcp-server.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "json-pokemon": "^1.0.0",
+    "mongodb": "^7.2.0",
+    "mongoose": "^8.18.2",
+    "morgan": "^1.10.0",
+    "servor": "^4.0.2",
+    "socket.io": "^4.8.0",
+    "uuid": "^11.0.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "tsx": "^4.21.0"
+  }
+}

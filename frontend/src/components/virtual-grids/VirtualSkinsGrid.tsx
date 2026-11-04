@@ -1,0 +1,202 @@
+"use client";
+
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useRef, useMemo, memo, useState, useCallback, useLayoutEffect } from "react";
+import SkinCard from "@/components/cards/collection/Skin/Skin";
+import { useResizeObserver } from "@/hooks/useResizeObserver";
+import { useThrottledCallback } from "@/hooks/useThrottle";
+import type { Skin } from '@/types/skin'
+import type { SkinGroupingOptionsValues } from "@/types/ui";
+import type { UserSkin } from '@/redux/slices/userSkinsSlice'
+import "./virtualGrid.css";
+
+type SkinsGroup = [
+  string,
+  Skin[]
+  ][]
+
+
+interface VirtualSkinsProps {
+  groupedSkins: SkinsGroup,
+  onHoverStart: (skin: Skin, skinCardRef: React.RefObject<HTMLDivElement>) => void,
+  onHoverEnd: () => void,
+  tooltipPosRef: React.MutableRefObject<{ x: number, y: number }>,
+  userSkins: UserSkin[],
+  groupedBy: SkinGroupingOptionsValues | null,
+  handleScroll: () => void
+}
+
+export default memo(function VirtualSkinsGrid({
+  groupedSkins,
+  onHoverStart,
+  onHoverEnd,
+  tooltipPosRef,
+  userSkins,
+  groupedBy,
+  handleScroll,
+}: VirtualSkinsProps) {
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [columns, setColumns] = useState<number | undefined>();
+  const acquiredSkinsIds = useMemo(
+    // eslint-disable-next-line no-undef
+    () => new Set(userSkins.map((us: UserSkin) => us.id)),
+    [userSkins]
+  );
+  function getRem() {
+    return parseFloat(getComputedStyle(document.documentElement).fontSize);
+  }
+  const currentRem = getRem();
+  const gapValue = currentRem * 3;
+  const columnGap = currentRem * 3.8;
+  const paddingRightValue = currentRem * 3.3;
+  const cardWidth = getRem() * 16;
+
+  const getAmountOfColumns = useCallback(
+    (containerWidth: number) => {
+      const amount =
+        (containerWidth + gapValue - paddingRightValue) /
+        (cardWidth + gapValue);
+      return Math.max(Math.floor(amount), 1);
+    },
+    [gapValue, cardWidth],
+  );
+  const throttledHandleScroll = useThrottledCallback(handleScroll, 500);
+
+  useLayoutEffect(() => {
+    if (parentRef.current) {
+      const rect = parentRef?.current?.getBoundingClientRect();
+      const rectWidth = rect.width;
+      const initialContainerWidth = getAmountOfColumns(rectWidth);
+      setColumns(initialContainerWidth);
+      parentRef.current.addEventListener("scroll", throttledHandleScroll);
+    }
+    return () =>
+      parentRef?.current?.removeEventListener("scroll", throttledHandleScroll);
+  }, []);
+
+  const handleResize = useCallback(
+    (containerWidth: number) => {
+      const newCols = getAmountOfColumns(containerWidth);
+      if (newCols > 0 && newCols !== columns) {
+        setColumns(newCols);
+      }
+    },
+    [columns, getAmountOfColumns],
+  );
+
+  useResizeObserver(parentRef, handleResize);
+
+  //-----------------------------------------------------------------------------------------------
+  interface Row {
+    type: string,
+    section?: string
+    skins?: Skin[]
+  }
+
+  const rows = useMemo(() => {
+    if (!columns) return []
+    const result: Row[] = [];
+
+    groupedSkins?.forEach(([section, skins]: [ section: string, skins: Skin[] ]) => {
+      if (section !== "Todos") {
+        result.push({
+          type: "header",
+          section:
+            groupedBy === "collection" ? `Obtenido en ${section}` : section,
+        });
+      }
+
+      for (let i = 0; i < skins.length; i += columns) {
+        result.push({
+          type: "row",
+          skins: skins.slice(i, i + columns),
+        });
+      }
+    });
+
+    return result;
+  }, [groupedSkins, columns]);
+
+
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    // Altura dinámica según tipo
+    estimateSize: (index) => {
+      const row = rows[index];
+
+      if (row.type === "header") {
+        return 100;
+      }
+
+      return 400;
+    },
+    measureElement: (el) => el.getBoundingClientRect().height,
+    gap: columnGap,
+    overscan: 6,
+  });
+
+  if (!groupedSkins) return <></>
+
+  return (
+    <div ref={parentRef} className="skins-grid-container">
+      <div
+        style={{
+          height: rowVirtualizer.getTotalSize(),
+          width: "100%",
+          position: "relative",
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const row = rows[virtualRow.index];
+
+          return (
+            <div
+              key={virtualRow.key}
+              data-index={virtualRow.index}
+              ref={rowVirtualizer.measureElement}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              {/* HEADER */}
+              {row.type === "header" && (
+                <div className="skins-section-header">
+                  <span>{row.section}</span>
+                </div>
+              )}
+
+              {/* ROW */}
+              {row.type === "row" && (
+                <div
+                  style={{
+                    display: "grid",
+                    gap: `${gapValue}px`,
+                    gridTemplateColumns: `repeat(${columns}, 1fr)`,
+
+                    /*padding: `0 ${gapValue}px`,*/
+                  }}
+                >
+                  {row.skins?.map((skin: Skin, index: number) => (
+                    <SkinCard
+                      key={skin.id || index}
+                      onHoverStart={onHoverStart}
+                      onHoverEnd={onHoverEnd}
+                      skin={skin}
+                      isAdquired={acquiredSkinsIds.has(skin.id)}
+                      tooltipPosRef={tooltipPosRef}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+})

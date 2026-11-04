@@ -1,0 +1,66 @@
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    position: fixed;
+    padding-right: calc(100vw - var(--dashboard-content-width));
+    inset: 0;
+}
+
+.loading-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--blue-five);
+    z-index: 9999;
+}
+
+.loading-spinner {
+    position: relative;
+    display: inline-block;
+    width: 5rem;
+    height: 5rem;
+}
+
+.loading-spinner.small {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.loading-spinner.medium {
+    width: 5rem;
+    height: 5rem;
+}
+
+.loading-spinner.large {
+    width: 8rem;
+    height: 8rem;
+}
+
+.spinner-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-message {
+    color: var(--color-primary);
+    font-family: "Medium";
+    font-size: var(--font-base);
+    margin: 0;
+    text-align: center;
+}

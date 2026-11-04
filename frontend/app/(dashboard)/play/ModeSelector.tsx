@@ -1,0 +1,173 @@
+"use client"
+
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setQueue } from '@/redux/slices/userInterfaceSlice';
+import ConfirmButton from '@/components/buttons/Confirm/Confirm';
+import { useSound } from '@/hooks/useSound';
+import { GAME_DATA } from '@/utils/constants';
+import { setSelectedQueue } from '@/redux/slices/matchmakingSlice';
+
+
+const QueueName = {
+  ranked_solo_duo: 'Ranked Solo/Duo',
+  ranked_flex: 'Ranked Flex',
+  swiftplay: 'Swiftplay',
+  aram: 'ARAM',
+  aram_mayhem: 'ARAM: Mayhem',
+  intro: 'Intro',
+  beginner: 'Beginner',
+  intermediate: 'Intermediate',
+} as const
+
+type QueueName = typeof QueueName[keyof typeof QueueName]
+
+type GameMode = typeof GAME_DATA[keyof typeof GAME_DATA][number]
+
+type Queue = GameMode["queues"][number]
+
+interface RenderQueueSelectorProps {
+  gameMode: GameMode;
+  setSelectedQueueGlobal: (queue: string) => void;
+}
+
+const RenderQueueSelector = ({ gameMode, setSelectedQueueGlobal }: RenderQueueSelectorProps) => {
+  const [ queueSelected, setQueueSelected ] = useState(gameMode.queues[0]);
+  const { play: playQueueClick } = useSound('/sfx/sfx-soc-ui-click-generic.ogg');
+
+  const handleClick = (queue: Queue) => {
+    if(queueSelected.name !== queue.name) {
+      setQueueSelected(queue);
+      setSelectedQueueGlobal(queue.name);
+      playQueueClick();
+    }
+  };
+  return (
+    <div className="queues-wrapper" key={gameMode.title} >
+      <div className="gamemode-description">
+        <p>{queueSelected.description}</p>
+      </div>
+      {
+        gameMode?.queues?.map((queue, index) => (
+          <div
+            className={`queue-option ${queueSelected.name === queue.name ? 'selected' : ''}`}
+              onClick={() => handleClick(queue)}
+              key={index}
+            >
+            <div className="custom-checkbox">
+              {queueSelected.name === queue.name && <div className="checkboxMark" />}
+            </div>
+            <span>{QueueName[queue.name as keyof typeof QueueName]}</span>
+          </div>
+        ))
+      }
+    </div>
+  );
+};
+
+interface RenderGameModeProps {
+  gameMode: GameMode;
+  selectedMap: string;
+  hoveredMap: string;
+  setSelectedMap: React.Dispatch<React.SetStateAction<string>>;
+  setHoveredMap: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedQueueGlobal: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const RenderGameMode = ({ gameMode, selectedMap, hoveredMap, setSelectedMap, setHoveredMap, setSelectedQueueGlobal }: RenderGameModeProps) => {
+  const { play: playGameModeHover } = useSound('/sfx/sfx-gameselect-button-hover.ogg');
+  const { play : playGameModeClick } = useSound('/sfx/sfx-gameselect-button-map-click.ogg');
+  const handleMouseEnter = () => {
+    if(selectedMap !== gameMode.title) {
+      setHoveredMap(gameMode.title);
+      playGameModeHover();
+    }
+  };
+  const handleClick = () => {
+    if(selectedMap !== gameMode.title) {
+      playGameModeClick();
+      setSelectedMap(gameMode.title);
+      hoveredMap === gameMode.title && setHoveredMap('');
+    }
+  };
+
+  return (
+    <div className={`gamemode-wrapper ${hoveredMap === gameMode.title ? 'hovered' : ''} ${selectedMap === gameMode.title ? 'active' : ''}`}>
+      <div className="gamemode-icon"
+        onMouseLeave={() => setHoveredMap('')}
+        onMouseEnter={() => handleMouseEnter()}
+        onClick={() => handleClick()}
+      >
+        <div className='map-img-wrapper'>
+          <img
+            src={`/general/${gameMode.disabledImg}`}
+            alt={gameMode.title}
+          />
+          <img
+            className='hover-img'
+            src={`/general/${gameMode.hoverImg}`}
+            alt={gameMode.title}
+            style={{opacity: gameMode.title === hoveredMap ? 1 : 0}}
+          />
+          <img
+            className='enabled-img'
+            src={`/general/${gameMode.enabledImg}`}
+            alt={gameMode.title}
+            style={{opacity: gameMode.title === selectedMap ? 1 : 0}}
+          />
+          {/*<video
+            className="gamemode-active-animation"
+            src="/gamemode-selection/game-select-icon-active.webm"
+            autoPlay
+            loop
+            muted
+            playsInline
+            disablePictureInPicture
+            style={{opacity: gameMode.title === selectedMap ? 1 : 0}}
+          ></video>*/}
+        </div>
+        <span className="mode-subtitle">{gameMode.subTitle}</span>
+        <h1 className="mode-title">{gameMode.title}</h1>
+        <div className="dividing-line"></div>
+      </div>
+      <RenderQueueSelector setSelectedQueueGlobal={setSelectedQueueGlobal} gameMode={gameMode} />
+    </div>
+  );
+}
+
+interface ModeSelectorProps {
+  data: typeof GAME_DATA[keyof typeof GAME_DATA]
+}
+
+export default function ModeSelector({ data : gameModes }: ModeSelectorProps){
+	const [ selectedMap, setSelectedMap ] = useState(gameModes[0].title);
+	const [ hoveredMap, setHoveredMap ] = useState('');
+  const dispatch = useDispatch();
+  const [selectedQueueGlobal, setSelectedQueueGlobal] = useState(gameModes[0].queues[0].name);
+
+  const handleConfirm = () => {
+    dispatch(setQueue(selectedQueueGlobal));
+  };
+
+  useEffect(() => {
+    const selectedMapData = gameModes.find(map => map.title === selectedMap);
+    if(selectedMapData) setSelectedQueueGlobal(selectedMapData.queues[0].name);
+  }, [selectedMap])
+
+	return <>
+
+      <div className="gamemode-selector">
+        <div className='gamemodes-grid'>
+        {gameModes.map((gameMode, index) => (
+          <RenderGameMode gameMode={gameMode} selectedMap={selectedMap} setSelectedMap={setSelectedMap} hoveredMap={hoveredMap} setHoveredMap={setHoveredMap} setSelectedQueueGlobal={setSelectedQueueGlobal} key={index} />
+        ))}
+        </div>
+        <div className='gamemode-selector-footer'>
+          <ConfirmButton
+            type="modeSelection"
+            activeButtonAction={handleConfirm}
+          />
+        </div>
+      </div>
+    </>
+}

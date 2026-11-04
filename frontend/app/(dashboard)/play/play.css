@@ -1,0 +1,349 @@
+@keyframes vertical-slice {
+    from {
+        background-position-y: bottom;
+    }
+    to {
+        background-position-y: top;
+    }
+}
+.play-screen-container {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+.play-selection-modes {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+    position: relative;
+    /*animation: vertical-slice 2s cubic-bezier(0,1.02,.25,.97);*/
+}
+
+/* El área específica de las tarjetas de modo de juego */
+.gamemodes-grid {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.mode-selection-header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 0.9rem; /* 0.5625vw → 0.9rem */
+    top: 0;
+    /*padding-left: 4.8rem;*/ /* 3vw → 4.8rem */
+    z-index: 1;
+    position: absolute;
+    padding-left: 2.5rem;
+}
+
+.subheader-item {
+    position: relative;
+    height: 2.5rem;
+    padding-left: 1.6rem; /* 1vw → 1.6rem */
+    padding-right: 1.6rem; /* 1vw → 1.6rem */
+    align-content: center;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1.52rem; /* 0.95vw → 1.52rem */
+    letter-spacing: 1px;
+    color: var(--color-primary);
+    transition: color 0.1s;
+    border-image: linear-gradient(
+            to right,
+            transparent,
+            var(--color-primary),
+            transparent
+        )
+        1;
+    font-family: "Medium";
+}
+
+.subheader-item:hover {
+    color: var(--gold-one);
+}
+
+.active-subheader-item {
+    color: #f0e6d2;
+}
+
+.active-subheader-item::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 0.1rem;
+    background: linear-gradient(to right, transparent, #cdbe91, transparent);
+    width: 90%;
+    justify-self: center;
+}
+
+.gamemode-wrapper {
+    width: 33rem;
+    height: 60rem;
+    justify-content: flex-start;
+    flex-direction: column;
+    display: flex;
+}
+.mode-title {
+    font-size: 3.3rem;
+    line-height: 1.1;
+    margin-top: 1rem;
+    color: #ccbd90;
+    font-family: Bold;
+    height: 7.5rem;
+    letter-spacing: 1px;
+    transition: color 1s;
+}
+.mode-subtitle {
+    color: #ccbd90;
+    font-family: "Bold";
+    font-size: 1.9rem;
+    transition: color 1s;
+}
+.gamemode-wrapper.active .mode-title, .gamemode-wrapper.active .mode-subtitle {
+    color: var(--gold-one);
+}
+.gamemode-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    padding-bottom: 2rem;
+    padding-right: 5rem;
+    position: relative;
+    height: 30rem;
+}
+.map-img-wrapper {
+    position: relative;
+    width: 13rem;
+    height: 15rem;
+}
+.map-img-wrapper img {
+    width: 12.5rem;
+    margin-bottom: 2.24rem;
+    position: absolute;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+.gamemode-active-animation {
+    width: 12.5rem;
+    margin-bottom: 2.24rem;
+    position: absolute;
+    transition: opacity 0.3s;
+    z-index: 3;
+}
+
+.dividing-line {
+    width: 100%;
+    height: 1px;
+    background: #5f747b;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+}
+/* La barra inferior donde confirmas la selección */
+.gamemode-selector {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+}
+.gamemode-selector-footer {
+    height: 7rem;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    display: flex;
+}
+.gamemode-description {
+    display: flex;
+    padding-top: 2rem;
+    padding-bottom: 2.4rem;
+    width: 29.76rem;
+    margin-bottom: 1rem;
+    color: gray;
+    line-height: 1.5;
+    font-size: 1.8rem;
+    font-family: Spiegel-Regular;
+    height: 14.5rem;
+    visibility: hidden;
+}
+.gamemode-wrapper.active .gamemode-description, .gamemode-wrapper.active .queue-option {
+    visibility: visible;
+    opacity: 1;
+}
+.gamemode-wrapper.active .gamemode-description {
+    color: #e5dcca;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.gamemode-wrapper.hovered .gamemode-description{
+    visibility: visible;
+}
+.gamemode-wrapper.hovered.active .gamemode-description{
+    color: #e5dcca;
+}
+
+.queues-wrapper {
+
+}
+.queue-option {
+    display: flex;
+    align-items: center;
+    font-size: 1.9rem;
+    color: #ccbd90;
+    cursor: pointer;
+    font-family: Bold;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    transition: color 0.4s;
+    height: 4.3rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.4s, color 0.4s;
+    flex-direction: row;
+}
+
+.queue-option:hover {
+    color: var(--gold-one);
+}
+
+.queue-option:hover .custom-checkbox {
+    border-image: linear-gradient(-45deg, var(--gold-two), var(--gold-one)) 1;
+}
+.queue-option:active .custom-checkbox {
+    border-image: linear-gradient(-45deg, var(--gold-six), var(--gold-five)) 1;
+}
+.queue-option.selected {
+    color: var(--gold-one);
+}
+.queue-option.selected:active .checkboxMark {
+    background-color: var(--gold-five);
+}
+
+.queue-option .custom-checkbox {
+    transform: rotate(45deg);
+    border: 3px solid var(--gold-five);
+    border-image: linear-gradient(-45deg, var(--gold-five), var(--gold-four)) 1;
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-right: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.checkboxMark {
+    height: 6px;
+    width: 6px;
+    background-color: var(--gold-one);
+}
+
+.background-engine {
+    z-index: 0;
+    position: absolute;
+    height: 100vh;
+    width: var(--dashboard-content-width);
+}
+
+.bg-layer {
+    z-index: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--dashboard-content-width);
+    height: 100vh;
+    background-size: cover;
+    background-position-y: top;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    will-change: transform, opacity;
+    transition:
+        transform 1s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.8s ease-in-out;
+        filter: brightness(0.7);
+}
+.bg-lobby {
+    transform: translateY(2px);
+    background-image: url("/background.png");
+    background-position-y: bottom;
+}
+.bg-room {
+    height: 100vh;
+    transform: translateY(100vh);
+    background-image: url("/background2.jpg");
+    background-position-y: top;
+    background-position: center top;
+}
+.background-engine.in-room .bg-lobby {
+    transform: translateY(-100vh);
+}
+.background-engine.in-room .bg-room {
+    transform: translateY(0px);
+}
+
+@media (max-width: 767px) {
+    .play-selection-modes {
+        /*height: var(--dashboard-content-height-mobile);*/
+    }
+    .gamemodes-grid {
+    }
+    .gamemode-description {
+    }
+
+    .gamemode-description p {
+    }
+
+    h1 {
+    }
+
+    .mode-subtitle {
+    }
+
+    .mode-selection-header {
+    }
+
+    .subheader-item {
+    }
+
+    .gamemode-icon {
+    }
+
+    .gamemode-icon img {
+    }
+
+    .queue-option {
+    }
+
+    .description-and-queues {
+    }
+
+    .description-and-queues .custom-checkbox {
+    }
+
+    .checkboxMark {
+    }
+
+    .mode-selection .play-and-out-button {
+    }
+}
