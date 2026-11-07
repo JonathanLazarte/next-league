@@ -45,6 +45,7 @@ export const useUserInterface = () => {
   const updateSettingsModal = useCallback((status: boolean) => {
     dispatch(setIsSettingsModalOpen(status))
   }, [dispatch])
+
   return {
     // Estado
     ...uiState,
@@ -56,6 +57,6 @@ export const useUserInterface = () => {
     updateQueue,
     updateQueueStatus,
     updateSideNav,
-    updateSettingsModal
+    updateSettingsModal,
   };
 };

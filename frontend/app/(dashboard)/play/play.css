@@ -259,16 +259,19 @@
     background-color: var(--gold-one);
 }
 
-.background-engine {
-    z-index: 0;
-    position: absolute;
-    height: 100vh;
+.play-background-layers {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: var(--dashboard-content-width);
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .bg-layer {
-    z-index: 0;
-    position: absolute;
+    z-index: -1;
+    position: fixed;
     top: 0;
     left: 0;
     width: var(--dashboard-content-width);
@@ -281,7 +284,7 @@
     transition:
         transform 1s cubic-bezier(0.25, 0.8, 0.25, 1),
         opacity 0.8s ease-in-out;
-        filter: brightness(0.7);
+    filter: brightness(0.7);
 }
 .bg-lobby {
     transform: translateY(2px);
@@ -295,10 +298,10 @@
     background-position-y: top;
     background-position: center top;
 }
-.background-engine.in-room .bg-lobby {
+.play-background-layers.in-room .bg-lobby {
     transform: translateY(-100vh);
 }
-.background-engine.in-room .bg-room {
+.play-background-layers.in-room .bg-room {
     transform: translateY(0px);
 }
 

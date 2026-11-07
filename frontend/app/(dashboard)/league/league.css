@@ -4,17 +4,19 @@
   height: 100%;
   overflow: hidden;
   user-select: none;
-  background-color: var(--blue-five);
   font-family: 'Spiegel-Regular', sans-serif;
   color: var(--gold-one);
 }
 
 /* Background Layers */
 .league-bg-container {
-  position: absolute;
+  position: fixed;
+  height: 100vh;
   inset: 0;
   z-index: 0;
   overflow: hidden;
+  background-size: cover;
+  background-color: var(--blue-five);
 }
 
 .league-bg-image {
@@ -116,33 +118,89 @@
 
 /* Left Sidebar */
 .league-sidebar {
-  width: 25rem;
+  width: 28.5rem;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2.5rem 1.6rem 2rem 2.2rem;
+  padding: 2.5rem 0;
   position: relative;
   z-index: 5;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .league-sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1.5rem;
 }
 
 .league-nav-item {
   display: flex;
   align-items: center;
   gap: 1.2rem;
-  padding: 0.7rem 1rem;
   border-radius: 3px;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
   background: transparent;
   border: 1px solid transparent;
+  padding: 1rem 0;
+}
+
+.league-nav-item-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: none;
+  z-index: -1;
+}
+
+.league-nav-item.active .league-nav-item-background,
+.league-nav-item:hover .league-nav-item-background {
+  display: flex;
+}
+
+
+.league-nav-icon {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  transition: color 0.2s ease;
+  height: 100%;
+
+}
+
+.league-nav-title {
+  font-family: 'Bold', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.8px;
+  color: #cdbe91;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+  line-height: 1.25;
+  white-space: wrap;
+  display: flex;
+  flex-direction: row;
+  padding-left: 15%;
+  width: 100%;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Active Nav Item */
+.league-nav-item.active {}
+
+.league-nav-item.active .league-nav-title {
+  color: var(--gold-one);
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+}
+
+.league-nav-item.active .league-nav-icon {
+  visibility: hidden;
 }
 
 .league-nav-item:hover {
@@ -150,58 +208,42 @@
 }
 
 .league-nav-item:hover .league-nav-title {
-  color: var(--gold-one);
+  color: var(--gold-four);
 }
 
 .league-nav-item:hover .league-nav-icon {
-  color: var(--gold-one);
-}
-
-.league-nav-icon {
-  font-size: 1.8rem;
-  color: var(--gold-two);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.2rem;
-  transition: color 0.2s ease;
-}
-
-.league-nav-title {
-  font-family: 'Bold', sans-serif;
-  font-size: 1.3rem;
-  letter-spacing: 0.8px;
-  color: #a09b8c;
-  text-transform: uppercase;
-  transition: color 0.2s ease;
-  line-height: 1.25;
-}
-
-/* Active Nav Item */
-.league-nav-item.active {
-  background: linear-gradient(90deg, rgba(0, 209, 219, 0.18) 0%, rgba(0, 209, 219, 0.04) 90%, transparent 100%);
-  border-left: 2px solid #00e5ff;
-}
-
-.league-nav-item.active .league-nav-title {
-  color: #00f2ff;
-  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
-}
-
-.league-nav-item.active .league-nav-icon {
-  color: #00f2ff;
+  visibility: hidden;
 }
 
 /* Special Thumbnail Active Item (e.g. True Damage) */
 .league-nav-thumb-wrapper {
   position: relative;
-  width: 4.8rem;
-  height: 2.8rem;
-  border-radius: 2px;
+  width: 50%;
+  height: 100%;
   overflow: hidden;
-  border: 1px solid rgba(0, 229, 255, 0.6);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
   flex-shrink: 0;
+  border-top-right-radius: 10%;
+  border-bottom-right-radius: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.league-nav-bg-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-left: 30%;
+  color: var(--gold-four);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.league-nav-item.active .league-nav-bg-icon {
+  color: var(--gold-one);
+  filter: drop-shadow(0 0 6px rgba(200, 170, 110, 0.6));
+}
+
+.league-nav-item:hover .league-nav-bg-icon {
+  color: var(--gold-one);
 }
 
 .league-nav-thumb-img {
@@ -228,12 +270,15 @@
 }
 
 .league-unread-dot {
+  position: absolute;
+  left: 6%;
   width: 0.55rem;
   height: 0.55rem;
   border-radius: 50%;
   background-color: var(--gold-four);
   box-shadow: 0 0 8px var(--gold-four);
   flex-shrink: 0;
+  z-index: 2;
 }
 
 .league-patch-notes-text {
@@ -520,4 +565,96 @@
   color: #c8aa6e;
   font-size: 1.35rem;
   line-height: 1.6;
+}
+
+/* Specialized Subsections Layout */
+.league-subsection-wrapper {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  position: relative;
+  z-index: 5;
+  overflow-y: auto;
+}
+
+.league-promo-container {
+  width: 100%;
+  max-width: 82rem;
+  background: rgba(1, 10, 19, 0.88);
+  border: 1.5px solid var(--gold-five);
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 2.8rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.league-promo-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.league-promo-title {
+  font-family: 'Bold', serif;
+  font-size: clamp(2rem, 2.4vw, 2.8rem);
+  color: var(--gold-one);
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.league-promo-subtitle {
+  max-width: 58rem;
+  color: #a09b8c;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin-top: 0.6rem;
+}
+
+/* Stage Selector Tabs */
+.league-stage-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  border-bottom: 1px solid rgba(200, 170, 110, 0.2);
+  padding-bottom: 1rem;
+}
+
+.league-stage-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.6rem 1.4rem;
+  font-family: 'Bold', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  color: #a09b8c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.league-stage-tab:hover {
+  color: var(--gold-one);
+}
+
+.league-stage-tab.active {
+  color: var(--gold-one);
+  border-bottom-color: var(--gold-two);
+  text-shadow: 0 0 8px rgba(200, 170, 110, 0.4);
+}
+
+/* Patch Content Box */
+.league-patch-content-box {
+  background: rgba(15, 23, 31, 0.75);
+  border: 1px solid rgba(200, 170, 110, 0.2);
+  padding: 1.8rem 2.2rem;
+  border-radius: 4px;
+  max-height: 35rem;
+  overflow-y: auto;
 }

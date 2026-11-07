@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import { FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
 import { FaUser, FaKeyboard } from "react-icons/fa";
+import BackendStatusBanner from "@/components/BackendFallback/BackendStatusBanner";
 import type { User } from '@/types/user'
 import * as Yup from "yup";
 
@@ -96,6 +97,7 @@ export default memo(function Login() {
             alt="RiotGames logo"
           />
         </div>
+        <BackendStatusBanner className="mb-3" />
         <div className="login-switch">
           {tabs.map((tab, index) => (
             <div

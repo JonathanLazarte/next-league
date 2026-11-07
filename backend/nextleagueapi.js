@@ -57,7 +57,11 @@ app.use("/api/v1/data", dataRouter);
 app.use("/api/v1/store", storeRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/connection", connectionRouter)
+app.use("/api/v1/connection", connectionRouter);
+
+app.get(["/health", "/api/v1/health"], (req, res) => {
+  res.status(200).json({ status: "ok", uptime: process.uptime(), timestamp: Date.now() });
+});
 
 const adminUser = {
   alias: "Jonathan Developer",

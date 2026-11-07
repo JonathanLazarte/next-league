@@ -1,32 +1,9 @@
 import React from 'react';
 
-export function TargetIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="22" y1="12" x2="18" y2="12" />
-      <line x1="6" y1="12" x2="2" y2="12" />
-      <line x1="12" y1="6" x2="12" y2="2" />
-      <line x1="12" y1="22" x2="12" y2="18" />
-      <circle cx="12" cy="12" r="3" fill="currentColor" />
-    </svg>
-  );
-}
-
-export function FistIcon({ className }: { className?: string }) {
+export function TrueDamageIcon({ className }: { className?: string }) {
   return (
     <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19 8h-2V6a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3v2H5a3 3 0 0 0-3 3v4a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5v-4a3 3 0 0 0-3-3zm-10-2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2H9V6zm11 9a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v4z" />
-    </svg>
-  );
-}
-
-export function ChaosIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z" />
-      <path d="M12 22V12" />
-      <path d="M20 6.5l-8 5.5-8-5.5" />
+      <path d="M12 2L2 9l10 13 10-13-10-7zm0 3.3L18.4 9 12 17.6 5.6 9 12 5.3z" />
     </svg>
   );
 }
@@ -55,17 +32,27 @@ export function TrophyIcon({ className }: { className?: string }) {
   );
 }
 
-export function SeasonIcon({ className }: { className?: string }) {
+export function PatchNotesIcon({
+  className,
+  width,
+  height,
+}: {
+  className?: string;
+  width?: number | string;
+  height?: number | string;
+}) {
   return (
-    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2L4 6v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V6l-8-4zm-1 14.5V8.5h2v6h2.5v2H11z" />
-    </svg>
-  );
-}
-
-export function PatchNotesIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      className={className}
+      width={width ?? 18}
+      height={height ?? 18}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
       <polyline points="14 2 14 8 20 8" />
       <line x1="16" y1="13" x2="8" y2="13" />

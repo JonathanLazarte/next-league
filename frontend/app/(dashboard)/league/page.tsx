@@ -1,67 +1,88 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './league.css';
 import LeagueSidebar from './components/LeagueSidebar';
 import TopControls from './components/TopControls';
-import FeaturedCarousel from './components/FeaturedCarousel';
 import PatchNotesModal from './components/PatchNotesModal';
-import { TRUE_DAMAGE_SLIDES, HEARTSTEEL_SLIDES } from './data';
+import SkinCarouselSection from './components/subsections/SkinCarouselSection';
+import PatchNotesSection from './components/subsections/PatchNotesSection';
+import { SIDEBAR_ITEMS, PATCH_NOTES_ITEM, TRUE_DAMAGE_SET } from './data';
+import { SidebarItem, SkinSlide } from './types';
 import { RESOURCES_URL } from '@/utils/constants';
 import { usePurchase } from '@/hooks/usePurchase';
 
 export default function LeaguePage() {
-  const [activeTab, setActiveTab] = useState('true-damage');
-  // Default to index 1 (Senna True Damage Know My Name) to match reference screenshot
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(1);
-  const [hideUI, setHideUI] = useState(false);
-  const [isPatchNotesOpen, setIsPatchNotesOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('true-damage');
+  const [currentSlide, setCurrentSlide] = useState<SkinSlide | null>(
+    TRUE_DAMAGE_SET.slides[TRUE_DAMAGE_SET.defaultIndex || 0]
+  );
+  const [hideUI, setHideUI] = useState<boolean>(false);
+  const [isPatchNotesModalOpen, setIsPatchNotesModalOpen] = useState<boolean>(false);
 
   const { openPurchaseModal } = usePurchase();
 
-  // Pick slides according to active tab
-  const getSlides = () => {
-    switch (activeTab) {
-      case 'heartsteel':
-        return HEARTSTEEL_SLIDES;
-      case 'true-damage':
-      default:
-        return TRUE_DAMAGE_SLIDES;
-    }
-  };
-
-  const slides = getSlides();
-  const currentSlide = slides[currentSlideIndex] || slides[0];
+  // Find active configuration item
+  const activeItem: SidebarItem = useMemo(() => {
+    if (activeTab === 'patch-notes') return PATCH_NOTES_ITEM;
+    return (
+      SIDEBAR_ITEMS.find((item) => item.id === activeTab) || SIDEBAR_ITEMS[0] // default true-damage
+    );
+  }, [activeTab]);
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
-    setCurrentSlideIndex(0);
   };
 
-  const handleBuyCurrent = () => {
-    if (!currentSlide) return;
+  const handleBuySkin = (skin: SkinSlide) => {
     openPurchaseModal({
-      id: currentSlide.id,
+      id: skin.id,
       type: 'skin',
-      name: currentSlide.skinName,
-      img: `${RESOURCES_URL}/splash/${currentSlide.img}`,
-      subtitle: `¡Desbloquea ${currentSlide.fullTitle} para tu colección!`,
+      name: skin.skinName,
+      img: `${RESOURCES_URL}/splash/${skin.img}`,
+      subtitle: `¡Desbloquea ${skin.fullTitle} para tu colección!`,
       value: {
-        rp: currentSlide.price,
+        rp: skin.price,
       },
     });
+  };
+
+  // Determine current background wallpaper
+  const backgroundUrl = useMemo(() => {
+    if (activeItem.type === 'carousel') {
+      if (currentSlide?.img) {
+        return `${RESOURCES_URL}/splash/${currentSlide.img}`;
+      }
+      return `${RESOURCES_URL}/splash/Senna_1.jpg`;
+    }
+    return activeItem.bgImage || '/collection_background.webp';
+  }, [activeItem, currentSlide]);
+
+  // Dynamic subsection rendering according to selected tab
+  const renderSubsection = () => {
+    switch (activeItem.type) {
+      case 'carousel':
+        return (
+          <SkinCarouselSection
+            key={activeItem.id}
+            set={activeItem.skinSet!}
+            onBuySkin={handleBuySkin}
+            onSlideChange={setCurrentSlide}
+          />
+        );
+      case 'patch-notes':
+        return <PatchNotesSection key={activeItem.id} />;
+      default:
+        return null;
+    }
   };
 
   return (
     <div className="league-container">
       {/* Background Wallpaper with Crossfade */}
-      <div className="league-bg-container">
+      <div className="league-bg-container" style={{ backgroundImage: `url(${backgroundUrl})` }}>
         <div
-          key={currentSlide.img}
-          className="league-bg-image"
-          style={{
-            backgroundImage: `url(${RESOURCES_URL}/splash/${currentSlide.img})`,
-          }}
+          key={backgroundUrl}
         />
         <div className="league-bg-overlay-left" />
         <div className="league-bg-overlay-bottom" />
@@ -79,21 +100,16 @@ export default function LeaguePage() {
         <LeagueSidebar
           activeTab={activeTab}
           onSelectTab={handleTabChange}
-          onOpenPatchNotes={() => setIsPatchNotesOpen(true)}
+          onOpenPatchNotes={() => setActiveTab('patch-notes')}
         />
 
-        <FeaturedCarousel
-          slides={slides}
-          currentIndex={currentSlideIndex}
-          onSelectIndex={setCurrentSlideIndex}
-          onBuyCurrent={handleBuyCurrent}
-        />
+        {renderSubsection()}
       </div>
 
-      {/* Patch Notes Modal */}
+      {/* Optional Patch Notes Modal */}
       <PatchNotesModal
-        isOpen={isPatchNotesOpen}
-        onClose={() => setIsPatchNotesOpen(false)}
+        isOpen={isPatchNotesModalOpen}
+        onClose={() => setIsPatchNotesModalOpen(false)}
       />
     </div>
   );

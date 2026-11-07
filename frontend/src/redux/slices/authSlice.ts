@@ -22,8 +22,18 @@ export const loginUser = createAsyncThunk<
           body: JSON.stringify(credentials),
         },
       );
-      const data = await response.json();
+
+      let data: Record<string, any> = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = { error: "El servidor backend se está desplegando o iniciando en Render." };
+      }
+
       if (!response.ok) {
+        if ([502, 503, 504].includes(response.status)) {
+          return rejectWithValue("El servidor backend se está desplegando o iniciando (cold start de Render). Por favor espera unos momentos.");
+        }
         return rejectWithValue(data.error || "Login failed");
       }
       // Guardar token en localStorage
@@ -31,17 +41,21 @@ export const loginUser = createAsyncThunk<
 
       return data as User;
     } catch (error) {
-      return rejectWithValue(String(error));
+      const errStr = String(error);
+      if (errStr.includes("Failed to fetch") || errStr.includes("NetworkError")) {
+        return rejectWithValue("El servidor backend se está desplegando o no responde. Por favor espera unos momentos.");
+      }
+      return rejectWithValue(errStr);
     }
   },
 );
 
-// Async thunk para login
+// Async thunk para registro
 export const registerUser = createAsyncThunk<
   User,
   UserCredentials,
   {
-    rejectValue: string
+    rejectValue: string;
   }
 >(
   "auth/registerUser",
@@ -57,9 +71,18 @@ export const registerUser = createAsyncThunk<
           body: JSON.stringify(credentials),
         },
       );
-      const data = await response.json();
+
+      let data: Record<string, any> = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = { error: "El servidor backend se está desplegando o iniciando en Render." };
+      }
 
       if (!response.ok) {
+        if ([502, 503, 504].includes(response.status)) {
+          return rejectWithValue("El servidor backend se está desplegando o iniciando (cold start de Render). Por favor espera unos momentos.");
+        }
         return rejectWithValue(data.error || "Register failed");
       }
       // Guardar token en localStorage
@@ -67,12 +90,15 @@ export const registerUser = createAsyncThunk<
 
       return data;
     } catch (error) {
-      return rejectWithValue(String(error));
-    } /*finally {
-
-    }*/
+      const errStr = String(error);
+      if (errStr.includes("Failed to fetch") || errStr.includes("NetworkError")) {
+        return rejectWithValue("El servidor backend se está desplegando o no responde. Por favor espera unos momentos.");
+      }
+      return rejectWithValue(errStr);
+    }
   },
 );
+
 export interface Rank {
   name: string;
   level: number;
@@ -81,7 +107,7 @@ export interface Rank {
 
 // Async thunk para verificar token
 export const verifyToken = createAsyncThunk<
-  { token: string, user: User },
+  { token: string; user: User },
   string,
   {
     rejectValue: string;
@@ -103,25 +129,33 @@ export const verifyToken = createAsyncThunk<
         },
       );
 
-      const data = await response.json();
+      let data: Record<string, any> = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = { message: "Servidor desplegándose" };
+      }
 
       if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem("token");
+        }
         return rejectWithValue(data.message || "Token verification failed");
       }
 
-      return data;
+      return data as { token: string; user: User };
     } catch (error) {
-      localStorage.removeItem('token');
+      // IMPORTANTE: NO borrar token de localStorage si fue fallo de red/despliegue
       return rejectWithValue(String(error));
     }
   },
 );
 
 interface AuthState {
-  isAuthenticated: boolean,
-  token: null | string,
-  loading: boolean,
-  error: null | string | undefined,
+  isAuthenticated: boolean;
+  token: null | string;
+  loading: boolean;
+  error: null | string | undefined;
 }
 
 const initialState: AuthState = {
@@ -164,6 +198,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      // Register
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -182,12 +217,11 @@ const authSlice = createSlice({
       .addCase(verifyToken.pending, (state) => {
         state.loading = true;
       })
-      .addCase(verifyToken.fulfilled, (state, action: PayloadAction<{ user: User, token: string }>) => {
+      .addCase(verifyToken.fulfilled, (state, action: PayloadAction<{ user: User; token: string }>) => {
         state.loading = false;
         state.isAuthenticated = true;
         state.token = action.payload.token;
         state.error = null;
-        /*state.user = action.payload.user*/
       })
       .addCase(verifyToken.rejected, (state, action) => {
         state.loading = false;

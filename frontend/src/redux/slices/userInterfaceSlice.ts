@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import type { Section, UserState, Queue, QueueStatus } from '@/types/ui'
+import type { Section, UserState, Queue, QueueStatus } from "@/types/ui";
 
 
 interface UserInterfaceState {
@@ -62,7 +62,7 @@ const userInterfaceSlice = createSlice({
   name: "userInterface",
   initialState,
   reducers: {
-    setActualSection: (state, action) => {
+    setActualSection: (state, action: PayloadAction<Section>) => {
       state.actualSection = action.payload;
     },
     setUserState: (state, action: PayloadAction<UserState>) => {
@@ -85,7 +85,7 @@ const userInterfaceSlice = createSlice({
     },
     setIsSettingsModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isSettingsModalOpen = action.payload
-    }
+    },
   },
 });
 
@@ -97,7 +97,7 @@ export const {
   setSectionTabSelected,
   setQueue,
   setQueueStatus,
-  setIsSettingsModalOpen
+  setIsSettingsModalOpen,
 } = userInterfaceSlice.actions;
 
 interface StateProp {
@@ -131,7 +131,7 @@ export const selectUserInterfaceData = createSelector(
     selectUserInterfaceSectionTabSelected,
     selectQueue,
     selectQueueStatus,
-    selectIsSettingsModalOpen
+    selectIsSettingsModalOpen,
   ],
   (userState, actualSection, isNavigating, showSideNav, sectionTabSelected, queue, queueStatus, isSettingsModalOpen) => ({
     userState,
@@ -141,7 +141,7 @@ export const selectUserInterfaceData = createSelector(
     sectionTabSelected,
     queue,
     queueStatus,
-    isSettingsModalOpen
+    isSettingsModalOpen,
   }),
 );
 

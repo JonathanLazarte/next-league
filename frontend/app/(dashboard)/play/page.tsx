@@ -5,6 +5,7 @@ import { useSound } from "@/hooks/useSound";
 
 import ModeSelector from "./ModeSelector";
 import Pvp from "./rooms/pvp/PvpLobby";
+import PlayBackground from "./PlayBackground";
 
 import "./play.css";
 import { useUserInterface } from "@/hooks/useUserInterface";
@@ -53,6 +54,7 @@ export default memo(function ModeSelection(){
 
   return (
     <div className="play-screen-container">
+      <PlayBackground />
       {!isQueueSelected && <PlaySelectionLayer />}
       {activeGameMode === "PVP" && isQueueSelected && (
         <Pvp

@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { useAuth } from "@/hooks/useAuth";
 import { FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
+import BackendStatusBanner from "@/components/BackendFallback/BackendStatusBanner";
 import "../auth.css";
 import { UserCredentials } from "@/types/user";
 
@@ -154,6 +155,7 @@ export default function Register() {
             alt="RiotGames Logo"
           />
         </div>
+        <BackendStatusBanner className="mb-3" />
         <div className="register-header">
           <h2 className="register-title">Register</h2>
           <div className="active-indicator"><div className="active-indicator-inner"></div></div>
