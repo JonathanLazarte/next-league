@@ -19,7 +19,18 @@ export default function HeaderWallet({ trigger }: HeaderWalletProps) {
         </div>
         <div className="header-buy-rp-button">
           <div className="buy-rp-icon">
-            +
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <line x1="5" y1="1.5" x2="5" y2="8.5" />
+              <line x1="1.5" y1="5" x2="8.5" y2="5" />
+            </svg>
           </div>
         </div>
       </div>

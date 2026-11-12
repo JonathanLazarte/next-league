@@ -66,7 +66,7 @@ export default function LeagueSidebar({
                 <div
                   className="league-nav-thumb-wrapper"
                   style={{
-                    backgroundImage: `linear-gradient(to right, transparent 90%, black), url('${RESOURCES_URL}/tiles/Senna_1.jpg')`
+                    backgroundImage: `linear-gradient(to right, transparent 90%, black), url('${RESOURCES_URL}/tiles/${item.thumbnailUrl || 'Senna_1.jpg'}')`
                   }}
                 >
                 </div>

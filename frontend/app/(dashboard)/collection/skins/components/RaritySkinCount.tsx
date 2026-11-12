@@ -1,7 +1,7 @@
 import { Skin } from "@/types/skin";
 import { RARITY_LEVELS } from "@/utils/constants";
 import type { TooltipTrigger } from '@/types/ui'
-import Image from 'next/image'
+import { getRarityGemUri, LEGACY_ICON_DATA_URI, CHROMA_ICON_DATA_URI } from '@/utils/uiAssets';
 
 
 
@@ -29,11 +29,10 @@ export default function RaritySkinsCount({ trigger, userSkinsFull }: RaritySkins
     <div className="rarity-icons">
       {raritys?.map((rarity) => (
         <div key={rarity} className="rarity-item" {...trigger({ content: rarity })}>
-          <Image
+          <img
             className="rarity-image"
-            src={`/collection/rarity-gem-icons/${rarity === 'Signature' ? 'transcendent' : rarity === 'Hall' ? 'exalted' : rarity.toLowerCase()}.png`}
+            src={getRarityGemUri(rarity)}
             alt={`Rareza ${rarity}`}
-            loading="lazy"
             width={20}
             height={20}
           />
@@ -44,11 +43,10 @@ export default function RaritySkinsCount({ trigger, userSkinsFull }: RaritySkins
 
     <div className="legacy-chromas-icons">
       <div className="legacy-item" {...trigger({ content: "Legacy" })}>
-        <Image
+        <img
           className="rariry-image w-7"
-          src="/raritys/Legacy.png"
+          src={LEGACY_ICON_DATA_URI}
           alt="Legacy"
-          loading="lazy"
           width={20}
           height={20}
         />
@@ -56,11 +54,10 @@ export default function RaritySkinsCount({ trigger, userSkinsFull }: RaritySkins
       </div>
 
       <div className="chroma-item" {...trigger({ content: "Chromas" })}>
-        <Image
+        <img
           className="rariry-image w-7"
-          src="/raritys/Chroma.png"
+          src={CHROMA_ICON_DATA_URI}
           alt="Chroma"
-          loading="lazy"
           width={20}
           height={20}
         />

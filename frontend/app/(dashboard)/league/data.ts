@@ -231,6 +231,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     type: 'carousel',
     iconType: 'true-damage',
     isSpecialThumbnail: true,
+    thumbnailUrl: 'Senna_1.jpg',
     skinSet: TRUE_DAMAGE_SET,
   },
   {
@@ -238,6 +239,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     title: 'FOR THE WIN',
     type: 'carousel',
     iconType: 'crown',
+    thumbnailUrl: 'Jayce_34.jpg',
     skinSet: FOR_THE_WIN_SET,
   },
   {
@@ -245,6 +247,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     title: 'ASPECTOS DE HEARTSTEEL',
     type: 'carousel',
     iconType: 'masks',
+    thumbnailUrl: 'Ezreal_33.jpg',
     skinSet: HEARTSTEEL_SET,
   },
   {
@@ -252,6 +255,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     title: 'WORLDS 2026',
     type: 'carousel',
     iconType: 'trophy',
+    thumbnailUrl: 'Viego_37.jpg',
     skinSet: WORLDS_SET,
   },
 ];

@@ -1,11 +1,12 @@
 "use client";
-import { memo, useRef, useCallback } from "react";
+import { memo, useRef, useCallback, useState, useEffect } from "react";
 import Image from 'next/image'
 import "./Champion.css";
 import { GiPadlock } from "react-icons/gi";
 import { RESOURCES_URL } from "@/utils/constants";
 import { useSound } from "@/hooks/useSound";
 import type { Champion } from '@/types/champion'
+import { MASTERY_FLAG_EMPTY_DATA_URI } from '@/utils/uiAssets'
 
 
 interface ChampionCardProps {
@@ -52,6 +53,11 @@ const ChampionCard = ({
   );
 
   const ref = useRef<HTMLDivElement | null>(null);
+  const [hasImgError, setHasImgError] = useState(false);
+
+  useEffect(() => {
+    setHasImgError(false);
+  }, [champion.id]);
 
   const getPosition = (localRef: React.RefObject<HTMLDivElement>): { x: number, y: number } | undefined => {
     const position = "right";
@@ -166,15 +172,22 @@ const ChampionCard = ({
         onMouseLeave={onHoverEnd}
       >
         <Image
-          className="champion-image"
+          className={`champion-image ${hasImgError ? "img-fallback" : ""}`}
           width={308}
           height={560}
-          src={`${RESOURCES_URL}/loading/${champion.id}_0.jpg`}
+          src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/loading/${champion.id}_0.jpg`}
           alt={`${champion.name} sprite`}
+          onError={() => setHasImgError(true)}
         />
         {adquired ? (
           <div className="mastery-box" aria-hidden="true">
-            <Image className="mastery" src="/collection/mastery-flag-empty.png" alt="mastery-flag" width={86} height={52} />
+            <Image 
+              className="mastery"
+              src={MASTERY_FLAG_EMPTY_DATA_URI}
+              alt="mastery-flag"
+              width={86}
+              height={52}
+          />
             <div className="eternals">
               <div className="eternals-content">
 

@@ -75,3 +75,10 @@
     .skin-card-rarity-image {
     }
 }
+
+.skin-card-image.img-fallback {
+    object-fit: contain;
+    background: radial-gradient(circle, #091428 0%, #010a13 100%);
+    padding: 3rem;
+    filter: brightness(0.9);
+}

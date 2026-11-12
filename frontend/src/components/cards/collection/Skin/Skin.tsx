@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useRef } from "react";
+import { memo, useRef, useState, useEffect } from "react";
 import { GiPadlock } from "react-icons/gi";
 import Image from 'next/image'
 import { useSound } from '@/hooks/useSound'
@@ -8,13 +8,15 @@ import { useSound } from '@/hooks/useSound'
 import "./Skin.css";
 import { RESOURCES_URL } from "@/utils/constants";
 import type { Skin } from '@/types/skin'
+import { BORDER_NORMAL_DATA_URI, getRarityGemUri } from "@/utils/uiAssets";
 
 interface SkinCardProps {
   onHoverStart: (skin: Skin, ref: React.RefObject<HTMLDivElement>) => void,
   onHoverEnd: () => void,
   skin: Skin,
   isAdquired: boolean,
-  tooltipPosRef: React.MutableRefObject<{x:number, y:number}>
+  tooltipPosRef: React.MutableRefObject<{x:number, y:number}>,
+  priority?: boolean
 }
 
 export default memo(function SkinCard({
@@ -23,8 +25,14 @@ export default memo(function SkinCard({
   skin,
   isAdquired,
   tooltipPosRef,
+  priority = false,
 }: SkinCardProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const [hasImgError, setHasImgError] = useState(false);
+
+  useEffect(() => {
+    setHasImgError(false);
+  }, [skin.img]);
   const getRem = () => {
     return parseFloat(getComputedStyle(document.documentElement).fontSize);
   };
@@ -62,33 +70,36 @@ export default memo(function SkinCard({
       onMouseLeave={onHoverEnd}
     >
       {isAdquired ? (
-        <Image
+        <img
           width={264}
           height={450}
-          alt={"Skin card border"}
+          alt="Skin card border"
           className="skin-card-border"
-          src={`/collection/borders/borders_normal.png`}
+          src={BORDER_NORMAL_DATA_URI}
         />
       ) : null}
       {
         <Image
-          className={`skin-card-image ${isAdquired ? "" : "not-obtained"}`}
-          src={`${RESOURCES_URL}/loading/${skin.img}`}
+          className={`skin-card-image ${isAdquired ? "" : "not-obtained"} ${hasImgError ? "img-fallback" : ""}`}
+          src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/loading/${skin.img}`}
           alt={`${skin.name} skin`}
           width={308}
           height={560}
+          priority={priority}
+          onError={() => setHasImgError(true)}
         />
       }
       {isAdquired ? (
-        skin.rarity !== "NoRarity" && (
+        skin.rarity !== "NoRarity" && getRarityGemUri(skin.rarity) ? (
           <img
             className="skin-card-rarity-image"
-            src={`/collection/rarity-gem-icons/${skin.rarity.toLowerCase()}.png`}
+            src={getRarityGemUri(skin.rarity)}
             alt={`Rareza ${skin.rarity}`}
-            loading="lazy"
             aria-hidden="true"
+            width={50}
+            height={50}
           />
-        )
+        ) : null
       ) : (
         <div className="unlock-champion-button" aria-label="Skin bloqueado">
           <GiPadlock

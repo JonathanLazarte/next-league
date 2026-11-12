@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import "./SkinTooltip.css";
 import { memo, useRef, useLayoutEffect, useState } from "react";
 import type { Skin } from "@/types/skin";
+import { getRarityGemUri, CHROMA_ICON_DATA_URI } from "@/utils/uiAssets";
 
 
 
@@ -67,11 +68,12 @@ const SkinTooltip = ({
             }}
           >
             <div className="tooltip-header">
-              {content.rarity !== "NoRarity" ? (
+              {content.rarity !== "NoRarity" && getRarityGemUri(content.rarity) ? (
                 <img
                   className="tooltip-rarity-icon"
-                  src={`/collection/rarity-gem-icons/${content.rarity.toLowerCase()}.png`}
-                ></img>
+                  src={getRarityGemUri(content.rarity)}
+                  alt={`Rareza ${content.rarity}`}
+                />
               ) : null}
               <h2 className="tooltip-skin-name">{content.name}</h2>
             </div>
@@ -88,7 +90,7 @@ const SkinTooltip = ({
                 </>
               )}
               {content.chromas ? (
-                <img className="chroma-icon" src={`/raritys/Chroma.png`}></img>
+                <img className="chroma-icon" src={CHROMA_ICON_DATA_URI} alt="Chroma" />
               ) : null}
             </div>
           </div>,

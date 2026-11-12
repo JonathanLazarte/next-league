@@ -198,15 +198,12 @@
     align-self: center;
     margin-left: auto;
     margin-right: 5%;
-    align-items: center;
-    text-align: center;
-    align-content: center;
-    justify-content: center;
-    line-height: 1;
     cursor: pointer;
     clip-path: circle(50%);
     color: var(--color-primary);
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-buy-rp-button:hover {
@@ -220,36 +217,23 @@
 
 .header-buy-rp-button::after {
     position: absolute;
-    display: grid;
     inset: 0;
+    margin: auto;
     content: "";
-    height: 90%;
-    width: 90%;
+    height: 85%;
+    width: 85%;
     background: var(--blue-six);
     clip-path: circle(50%);
     z-index: 0;
-    align-self: center;
-    justify-self: center;
-    place-self: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    text-align: center;
 }
 
 .buy-rp-icon {
-    position: absolute;
+    position: relative;
     z-index: 1;
-    align-self: center;
-    justify-self: center;
-    place-self: center;
-    display: grid;
-    inset: 0;
-    place-self: center;
-    line-height: 1;
-    font-size: 1.3rem;
-    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
 }
 
 .logout-button {

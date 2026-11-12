@@ -189,6 +189,7 @@ export default memo(function VirtualSkinsGrid({
                       skin={skin}
                       isAdquired={acquiredSkinsIds.has(skin.id)}
                       tooltipPosRef={tooltipPosRef}
+                      priority={virtualRow.index <= 2}
                     />
                   ))}
                 </div>
