@@ -8,10 +8,12 @@ import {
   setMute,
   restoreDefaults,
 } from "@/redux/slices/soundSlice";
-import { saveSettings } from "@/redux/slices/settingsSlice";
+import { saveSettings, setLanguage } from "@/redux/slices/settingsSlice";
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks'
 import { useSound } from '@/hooks/useSound'
 import { useUserInterface } from "@/hooks/useUserInterface";
+import { LOCALE_STORAGE_KEY, useI18n } from "@/hooks/useI18n";
+import type { Locale } from "@/i18n/messages";
 
 interface SoundControlProps {
   label: string,
@@ -21,6 +23,7 @@ interface SoundControlProps {
 }
 
 function SoundControl({ label, checkLabel, type, isMasterMuted }: SoundControlProps) {
+  const { t } = useI18n();
   // Estado local solo para visualización inmediata en UI
   const [localVolume, setLocalVolume] = useState(0.5); // Valor inicial debería venir de config
   const [isLocalMuted, setIsLocalMuted] = useState(false);
@@ -64,7 +67,7 @@ function SoundControl({ label, checkLabel, type, isMasterMuted }: SoundControlPr
             />
           )}
         </div>
-        <label className="audio-label">Enable {checkLabel}</label>
+        <label className="audio-label">{t("settings.enable")} {checkLabel}</label>
       </div>
       <div className="sub-volume-controls">
         <span className={`audio-label `}>
@@ -90,6 +93,7 @@ function SoundControl({ label, checkLabel, type, isMasterMuted }: SoundControlPr
 
 // Componente de Ajustes de Sonido
 function AudioSettings() {
+  const { t } = useI18n();
   const [localVolume, setLocalVolume] = useState(0.5); // Valor inicial debería venir de config
   const [isMasterMuted, setIsMasterMuted] = useState(false);
   const { volume: globalVolume, muted: globalMuted } = useAppSelector(
@@ -127,10 +131,10 @@ function AudioSettings() {
               />
             )}
           </div>
-          <label className="audio-label">Enable Sound</label>
+          <label className="audio-label">{t("settings.enableSound")}</label>
         </div>
         <span className="audio-label">
-          Overall Volume: {globalVolume * 100}
+          {t("settings.overallVolume")}: {globalVolume * 100}
         </span>
         <input
           type="range"
@@ -148,13 +152,13 @@ function AudioSettings() {
 
       <div className="secondary-controls">
         <SoundControl
-          label="SFX Volume: "
+          label={`${t("settings.sfxVolume")}: `}
           checkLabel={"SFX"}
           type="sfx"
           isMasterMuted={isMasterMuted}
         />
         <SoundControl
-          label="Music Volume: "
+          label={`${t("settings.musicVolume")}: `}
           checkLabel={"Music"}
           type="music"
           isMasterMuted={isMasterMuted}
@@ -164,7 +168,39 @@ function AudioSettings() {
   );
 }
 
+function ClientSettings() {
+  const { locale, t } = useI18n();
+  const dispatch = useAppDispatch();
+
+  const choose = (next: Locale) => {
+    dispatch(setLanguage(next));
+    localStorage.setItem(LOCALE_STORAGE_KEY, next);
+  };
+
+  return (
+    <div className="audio-settings">
+      <span className="audio-label">{t("settings.language")}</span>
+      <p className="audio-label">{t("settings.languageHint")}</p>
+      <div className="settings-category-selector">
+        {(["es", "en"] as const).map((code) => (
+          <div
+            key={code}
+            className={`setting-category-item ${locale === code ? "selected" : ""}`}
+            onClick={() => choose(code)}
+          >
+            <div className="selected-reference-bar"></div>
+            <div className="setting-category-item-name">
+              {code === "es" ? t("settings.spanish") : t("settings.english")}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Settings() {
+  const { t } = useI18n();
   const [settingSelected, setSettingSelected] = useState("sound");
   const userSettings = useAppSelector((state) => state.settings);
   const { updateSettingsModal, isSettingsModalOpen } = useUserInterface()
@@ -204,31 +240,39 @@ export default function Settings() {
         <div className="settings-panel">
           <div className="settings-header">
             <div className="settings-header-tittle">
-              <span>CLIENT</span>
+              <span>{t("settings.interface")}</span>
               <span style={{ marginLeft: "1rem", marginRight: "1rem" }}>/</span>
               <span style={{ color: "var(--gold-one)" }}>
-                {settingSelected.toUpperCase()}
+                {settingSelected === "interface" ? t("settings.interface") : t("settings.sound")}
               </span>
             </div>
             <div
               className="settings-restore-button general-button"
               onClick={() => handleRestoreDefaults()}
             >
-              Restore Defaults
+              {t("settings.restore")}
             </div>
           </div>
           <div className="settings-main">
             <div className="settings-category-selector">
               <div
-                className={`setting-category-item ${settingSelected === "sound" ? "selected" : null}`}
-                onClick={() => setSettingSelected("SOUND")}
+                className={`setting-category-item ${settingSelected === "sound" ? "selected" : ""}`}
+                onClick={() => setSettingSelected("sound")}
               >
                 <div className="selected-reference-bar"></div>
-                <div className="setting-category-item-name">SOUND</div>
+                <div className="setting-category-item-name">{t("settings.sound")}</div>
+              </div>
+              <div
+                className={`setting-category-item ${settingSelected === "interface" ? "selected" : ""}`}
+                onClick={() => setSettingSelected("interface")}
+              >
+                <div className="selected-reference-bar"></div>
+                <div className="setting-category-item-name">{t("settings.interface")}</div>
               </div>
             </div>
             <div className="settings-parameters">
               {settingSelected === "sound" && <AudioSettings />}
+              {settingSelected === "interface" && <ClientSettings />}
             </div>
           </div>
           <div
@@ -238,7 +282,7 @@ export default function Settings() {
               updateSettingsModal(false);
             }}
           >
-            DONE
+            {t("settings.done")}
           </div>
         </div>
       </div>,

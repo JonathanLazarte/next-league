@@ -4,6 +4,7 @@ import "./Confirm.css";
 import { useRouter } from "next/navigation";
 import { useUserInterface } from "@/hooks/useUserInterface";
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 
 interface PlayButtonProps {
   type: string,
@@ -13,7 +14,8 @@ interface PlayButtonProps {
 export default function PlayButton({ type, activeButtonAction }: PlayButtonProps) {
   const router = useRouter();
   const { updateQueue } = useUserInterface();
-  const text = "CONFIRM"
+  const { t } = useI18n();
+  const text = t("buttons.confirm")
 
   const { play: playHover } = useSound("/sfx/sfx-gameselect-button-confirm-hover.ogg");
   const { play: playCancel } = useSound(

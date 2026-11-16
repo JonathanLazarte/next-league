@@ -6,6 +6,7 @@ import type { Dispatch } from 'react'
 import { useRouter } from "@/hooks/useRouter";
 import { useUserInterface } from "@/hooks/useUserInterface";
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 import Image from 'next/image'
 import { Section } from "@/types/ui";
 
@@ -17,6 +18,7 @@ interface LobbyPlayButtonProps {
 
 export default function LobbyPlayButton({ setSectionTabSelected }: LobbyPlayButtonProps) {
   const route = useRouter();
+  const { t } = useI18n();
   const { actualSection, queue } = useUserInterface();
   const [buttonState, setButtonState] = useState<Button>('idle')
   const { play: playHover } = useSound("/sfx/sfx-nav-button-play-hover.ogg");
@@ -38,8 +40,8 @@ export default function LobbyPlayButton({ setSectionTabSelected }: LobbyPlayButt
   }, [actualSection, isUserInParty]);
   // Texto dinámico del botón
   const getButtonText = () => {
-    if (isUserInParty) return "PARTY";
-    return "PLAY";
+    if (isUserInParty) return t("common.party");
+    return t("common.play");
   };
 
   const handleClick = () => {

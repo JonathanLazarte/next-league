@@ -4,6 +4,7 @@ import { FaCheck } from "react-icons/fa6";
 import { FILTER_OPTIONS_BY_GROUPING, SKIN_FILTER_OPTIONS } from "@/utils/constants";
 import type { SkinGroupingOptionsValues, SortOptionsValues } from '@/types/ui'
 import type { Dispatch } from 'react'
+import { useI18n } from "@/hooks/useI18n";
 
 interface FiltersProps {
   setSearchKeys: Dispatch<React.SetStateAction<string | null>>;
@@ -24,15 +25,16 @@ export default function Filters({
   setGroupedBy,
   sortedBy,
   setSortedBy }: FiltersProps) {
+  const { t } = useI18n();
 
   return <div>
   <div className="search-filter">
     <FaSearch className="search-icon" />
     <input
-      placeholder="Search"
+      placeholder={t("common.search")}
       type="search"
       onChange={(event) => setSearchKeys(event.currentTarget.value)}
-      aria-label="Buscar skins"
+      aria-label={t("filters.searchSkins")}
     />
   </div>
   <div className="checkbox-container">
@@ -53,7 +55,7 @@ export default function Filters({
         <div className="custom-checkbox" aria-hidden="true">
           {showNotObtained ? <FaCheck className="check-icon" /> : null}
         </div>
-        Show Unowned
+        {t("collection.showUnowned")}
       </div>
     ) : (
       <div className="h-3" aria-hidden="true"></div>
@@ -64,14 +66,14 @@ export default function Filters({
     options={SKIN_FILTER_OPTIONS}
     value={groupedBy}
     onChange={setGroupedBy}
-    placeholder="Seleccionar agrupación..."
+    placeholder={t("filters.selectGrouping")}
   />
   <CustomSelect
     className="select-filter"
     options={FILTER_OPTIONS_BY_GROUPING[groupedBy as keyof typeof FILTER_OPTIONS_BY_GROUPING]}
     value={sortedBy}
     onChange={setSortedBy}
-    placeholder="Seleccionar orden..."
+    placeholder={t("filters.selectSort")}
     />
 
 </div>

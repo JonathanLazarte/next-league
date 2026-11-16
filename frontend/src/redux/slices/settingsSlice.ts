@@ -61,7 +61,7 @@ interface SettingsState {
 const initialState: SettingsState = {
   loading: false,
   error: null,
-  language: 'es',
+  language: 'en',
   sound: {
     master: { volume: 1, muted: false },
     sfx: { volume: 3, muted: false },

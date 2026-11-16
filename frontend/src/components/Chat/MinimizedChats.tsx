@@ -1,9 +1,11 @@
 import { memo } from 'react'
 import { useChat } from '@/hooks/useChat'
+import { useI18n } from '@/hooks/useI18n'
 import { PiXBold } from "react-icons/pi"
 import './MinimizedChats.css'
 
 export default memo(function MinimizedChats() {
+  const { t } = useI18n();
   const {
     minimizedChats,
     chatUsers,
@@ -61,7 +63,7 @@ export default memo(function MinimizedChats() {
                     handleRestoreChat(chatId)
                   }}
                   className="minimized-chat-btn restore-btn"
-                  title="Restaurar"
+                  title={t("common.restore")}
                 >
                   ↗
                 </button>
@@ -71,7 +73,7 @@ export default memo(function MinimizedChats() {
                     handleCloseChat(chatId)
                   }}
                   className="minimized-chat-btn close-btn"
-                  title="Cerrar"
+                  title={t("common.close")}
                 >
                   <PiXBold />
                 </button>

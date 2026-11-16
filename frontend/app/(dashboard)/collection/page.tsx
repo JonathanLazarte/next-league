@@ -6,6 +6,7 @@ import { useSound } from "@/hooks/useSound";
 import dynamic from "next/dynamic";
 import Loading from "@/components/Loading/Loading";
 import ChampionsSection from './champions/Champions'
+import { useDecodeAssetGroup } from "@/hooks/useDecodeAssetGroup";
 import { Section } from "@/types/ui";
 const SkinsSection = dynamic(
   () => import("./skins/Skins"),
@@ -16,6 +17,7 @@ const SkinsSection = dynamic(
 );
 
 export default memo(function Collection() {
+  useDecodeAssetGroup("championDetails");
   const [actualSubSection, setActualSubSection] = useState("campeones");
   const subSections = [
     "campeones",

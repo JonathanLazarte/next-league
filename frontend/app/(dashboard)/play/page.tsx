@@ -2,6 +2,7 @@
 
 import { useState, memo } from "react";
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 
 import ModeSelector from "./ModeSelector";
 import Pvp from "./rooms/pvp/PvpLobby";
@@ -17,6 +18,7 @@ export default memo(function ModeSelection(){
   console.log(queue)
   const [ categorySelected, setCategorySelected ] = useState("PVP");
   const { play: playMenuClick } = useSound("/general/menu-click.mp3");
+  const { t } = useI18n();
 
   const handleCategoryChange = (category: string) => {
     playMenuClick();
@@ -33,14 +35,14 @@ export default memo(function ModeSelection(){
             onClick={() => handleCategoryChange("PVP")}
             /*onMouseEnter={() => playConfirmButtonHover()}*/
           >
-            PVP
+            {t("play.categories.PVP")}
           </div>
           <div
             className={`subheader-tab ${categorySelected === "CO_OP_VS_AI" ? "active-subheader-tab" : ""}`}
             onClick={() => handleCategoryChange("CO_OP_VS_AI")}
             /*onMouseEnter={() => playConfirmButtonHover()}*/
           >
-            CO-OP VS AI
+            {t("play.categories.CO_OP_VS_AI")}
           </div>
         </header>
         <ModeSelector data={GAME_DATA[categorySelected as keyof typeof GAME_DATA]} />

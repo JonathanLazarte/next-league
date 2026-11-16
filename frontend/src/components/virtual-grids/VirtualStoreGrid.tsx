@@ -33,7 +33,7 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
   }
   const currentRem = getRem();
   const gapValue = currentRem * 1.3;
-  const cardWidth = currentRem * 23.1;
+  const cardWidth = currentRem * 21;
   const paddingRightValue = currentRem * 2.85;
   const [columns, setColumns] = useState<number>();
 

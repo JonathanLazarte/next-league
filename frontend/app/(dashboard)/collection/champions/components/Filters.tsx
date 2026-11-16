@@ -3,6 +3,7 @@ import { FaCheck } from "react-icons/fa6";
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
 import { ChampionGroupingOptionsValues, SortOptionsValues } from "@/types/ui";
 import { CHAMPION_SORT_OPTIONS, CHAMPION_GROUP_OPTIONS } from "@/utils/constants";
+import { useI18n } from "@/hooks/useI18n";
 
 interface FiltersProps {
   setSearchKeys: React.Dispatch<React.SetStateAction<string>>;
@@ -23,6 +24,7 @@ export default function Filters({
     sortedBy,
     setSortedBy,
 }: FiltersProps) {
+    const { t } = useI18n();
     return (
         <div className="filter-nav">
             <div className="left-place">
@@ -58,11 +60,11 @@ export default function Filters({
                     <div className="maestry-etern-levels">
                         <div className="amount-and-description">
                             <div className="amount">0</div>
-                            <div className="description">TOTAL MASTERY LEVEL</div>
+                            <div className="description">{t("collection.totalMastery")}</div>
                         </div>
                         <div className="amount-and-description">
                             <div className="amount">0</div>
-                            <div className="description">ETERNALS MILESTONES</div>
+                            <div className="description">{t("collection.eternalsMilestones")}</div>
                         </div>
                     </div>
                 </div>
@@ -71,7 +73,7 @@ export default function Filters({
                 <div className="search-filter">
                     <FaSearch className="search-icon" />
                     <input
-                        placeholder="Search"
+                        placeholder={t("common.search")}
                         type="search"
                         onKeyUp={(event) => setSearchKeys(event.currentTarget.value)}
                     ></input>
@@ -85,7 +87,7 @@ export default function Filters({
                         <div className="custom-checkbox">
                             {!inCollection ? <FaCheck className="check-icon" /> : null}
                         </div>
-                        Show Unowned
+                        {t("collection.showUnowned")}
                     </div>
                 ) : (
                     <div style={{ height: "5.4rem" }} className="h-3"></div>
@@ -96,7 +98,7 @@ export default function Filters({
                     options={CHAMPION_GROUP_OPTIONS}
                     value={groupedBy}
                     onChange={setGroupedBy}
-                    placeholder="Select Grouping..."
+                    placeholder={t("filters.selectGroup")}
                 />
 
                 <CustomSelect
@@ -104,7 +106,7 @@ export default function Filters({
                     options={CHAMPION_SORT_OPTIONS}
                     value={sortedBy}
                     onChange={setSortedBy}
-                    placeholder="Select Sorting..."
+                    placeholder={t("filters.selectSorting")}
                 />
             </div>
         </div>

@@ -10,6 +10,7 @@ import { RESOURCES_URL } from '@/utils/constants'
 import { useAuth } from '@/hooks/useAuth'
 import { useUser } from "@/hooks/useUser";
 import { useSound } from "@/hooks/useSound"
+import { useI18n } from "@/hooks/useI18n"
 
 interface ProfileBoxProps {
   updateSideNav: () => void,
@@ -18,6 +19,7 @@ interface ProfileBoxProps {
 
 const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
   const { user } = useUser();
+  const { t } = useI18n();
   const { queue, queueStatus, updateUserState, updateSettingsModal } = useUserInterface();
   const [iconIsInHover, setIconIsInHover] = useState(false);
   const { play: playClickGeneric } = useSound("/sfx/sfx-uikit-click-generic.ogg")
@@ -30,16 +32,7 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
     in_game: "In Game",
     offline: "Offline",
   };
-  const userQueueLabel = {
-    ranked_solo_duo: "Ranked Solo/Duo",
-    ranked_flex: "Ranked Flex",
-    swiftplay: "Swiftplay",
-    aram: "Aram",
-    aram_mayhem: "Aram: Mayhem",
-    intro: "Intro",
-    beginner: "Beginner",
-    intermediate: "Intermediate",
-  }
+  const userQueueLabel = (queueName: string) => t(`play.queues.${queueName}.name`);
   const { logout } = useAuth();
 
   const handleLogout = () => {
@@ -61,7 +54,7 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
         className="user-icon-wrapper"
       >
         <div className="user-level-wrapper">
-          <span className="user-level">{user.level}</span>
+          <span className="user-level">{/*user.level*/}</span>
         </div>
         <svg
           className="user-icon-border-svg"
@@ -138,13 +131,13 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
             >
               <div className="status-icon"></div>
               {queueStatus === "idle"
-                ? `${queue !== null ? "1/5 " : ""}${ queue !== null ? userQueueLabel[queue as keyof typeof userQueueLabel] : userStateLabel[userState as keyof typeof userStateLabel]}`
-                : "In Queue"}
+                ? `${queue !== null ? "1/5 " : ""}${ queue !== null ? userQueueLabel(queue) : userStateLabel[userState as keyof typeof userStateLabel]}`
+                : t("play.categories.inQueue")}
             </div>
           </>
         )}
         <span className="showPerfilSpan" style={showPerfilSpanStyle as CSSProperties}>
-          View Profile
+          {t("profile.view")}
         </span>
       </div>
     </div>

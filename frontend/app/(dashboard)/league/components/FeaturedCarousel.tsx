@@ -7,6 +7,7 @@ import { SkinSlide } from '../types';
 import { RpIcon, TierCrestIcon } from './LeagueIcons';
 import { RESOURCES_URL } from '@/utils/constants';
 import { useSound } from '@/hooks/useSound';
+import { useI18n } from '@/hooks/useI18n';
 
 interface FeaturedCarouselProps {
   slides: SkinSlide[];
@@ -24,6 +25,7 @@ export default function FeaturedCarousel({
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const { play: playClick } = useSound('/general/menu-click.mp3');
+  const { t } = useI18n();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const currentSlide = slides[currentIndex] || slides[0];
@@ -122,7 +124,7 @@ export default function FeaturedCarousel({
         <button
           className="league-carousel-arrow"
           onClick={handlePrev}
-          aria-label="Anterior"
+          aria-label={t("common.previous")}
         >
           <IoChevronBack />
         </button>
@@ -163,7 +165,7 @@ export default function FeaturedCarousel({
         <button
           className="league-carousel-arrow"
           onClick={handleNext}
-          aria-label="Siguiente"
+          aria-label={t("common.next")}
         >
           <IoChevronForward />
         </button>

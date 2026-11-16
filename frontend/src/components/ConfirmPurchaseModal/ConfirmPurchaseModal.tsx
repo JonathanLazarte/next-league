@@ -1,16 +1,18 @@
 "use client";
 import ReactDOM from "react-dom";
-import { useState } from "react";
 import Image from "next/image";
 import { useMemo } from "react";
 import { LiaLongArrowAltUpSolid } from "react-icons/lia";
 import useLoadingDelay from "@/hooks/useLoadingDelay";
 import "./confirmPurchaseModal.css";
 import { usePurchase } from "@/hooks/usePurchase";
+import { useI18n } from "@/hooks/useI18n";
+import MediaSlot from "@/components/MediaSlot/MediaSlot";
 
 
 
 export default function ConfirmPurchaseModal() {
+  const { t } = useI18n();
   const {
     wallet: { RP: walletRP, BE: walletBE },
     itemToBuy,
@@ -24,8 +26,6 @@ export default function ConfirmPurchaseModal() {
   const showLoading = useLoadingDelay(isProcessing, { delay: 300, minDisplayTime: 1000 });
   const isSuccess = status === "success";
   const showSuccess = isSuccess && !showLoading
-  const [imageLoading, setImageLoading] = useState(true);
-  const delayedImageLoading = useLoadingDelay(imageLoading, { delay: 400 })
 
   const productPrice = itemToBuy?.value;
 
@@ -153,7 +153,7 @@ export default function ConfirmPurchaseModal() {
           className="general-button done-purchase-modal-button"
           data-testid="done-purchase-button"
         >
-          Done
+          {t("buttons.done")}
         </div>
       </div>
     );
@@ -170,7 +170,7 @@ export default function ConfirmPurchaseModal() {
           className="general-button done-purchase-modal-button"
           data-testid="done-purchase-button"
         >
-          Ok
+          {t("buttons.ok")}
         </div>
       </div>
     );
@@ -195,25 +195,14 @@ export default function ConfirmPurchaseModal() {
                 </button>
 
                 <div className="image-container">
-                  <Image
-                    className="product-image"
-                    src={itemToBuy?.img}
-                    alt={itemToBuy.name}
-                    fill
-                    onLoad={() => setImageLoading(false)}
-                    style={{
-                      visibility: !delayedImageLoading ? "visible" : "hidden",
-                    }}
-                  />
-                  {delayedImageLoading && <div className="loading-image">
-                    <div className={`loading-spinner medium`}>
-                      <img
-                        alt="loading spinner"
-                        className="spinner-ring"
-                        src="/general/loading-spinner-blue.png"
-                      />
-                    </div>
-                  </div>}
+                  <MediaSlot variant="hero">
+                    <Image
+                      className="product-image"
+                      src={itemToBuy?.img}
+                      alt={itemToBuy.name}
+                      fill
+                    />
+                  </MediaSlot>
                   <div className="gradient"></div>
                 </div>
 
@@ -226,7 +215,7 @@ export default function ConfirmPurchaseModal() {
                       {itemToBuy?.subtitle}
                     </span>
                   ) : (
-                    <span className="product-subtitle">Item unlocked!</span>
+                    <span className="product-subtitle">{t("purchase.unlocked")}</span>
                   )}
                 </div>
 

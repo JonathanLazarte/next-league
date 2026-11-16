@@ -4,6 +4,7 @@ import React, { useState, useRef} from "react";
 import ReactDOM from "react-dom";
 import "./TextTooltip.css";
 import { SECTION_LABELS } from '@/utils/constants'
+import { useI18n } from '@/hooks/useI18n'
 
 interface TextTooltipProps {
   content: string,
@@ -14,6 +15,7 @@ const TextTooltip = ({
   content,
   position
 }: TextTooltipProps ) => {
+  const { t } = useI18n();
   const [visible, /*setVisible*/] = useState(true);
   const tooltipRef = useRef(null);
 
@@ -32,7 +34,7 @@ const TextTooltip = ({
             }}
           >
             {
-              SECTION_LABELS[content as keyof typeof SECTION_LABELS] || content || '??'
+              t(SECTION_LABELS[content as keyof typeof SECTION_LABELS] || content || '??')
             }
           </div>,
           document.body,

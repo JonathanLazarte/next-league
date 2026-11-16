@@ -20,14 +20,14 @@ export const GROUP_MODES = {
 };
 
 export const STORE_SORT_OPTIONS = [
-  { value: null, label: "Release Date ↓" },
-  { value: "ReleaseAscend", label: "Release Date ↑" },
-  { value: "PriceRpDescend", label: "Price (RP) ↓" },
-  { value: "PriceRpAscend", label: "Price (RP) ↑" },
-  { value: "PriceBeDescend", label: "Price (EA) ↓" },
-  { value: "PriceBeAscend", label: "Price (EA) ↑" },
-  { value: "AlphabeticallyDescend", label: "Alphabetical (A-Z)" },
-  { value: "AlphabeticallyAscend", label: "Alphabetical (Z-A)" },
+  { value: null, label: "filters.releaseDateDesc" },
+  { value: "ReleaseAscend", label: "filters.releaseDateAsc" },
+  { value: "PriceRpDescend", label: "filters.priceRpDesc" },
+  { value: "PriceRpAscend", label: "filters.priceRpAsc" },
+  { value: "PriceBeDescend", label: "filters.priceBeDesc" },
+  { value: "PriceBeAscend", label: "filters.priceBeAsc" },
+  { value: "AlphabeticallyDescend", label: "filters.alphaAZ" },
+  { value: "AlphabeticallyAscend", label: "filters.alphaZA" },
 ] as const;
 
 export const SKIN_SORT_OPTIONS = [
@@ -35,14 +35,14 @@ export const SKIN_SORT_OPTIONS = [
 ] as const;
 
 export const CHAMPION_SORT_OPTIONS = [
-  { value: "alphabetically", label: "Alphabetical" },
-  { value: "championsMastery", label: "Champion Mastery" },
+  { value: "alphabetically", label: "filters.alphabetical" },
+  { value: "championsMastery", label: "filters.mastery" },
 ] as const;
 
 export const CHAMPION_GROUP_OPTIONS = [
-    { value: "all", label: "All Champions" },
-    { value: "possession", label: "Most Popular Posesition" },
-    { value: "role", label: "Role" },
+    { value: "all", label: "filters.allChampions" },
+    { value: "possession", label: "filters.possession" },
+    { value: "role", label: "filters.role" },
 ] as const
 
 export const HOVER_DELAYS = {
@@ -58,9 +58,9 @@ export const API_ENDPOINTS = {
 };
 
 export const SECTION_LABELS = {
-  collection: "Collection",
-  store: "Store",
-  league: "LEAGUE",
+  collection: "sections.collection",
+  store: "sections.store",
+  league: "sections.league",
 }
 
 export const SECTIONS = {
@@ -98,120 +98,80 @@ export const BACKGROUND_URLS = {
 
 export const FILTER_OPTIONS_BY_GROUPING = {
   collection: [
-    { value: "purchaseDate", label: "Adquisition Date" },
-    { value: "releaseDate", label: "Release Date" },
-    { value: "alphabetical", label: "Alphabetical" },
+    { value: "purchaseDate", label: "filters.acquisitionDate" },
+    { value: "releaseDate", label: "filters.releaseDate" },
+    { value: "alphabetical", label: "filters.alphabetical" },
   ],
   all: [
-    { value: "releaseDate", label: "Release Date" },
-    { value: "alphabetical", label: "Alphabetical" },
+    { value: "releaseDate", label: "filters.releaseDate" },
+    { value: "alphabetical", label: "filters.alphabetical" },
   ],
   champion: [
-    { value: "mastery", label: "Mastery" },
-    { value: "mostOwned", label: "Most Owned" },
-    { value: "alphabetical", label: "Alphabetical" },
+    { value: "mastery", label: "filters.mastery" },
+    { value: "mostOwned", label: "filters.mostOwned" },
+    { value: "alphabetical", label: "filters.alphabetical" },
   ],
   set: [
-    { value: "mostOwned", label: "Most Owned" },
-    { value: "alphabetical", label: "Alphabetical" },
+    { value: "mostOwned", label: "filters.mostOwned" },
+    { value: "alphabetical", label: "filters.alphabetical" },
   ],
   level: [
-    { value: "rarity", label: "Rarity (By default)" }
+    { value: "rarity", label: "filters.rarityDefault" }
   ],
 } as const;
 
 export const GROUPING_OPTIONS_CHAMPION = [
-  { value: "all", label: "All" },
-  { value: "role", label: "Role" },
-  { value: "possession", label: "Possession" }
+  { value: "all", label: "filters.all" },
+  { value: "role", label: "filters.role" },
+  { value: "possession", label: "filters.possession" }
 ] as const;
 
 export const SKIN_FILTER_OPTIONS = [
-  { value: "collection", label: "My collection" },
-  { value: "all", label: "All" },
-  { value: "champion", label: "Champion" },
-  { value: "set", label: "Set" },
-  { value: "level", label: "Tier" },
+  { value: "collection", label: "filters.myCollection" },
+  { value: "all", label: "filters.all" },
+  { value: "champion", label: "filters.champion" },
+  { value: "set", label: "filters.set" },
+  { value: "level", label: "filters.tier" },
 ] as const;
 
 export const GAME_DATA = {
   PVP: [
     {
-      name: "summoner rift",
+      id: "summonersRift",
       hoverImg: "sr-icon-hover.png",
       enabledImg: "sr-icon-active.png",
       disabledImg: "sr-icon-default.png",
       subTitle: "5v5",
-      title: "SUMMONER'S RIFT",
       queues: [
-        {
-          name: "swiftplay",
-          description:
-            "Authentic SR gameplay in a much shorter match. Play with friends of different skill levels without the fear of falling too far behind.",
-          room_title: "SR · Swiftplay · ",
-        },
-        {
-          name: "ranked_solo_duo",
-          description:
-            "Crush your lane, dive into epic five-on-five team fights, and destroy the enemy nexus in League`s premier competitive mode.",
-          room_title: "SR · Ranked Solo/Duo · Draft",
-        },
-        {
-          name: "ranked_flex",
-          description:
-            "Crush your lane, dive into epic five-on-five team fights, and destroy the enemy nexus in League`s premier competitive mode.",
-          room_title: "SR · Ranked Flex · Draft",
-        },
+        { name: "swiftplay" },
+        { name: "ranked_solo_duo" },
+        { name: "ranked_flex" },
       ],
     },
     {
-      name: "aram",
+      id: "aram",
       hoverImg: "aram-hover.png",
       enabledImg: "aram-active.png",
       disabledImg: "aram-default.png",
       subTitle: "5v5",
-      title: "ARAM",
       queues: [
-        {
-          name: "aram_mayhem",
-          description:
-            "Ten randomly-selected champions assemble on a narrow bridge. Cross to the other side and destroy everything in your path.",
-          room_title: "RNG · ARAM: MAYHEM · RANDOM",
-        },
-        {
-          name: "aram",
-          description:
-            "Ten randomly-selected champions assemble on a narrow bridge. Cross to the other side and destroy everything in your path.",
-          room_title: "RNG · ARAM · RANDOM",
-        },
+        { name: "aram_mayhem" },
+        { name: "aram" },
       ],
     },
   ],
   CO_OP_VS_AI: [
     {
-      name: "co-op vs ai",
+      id: "summonersRift",
       hoverImg: "sr-icon-hover.png",
       enabledImg: "sr-icon-active.png",
       disabledImg: "sr-icon-default.png",
       subTitle: "5v5",
-      title: "SUMMONER'S RIFT",
       queues: [
-        {
-          name: "intro",
-          description: "Team up with other players against a team of boths and destroy the enemy Nexus.",
-          room_title: "SR · Intro · Blind",
-        },
-        {
-          name: "beginner",
-          description: "Team up with other players against a team of boths and destroy the enemy Nexus.",
-          room_title: "SR · Begginer · Blind",
-        },
-        {
-          name: "intermediate",
-          description: "Team up with other players against a team of boths and destroy the enemy Nexus.",
-          room_title: "SR · Intermediate · Blind",
-        },
+        { name: "intro" },
+        { name: "beginner" },
+        { name: "intermediate" },
       ],
     },
   ],
-};
+} as const;

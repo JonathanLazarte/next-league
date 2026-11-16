@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, memo, useMemo } from "react";
 import { PiMinus } from "react-icons/pi";
 import "./Chat.css";
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 import { useChat } from "@/hooks/useChat";
 import { useUser } from "@/hooks/useUser";
 import { RESOURCES_URL } from '@/utils/constants'
@@ -13,6 +14,7 @@ import Image from 'next/image'
 import type { Message, ChatUser } from '@/redux/slices/chatSlice'
 
 export default memo(function Chat({ socket }: { socket: Socket | undefined }) {
+  const { t } = useI18n();
   const [chatInput, setChatInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
@@ -170,7 +172,7 @@ export default memo(function Chat({ socket }: { socket: Socket | undefined }) {
 
         <div className="chat-header-info">
           <span className="chat-username">
-            {selectedUser?.alias || selectedUser?.alias || "Seleccione un chat"}
+            {selectedUser?.alias || t("chat.select")}
           </span>
           <span className="chat-status">
             {selectedUser?.alias} {selectedUser?.tag}
@@ -181,7 +183,7 @@ export default memo(function Chat({ socket }: { socket: Socket | undefined }) {
           <button
             onClick={handleMinimizeChat}
             className="chat-control-btn"
-            title="Minimizar"
+            title={t("common.minimize")}
           >
             <PiMinus />
           </button>
@@ -210,7 +212,7 @@ export default memo(function Chat({ socket }: { socket: Socket | undefined }) {
         {/* Indicador de escritura */}
         {isUserTyping && (
           <div className="typing-indicator">
-            <span>Escribiendo...</span>
+            <span>{t("common.typing")}</span>
             <div className="typing-dots">
               <span></span>
               <span></span>
@@ -228,7 +230,7 @@ export default memo(function Chat({ socket }: { socket: Socket | undefined }) {
           value={chatInput}
           onChange={handleTyping}
           className="input-chat"
-          placeholder="Type here..."
+          placeholder={t("common.typeHere")}
           maxLength={500}
           autoFocus
         />

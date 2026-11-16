@@ -1,11 +1,13 @@
 import { memo } from "react";
+import { useI18n } from "@/hooks/useI18n";
 
 const TotalSkinsCount = memo(function TotalSkinsCount({ count = 0 }: { count: number }) {
+  const { t } = useI18n();
   return (
     <div className="total-skins-count">
       <div className="total-skins-info">
         <div className="amount">{count}</div>
-        <div className="description">TOTAL SKINS OWNED</div>
+        <div className="description">{t("collection.totalSkins")}</div>
       </div>
 
       <svg className="hextech-rounded-border" id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="-1 0 184 193.99">

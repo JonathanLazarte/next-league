@@ -9,6 +9,7 @@ import PartyRequestUI from './PartyRequest'
 import { RESOURCES_URL } from '@/utils/constants'
 import type { ConnectedUser } from "@/types/user"
 import type { PartyRequest } from "@/types/socket"
+import { useI18n } from "@/hooks/useI18n"
 
 
 interface FriendProps {
@@ -28,6 +29,7 @@ export default (function Friend({
   onHoverStart,
   onHoverEnd,
 }: FriendProps) {
+  const { t } = useI18n();
   const ref = useRef<HTMLLIElement>(null);
   const { play: playClickSound } = useSound("/sfx/menu-click.mp3");
   const {
@@ -85,7 +87,7 @@ export default (function Friend({
 
       <div className="user-box-data">
         <span className="friendlist-username">{user?.alias}</span>
-        <span className="friendlist-status">Online</span>
+        <span className="friendlist-status">{t("common.online")}</span>
         {/*chatUsers[user.alias]?.unreadCount > 0 && (
           <span className="unread-badge">
             {chatUsers[user?.alias]?.unreadCount}

@@ -9,6 +9,7 @@ import type { Skin } from '@/types/skin'
 import type { SkinGroupingOptionsValues } from "@/types/ui";
 import type { UserSkin } from '@/redux/slices/userSkinsSlice'
 import "./virtualGrid.css";
+import { useI18n } from "@/hooks/useI18n";
 
 type SkinsGroup = [
   string,
@@ -35,6 +36,7 @@ export default memo(function VirtualSkinsGrid({
   groupedBy,
   handleScroll,
 }: VirtualSkinsProps) {
+  const { t } = useI18n();
   const parentRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<number | undefined>();
   const acquiredSkinsIds = useMemo(
@@ -49,7 +51,7 @@ export default memo(function VirtualSkinsGrid({
   const gapValue = currentRem * 3;
   const columnGap = currentRem * 3.8;
   const paddingRightValue = currentRem * 3.3;
-  const cardWidth = getRem() * 16;
+  const cardWidth = getRem() * 14;
 
   const getAmountOfColumns = useCallback(
     (containerWidth: number) => {
@@ -102,7 +104,7 @@ export default memo(function VirtualSkinsGrid({
         result.push({
           type: "header",
           section:
-            groupedBy === "collection" ? `Obtenido en ${section}` : section,
+            groupedBy === "collection" ? `${t("collection.obtainedIn")} ${section}` : section,
         });
       }
 
@@ -115,7 +117,7 @@ export default memo(function VirtualSkinsGrid({
     });
 
     return result;
-  }, [groupedSkins, columns]);
+  }, [groupedSkins, columns, groupedBy, t]);
 
 
   const rowVirtualizer = useVirtualizer({
@@ -177,8 +179,6 @@ export default memo(function VirtualSkinsGrid({
                     display: "grid",
                     gap: `${gapValue}px`,
                     gridTemplateColumns: `repeat(${columns}, 1fr)`,
-
-                    /*padding: `0 ${gapValue}px`,*/
                   }}
                 >
                   {row.skins?.map((skin: Skin, index: number) => (

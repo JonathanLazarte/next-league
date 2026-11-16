@@ -131,6 +131,29 @@
     }
 }
 
+.online-users {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+.social-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    text-align: center;
+    padding: 1.6rem;
+    font-family: Spiegel-Regular;
+    font-size: 1.4rem;
+    color: #7a7568;
+}
+.social-empty img {
+    width: 9rem;
+    height: auto;
+}
 .user-folder-name {
     font-size: 1.5rem; /* antes ~0.91vw ≈ 1.456rem */
     letter-spacing: 1px;

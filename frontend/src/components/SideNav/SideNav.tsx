@@ -17,10 +17,12 @@ import SocialPanel from "./SocialPanel";
 
 import { useUserInterface } from "@/hooks/useUserInterface";
 import { useChat } from "@/hooks/useChat";
+import ReportBugModal from "@/components/ReportBugModal/ReportBugModal";
 
 
 export default memo(function RightNav() {
   const { actualSection, userState, showSideNav, updateSideNav } = useUserInterface();
+  const [isReportBugOpen, setIsReportBugOpen] = useState(false);
 
 
 
@@ -39,7 +41,8 @@ export default memo(function RightNav() {
   };
 
   return (
-    <div
+    <>
+      <div
       style={{
         right: `${!showSideNav ? "-260px" : "0"}`,
       }}
@@ -58,17 +61,19 @@ export default memo(function RightNav() {
             <span className="unread-count-badge">{unreadCount}</span>
           )}
         </button>
-        <button className="right-nav-buttom-button news-button">
+        <button className="right-nav-buttom-button news-button disabled-control" disabled aria-label="News unavailable">
           <RiFilePaper2Fill />
         </button>
-        <button className="right-nav-buttom-button">
+        <button className="right-nav-buttom-button disabled-control" disabled aria-label="Voice unavailable">
           <FaMicrophone />
         </button>
         <span className="actual-version">1.1</span>
-        <button className="right-nav-buttom-button bug-report-button">
+        <button className="right-nav-buttom-button bug-report-button" onClick={() => setIsReportBugOpen(true)} aria-label="Report a bug">
           <MdBugReport />
         </button>
       </div>
-    </div>
+      </div>
+      <ReportBugModal open={isReportBugOpen} onClose={() => setIsReportBugOpen(false)} />
+    </>
   );
 });

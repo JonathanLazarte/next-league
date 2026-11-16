@@ -16,6 +16,7 @@ import "./virtualGrid.css";
 import { useThrottledCallback } from "@/hooks/useThrottle";
 import type { Champion, AdquiredChampion } from '@/types/champion';
 import { ChampionGroupingOptionsValues } from '@/types/ui';
+import { useI18n } from '@/hooks/useI18n';
 
 
 interface VirtualSkinsGridProps {
@@ -40,6 +41,7 @@ export default memo(function VirtualChampionsGrid({
   groupedBy,
   handleScroll,
 }: VirtualSkinsGridProps) {
+  const { t } = useI18n();
   const parentRef = useRef<HTMLDivElement>(null);
   const [columns, setColumns] = useState<number>();
 
@@ -48,7 +50,7 @@ export default memo(function VirtualChampionsGrid({
   }
   const currentRem = getRem();
   const gapValue = currentRem * 2.3;
-  const cardWidth = currentRem * 16;
+  const cardWidth = currentRem * 15;
   const paddingRightValue = currentRem * 3.5;
   const acquiredChampionIds = useMemo(
     // eslint-disable-next-line no-undef
@@ -111,7 +113,7 @@ export default memo(function VirtualChampionsGrid({
         result.push({
           type: "header",
           section:
-            groupedBy === "possession" ? `Obtenido en ${section}` : section,
+            groupedBy === "possession" ? `${t("collection.obtainedIn")} ${section}` : section,
         });
       }
 
@@ -124,7 +126,7 @@ export default memo(function VirtualChampionsGrid({
     });
 
     return result;
-  }, [groupedChampions, columns, groupedBy]);
+  }, [groupedChampions, columns, groupedBy, t]);
 
 
   const rowVirtualizer = useVirtualizer({

@@ -5,8 +5,10 @@ import "./Champion.css";
 import { GiPadlock } from "react-icons/gi";
 import { RESOURCES_URL } from "@/utils/constants";
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 import type { Champion } from '@/types/champion'
 import { MASTERY_FLAG_EMPTY_DATA_URI } from '@/utils/uiAssets'
+import MediaSlot from '@/components/MediaSlot/MediaSlot'
 
 
 interface ChampionCardProps {
@@ -28,6 +30,7 @@ const ChampionCard = ({
   onHoverStart,
   tooltipPosRef,
 }: ChampionCardProps) => {
+  const { t } = useI18n();
   const { play: playGridHover } = useSound("/sfx/sfx-uikit-grid-hover.ogg")
   const { play: playGridClick } = useSound("/sfx/sfx-uikit-grid-click.ogg")
 
@@ -171,14 +174,16 @@ const ChampionCard = ({
         }}
         onMouseLeave={onHoverEnd}
       >
-        <Image
-          className={`champion-image ${hasImgError ? "img-fallback" : ""}`}
-          width={308}
-          height={560}
-          src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/loading/${champion.id}_0.jpg`}
-          alt={`${champion.name} sprite`}
-          onError={() => setHasImgError(true)}
-        />
+        <MediaSlot variant="portrait">
+          <Image
+            className={`champion-image ${hasImgError ? "img-fallback" : ""}`}
+            width={308}
+            height={560}
+            src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/loading/${champion.id}_0.jpg`}
+            alt={`${champion.name} sprite`}
+            onError={() => setHasImgError(true)}
+          />
+        </MediaSlot>
         {adquired ? (
           <div className="mastery-box" aria-hidden="true">
             <Image 
@@ -202,7 +207,7 @@ const ChampionCard = ({
         ) : (
           <div
             className="unlock-champion-button"
-            aria-label="Campeón bloqueado"
+            aria-label={t("common.lockedChampion")}
           >
             <GiPadlock
               style={{ transform: "rotate(-45deg)" }}

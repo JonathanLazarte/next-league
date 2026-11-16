@@ -12,6 +12,7 @@ import { useChat } from "@/hooks/useChat";
 import type { ConnectedUser } from "@/types/user";
 import useHoverIntent from "@/hooks/useHoverIntent";
 import UserTooltip from "@/components/tooltips/UserTooltip/UserTooltip";
+import { useI18n } from "@/hooks/useI18n";
 
 interface FriendsGroupProps {
   group: { users: ConnectedUser[] },
@@ -60,12 +61,14 @@ export const FriendsGroup = ({ group, groupStyle }: FriendsGroupProps) => {
 
 
 export default function SocialPanel() {
+  const { t } = useI18n();
   const [showMenu, setShowMenu] = useState<boolean>(false);
   //const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [isFolderOpen, setIsFolderOpen] = useState<boolean>(true);
   const iconStyle = isFolderOpen ? { transform: "rotate(90deg)" } : undefined;
   const groupStyle = !isFolderOpen ? { display: "none" } : undefined;
   const { friendsOnline } = useConnectedUsers();
+  const onlineCount = friendsOnline[0]?.users.length || 0;
   const {
     updateChatUser
   } = useChat();
@@ -121,12 +124,12 @@ export default function SocialPanel() {
       <div onClick={() => setShowMenu(false)} className="online-users">
         {showMenu && (null/*<Menu></Menu>*/)}
         <div className="social-menu">
-          SOCIAL
+          {t("nav.social")}
           <div className="social-icons">
-            <FaUserPlus className="social-icon" />
-            <FaFolderPlus className="social-icon" />
-            <GiHamburgerMenu className="social-icon" />
-            <FaSearch className="social-icon" />
+            <button type="button" className="social-icon disabled-control" disabled aria-label="Add friend unavailable"><FaUserPlus /></button>
+            <button type="button" className="social-icon disabled-control" disabled aria-label="Create folder unavailable"><FaFolderPlus /></button>
+            <button type="button" className="social-icon disabled-control" disabled aria-label="Social menu unavailable"><GiHamburgerMenu /></button>
+            <button type="button" className="social-icon disabled-control" disabled aria-label="Search unavailable"><FaSearch /></button>
           </div>
         </div>
         <div
@@ -134,9 +137,15 @@ export default function SocialPanel() {
           onClick={() => setIsFolderOpen((p) => !p)}
         >
           <VscTriangleRight style={iconStyle as CSSProperties} className="triangle" />
-          {`GENERAL ${friendsOnline[0]?.users.length || 0}/${friendsOnline[0]?.users.length || 0})`}
+          {`GENERAL (${onlineCount}/${onlineCount})`}
 
         </div>
+        {isFolderOpen && onlineCount === 0 && (
+          <div className="social-empty">
+            <img src="/global/poro_sleeping.png" alt="" />
+            <span>{t("chat.nobody")}</span>
+          </div>
+        )}
         <FriendsGroup group={friendsOnline[0]} groupStyle={groupStyle}></FriendsGroup>
       </div>
     </>

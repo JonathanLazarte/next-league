@@ -1,6 +1,7 @@
 import { FaSearch } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
+import { useI18n } from "@/hooks/useI18n";
 import type { Dispatch, SetStateAction } from "react";
 import type { SortOptions, SortOptionsValues, FilterCategories } from "@/types/ui";
 import type { ChampionRoles } from '@/types/champion'
@@ -39,6 +40,7 @@ export default function StoreSidePanel({
   championInCollection,
   setChampionInCollection
 }: StoreSidePanelProps) {
+  const { t } = useI18n();
 
   const handleCheckboxChange = (role: keyof FilterCategories) => {
     setItemCategoryChecked((prev) => ({
@@ -65,7 +67,7 @@ export default function StoreSidePanel({
               subsectionSelected === subsection ? "section-selected" : ""
             }
           >
-            {subsection}
+            {t(`store.subsections.${subsection}`)}
           </div>
         </div>
       ))}
@@ -75,7 +77,7 @@ export default function StoreSidePanel({
       <div className="search-filter">
         <FaSearch className="search-icon" />
         <input
-          placeholder="Search"
+          placeholder={t("common.search")}
           type="search"
           value={searchKeys}
           onChange={(e) => setSearchKeys(e.target.value)}
@@ -88,7 +90,7 @@ export default function StoreSidePanel({
         <div className="custom-checkbox">
           {inCollection && <FaCheck className="check-icon" />}
         </div>
-        Show Owned
+        {t("store.showOwned")}
       </div>
     </section>
 
@@ -98,7 +100,7 @@ export default function StoreSidePanel({
         options={sortOptions}
         value={sortedBy}
         onChange={setSortedBy}
-        placeholder="Select..."
+        placeholder="common.select"
       />
       {championInCollection !== undefined && setChampionInCollection !== undefined && (
         <div
@@ -108,7 +110,7 @@ export default function StoreSidePanel({
           <div className="custom-checkbox">
             {championInCollection && <FaCheck className="check-icon" />}
           </div>
-          Champion Owned
+          {t("store.championOwned")}
         </div>
       )}
 
@@ -121,7 +123,7 @@ export default function StoreSidePanel({
           <div className="custom-checkbox">
             {itemCategoryChecked[cat] && <FaCheck className="check-icon" />}
           </div>
-          {cat}
+          {t(`store.categories.${String(cat)}`)}
         </div>
       ))}
     </section>
@@ -129,7 +131,7 @@ export default function StoreSidePanel({
     <section className="nav-section last">
       <div className="checkbox">
         <div className="custom-checkbox" />
-        On Sale
+        {t("store.onSale")}
       </div>
     </section>
   </div>

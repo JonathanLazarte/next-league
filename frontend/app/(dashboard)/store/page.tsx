@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { IoIosGift } from "react-icons/io";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 import Loading from "@/components/Loading/Loading";
 import "./champions/champions.css";
 import "./skins/skins.css";
@@ -26,6 +27,7 @@ const SkinsStore = dynamic(() => import("./skins/Skins"), {
 export default memo(function Store() {
   const [actualSection, setActualSection] = useState("campeones");
   const { play } = useSound("/general/menu-click.mp3");
+  const { t } = useI18n();
 
   return (
     <section className="store">
@@ -38,7 +40,7 @@ export default memo(function Store() {
               play();
             }}
           >
-            CHAMPIONS
+            {t("sections.champions")}
           </div>
           <div
             className={`subheader-tab ${actualSection === "aspectos" ? "active-subheader-tab" : null}`}
@@ -47,17 +49,17 @@ export default memo(function Store() {
               play();
             }}
           >
-            SKINS
+            {t("sections.skins")}
           </div>
         </div>
         <div className="right-items">
-          <div className="buy-rp-button">COMPRAR RP</div>
-          <div className="rounded-button">
+          <button type="button" className="buy-rp-button disabled-control" disabled>{t("common.buyRp")}</button>
+          <button type="button" className="rounded-button disabled-control" disabled aria-label="Gift unavailable">
             <IoIosGift className="rounded-icon" />
-          </div>
-          <div className="rounded-button">
+          </button>
+          <button type="button" className="rounded-button disabled-control" disabled aria-label="Account management unavailable">
             <MdOutlineManageAccounts className="rounded-icon" />
-          </div>
+          </button>
         </div>
       </header>
 

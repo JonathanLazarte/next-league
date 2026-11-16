@@ -1,11 +1,14 @@
 import Image from 'next/image'
 import { usePurchase } from '@/hooks/usePurchase'
+import { useI18n } from '@/hooks/useI18n'
 import './Skin.css'
 import { RESOURCES_URL } from '@/utils/constants';
 import { Skin } from '@/types/skin'
+import MediaSlot from '@/components/MediaSlot/MediaSlot'
 
 
 export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned?: boolean }) {
+  const { t } = useI18n();
   const { openPurchaseModal } = usePurchase();
 
 
@@ -29,14 +32,16 @@ export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned
       className={`store-champion-item ${owned ? "owned" : ""}`}
       onClick={() => handleClick()}
     >
-      <Image
-        src={`${RESOURCES_URL}/tiles/${skin.img}`}
-        alt={skin.name}
-        fill
-        sizes="23rem"
-        className="store-champion-image"
-        style={{ objectFit: 'cover' }}
-      />
+      <MediaSlot variant="tile">
+        <Image
+          src={`${RESOURCES_URL}/tiles/${skin.img}`}
+          alt={skin.name}
+          fill
+          sizes="23rem"
+          className="store-champion-image"
+          style={{ objectFit: 'cover' }}
+        />
+      </MediaSlot>
       <div className="product-info">
         <h4 className="card-name">{skin.name}</h4>
         {!owned ? <div className="price">
@@ -52,7 +57,7 @@ export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned
           </div>
         </div> : (
           <div className="owned-status-wrapper">
-            <span className="owned-status-badge">owned</span>
+            <span className="owned-status-badge">{t("common.owned")}</span>
           </div>
         )}
       </div>

@@ -4,11 +4,13 @@ import { memo, useRef, useState, useEffect } from "react";
 import { GiPadlock } from "react-icons/gi";
 import Image from 'next/image'
 import { useSound } from '@/hooks/useSound'
+import { useI18n } from '@/hooks/useI18n'
 
 import "./Skin.css";
 import { RESOURCES_URL } from "@/utils/constants";
 import type { Skin } from '@/types/skin'
 import { BORDER_NORMAL_DATA_URI, getRarityGemUri } from "@/utils/uiAssets";
+import MediaSlot from "@/components/MediaSlot/MediaSlot";
 
 interface SkinCardProps {
   onHoverStart: (skin: Skin, ref: React.RefObject<HTMLDivElement>) => void,
@@ -27,6 +29,7 @@ export default memo(function SkinCard({
   tooltipPosRef,
   priority = false,
 }: SkinCardProps) {
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [hasImgError, setHasImgError] = useState(false);
 
@@ -60,7 +63,7 @@ export default memo(function SkinCard({
       ref={ref}
       role="button"
       tabIndex={0}
-      aria-label={`Skin ${skin.name}${isAdquired ? " - Obtenido" : " - No obtenido"}`}
+      aria-label={`Skin ${skin.name}${isAdquired ? ` - ${t("collection.owned")}` : ` - ${t("collection.notOwned")}`}`}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -78,7 +81,7 @@ export default memo(function SkinCard({
           src={BORDER_NORMAL_DATA_URI}
         />
       ) : null}
-      {
+      <MediaSlot variant="portrait">
         <Image
           className={`skin-card-image ${isAdquired ? "" : "not-obtained"} ${hasImgError ? "img-fallback" : ""}`}
           src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/loading/${skin.img}`}
@@ -88,7 +91,7 @@ export default memo(function SkinCard({
           priority={priority}
           onError={() => setHasImgError(true)}
         />
-      }
+      </MediaSlot>
       {isAdquired ? (
         skin.rarity !== "NoRarity" && getRarityGemUri(skin.rarity) ? (
           <img
@@ -101,7 +104,7 @@ export default memo(function SkinCard({
           />
         ) : null
       ) : (
-        <div className="unlock-champion-button" aria-label="Skin bloqueado">
+        <div className="unlock-champion-button" aria-label={t("common.lockedSkin")}>
           <GiPadlock
             style={{ transform: "rotate(-45deg)" }}
             aria-hidden="true"

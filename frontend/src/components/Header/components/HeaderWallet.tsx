@@ -17,7 +17,7 @@ export default function HeaderWallet({ trigger }: HeaderWalletProps) {
             ? `${Math.floor(RP / 1000)} K`
             : RP || 0}
         </div>
-        <div className="header-buy-rp-button">
+        <button type="button" className="header-buy-rp-button disabled-control" disabled aria-label="Buy RP unavailable">
           <div className="buy-rp-icon">
             <svg
               width="10"
@@ -32,7 +32,7 @@ export default function HeaderWallet({ trigger }: HeaderWalletProps) {
               <line x1="1.5" y1="5" x2="8.5" y2="5" />
             </svg>
           </div>
-        </div>
+        </button>
       </div>
       <div {...trigger({ content: `${BE?.toLocaleString('es-AR')} Blue essences` })} className="blue-essences">
         <img src="/general/BE_icon.png" alt="BE" />

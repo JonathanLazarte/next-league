@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "@/hooks/useRouter";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useI18n } from "@/hooks/useI18n";
 import { useAuth } from "@/hooks/useAuth";
 import { FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
@@ -16,6 +17,7 @@ export default function Register() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
   const { loading, error, register } = useAuth();
+  const { t } = useI18n();
 
   const initialValues = {
     userName: "",
@@ -25,9 +27,9 @@ export default function Register() {
   const validationSchema = () =>
     Yup.object().shape({
       userName: Yup.string()
-        .required("Campo obligatorio")
-        .min(6, "Debe tener al menos 6 caracteres"),
-      password: Yup.string().required("Campo obligatorio"),
+        .required(t("common.required"))
+        .min(6, t("common.minLength")),
+      password: Yup.string().required(t("common.required")),
     });
   const Ahri = {
     version: "14.17.1",
@@ -157,7 +159,7 @@ export default function Register() {
         </div>
         <BackendStatusBanner className="mb-3" />
         <div className="register-header">
-          <h2 className="register-title">Register</h2>
+          <h2 className="register-title">{t("auth.register")}</h2>
           <div className="active-indicator"><div className="active-indicator-inner"></div></div>
         </div>
         <div
@@ -185,7 +187,7 @@ export default function Register() {
               onChange={handleChange}
             />
             <label className="label-placeholder">
-              username
+              {t("auth.username")}
             </label>
           </div>
           {/*errors.userName && touched.userName && <div className="error-text">{errors.userName}</div>*/}
@@ -202,7 +204,7 @@ export default function Register() {
               onChange={handleChange}
             />
             <label className="label-placeholder" >
-              password
+              {t("auth.password")}
             </label>
           </div>
           {/*errors.password && touched.password && <div className="error-message">{errors.password}</div>*/}
@@ -216,13 +218,13 @@ export default function Register() {
           >
             <FaArrowRight />
           </button>
-          <a className="auth-link" onClick={() => router.push("/login")}>I have an account</a>
+          <a className="auth-link" onClick={() => router.push("/login")}>{t("auth.haveAccount")}</a>
           <div className="disclaimer">
             <span className="disclaimer-line">
-              THIS APP IS PROTECTED BY HCAPCHA AND ITS
+              {t("auth.captcha")}
             </span>
             <span className="disclaimer-line">
-              <a>PRIVACY POLICY</a> AND <a>TERMS OF SERVICE</a> APPLY.
+              <a>{t("auth.privacy")}</a> {t("auth.and")} <a>{t("auth.terms")}</a> {t("auth.apply")}
             </span>
           </div>
         </div>

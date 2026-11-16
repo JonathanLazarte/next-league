@@ -6,7 +6,10 @@ import { useState, useEffect } from "react";
 import store from "@/redux/store";
 import { useRouter, usePathname } from "next/navigation";
 import { verifyToken } from "@/redux/slices/authSlice";
+import { setLanguage } from "@/redux/slices/settingsSlice";
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks'
+import { LOCALE_STORAGE_KEY } from "@/hooks/useI18n";
+import RoomAssetsPreloader from "@/components/RoomAssetsPreloader/RoomAssetsPreloader";
 
 
 export const AuthProvider = ({ children }: { children: React.ReactElement}) => {
@@ -36,6 +39,11 @@ export const AuthProvider = ({ children }: { children: React.ReactElement}) => {
       setIsInitialized(true);
     };
 
+    const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (savedLocale === "es" || savedLocale === "en") {
+      dispatch(setLanguage(savedLocale));
+    }
+
     initAuth();
   }, [dispatch, isAuthenticated]);
 
@@ -64,7 +72,7 @@ export function Providers({ children }: { children: React.ReactElement }) {
 
   return (
     <ReduxProvider store={store}>
-      <AuthProvider><QueryClientProvider client={queryClient}>{children}</QueryClientProvider></AuthProvider>
+      <AuthProvider><QueryClientProvider client={queryClient}><RoomAssetsPreloader />{children}</QueryClientProvider></AuthProvider>
     </ReduxProvider>
   );
 }

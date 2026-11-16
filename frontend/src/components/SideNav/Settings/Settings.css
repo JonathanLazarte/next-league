@@ -78,6 +78,10 @@
     height: 100%;
     width: 0.5rem;
     background: var(--gold-four);
+    visibility: hidden;
+}
+.setting-category-item.selected .selected-reference-bar {
+    visibility: visible;
 }
 .settings-parameters {
     display: flex;

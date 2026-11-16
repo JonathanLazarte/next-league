@@ -19,7 +19,7 @@ export default function BackgroundEngine() {
     <div
       className="background-engine"
       style={{
-        backgroundImage: showLoading
+        backgroundImage: showLoading || actualSection === 'league'
           ? "var(--blue-five)"
           : backgroundImage,
         backgroundRepeat: "no-repeat",

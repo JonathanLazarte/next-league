@@ -1,12 +1,15 @@
 import { memo } from "react";
 import { usePurchase } from "@/hooks/usePurchase";
+import { useI18n } from "@/hooks/useI18n";
 import "./Champion.css";
 import Image from 'next/image'
 import { RESOURCES_URL } from "@/utils/constants";
 import { Champion } from '@/types/champion'
+import MediaSlot from '@/components/MediaSlot/MediaSlot'
 
 const ChampionCard = ({ item: data, owned = false }: { item: Champion, owned?: boolean }) => {
   const { openPurchaseModal } = usePurchase();
+  const { t } = useI18n();
 
   const handleClick = async () => {
     if (owned) return;
@@ -32,14 +35,16 @@ const ChampionCard = ({ item: data, owned = false }: { item: Champion, owned?: b
     >
       {" "}
       {/* Unique key and card class */}
-      <Image
-        className="store-champion-image"
-        id={data.id}
-        src={`${RESOURCES_URL}/tiles/${data.id}_0.jpg`}
-        alt={`Sprite of ${data.name}`}
-        sizes={'23rem'}
-        fill
-      />
+      <MediaSlot variant="tile">
+        <Image
+          className="store-champion-image"
+          id={data.id}
+          src={`${RESOURCES_URL}/tiles/${data.id}_0.jpg`}
+          alt={`Sprite of ${data.name}`}
+          sizes={'23rem'}
+          fill
+        />
+      </MediaSlot>
       <div className="product-info">
         <h4 className="card-name">{data.name}</h4>
         {!owned ? (
@@ -63,7 +68,7 @@ const ChampionCard = ({ item: data, owned = false }: { item: Champion, owned?: b
           </div>
         ) : (
           <div className="owned-status-wrapper">
-            <span className="owned-status-badge">owned</span>
+            <span className="owned-status-badge">{t("common.owned")}</span>
           </div>
         )}
       </div>

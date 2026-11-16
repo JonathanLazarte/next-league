@@ -4,7 +4,7 @@
 }
 
 html {
-    font-size: clamp(7px, 0.625vw, 10px);
+    font-size: clamp(7px, 0.625vw, 10.5px);
     background-color: black;
     overflow: hidden;
 }
@@ -217,6 +217,22 @@ input[type="search"]::-webkit-search-cancel-button {
     color: gray;
 }
 
+.disabled-control,
+button:disabled {
+    border-color: #5c5b57 !important;
+    background: var(--blue-six) !important;
+    color: #5c5b57 !important;
+    cursor: default !important;
+    filter: grayscale(1);
+    pointer-events: none;
+}
+
+.disabled-control:hover,
+button:disabled:hover {
+    border-color: #5c5b57 !important;
+    background: var(--blue-six) !important;
+    color: #5c5b57 !important;
+}
 .general-button.disabled {
     border: 0.2rem solid gray;
     color: gray;

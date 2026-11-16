@@ -25,6 +25,7 @@ export function useBackendStatus(autoCheck = true): BackendStatusState {
   const checkHealth = useCallback(async (): Promise<boolean> => {
     if (isCheckingRef.current) return false;
     isCheckingRef.current = true;
+    setRetryCount((prev) => prev + 1);
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     if (!apiUrl) {
@@ -75,14 +76,13 @@ export function useBackendStatus(autoCheck = true): BackendStatusState {
       setErrorDetails(errorMsg.includes('abort') ? 'Tiempo de espera agotado (Servidor iniciando)' : errorMsg);
     }
 
-    setRetryCount((prev) => prev + 1);
     isCheckingRef.current = false;
     return false;
   }, []);
 
-  // Timer para contar segundos mientras esté en estado 'deploying'
+  // El contador empieza al montar el fallback, incluso durante la primera consulta.
   useEffect(() => {
-    if (status === 'deploying') {
+    if (autoCheck && status !== 'online') {
       elapsedTimerRef.current = setInterval(() => {
         setSecondsElapsed((prev) => prev + 1);
       }, 1000);
@@ -93,7 +93,7 @@ export function useBackendStatus(autoCheck = true): BackendStatusState {
     return () => {
       if (elapsedTimerRef.current) clearInterval(elapsedTimerRef.current);
     };
-  }, [status]);
+  }, [autoCheck, status]);
 
   // Chequeo inicial y reintentos periódicos si está desplegando
   useEffect(() => {
@@ -108,7 +108,7 @@ export function useBackendStatus(autoCheck = true): BackendStatusState {
 
   // Si está desplegando, reintentar cada 4 segundos
   useEffect(() => {
-    if (status === 'deploying') {
+    if (autoCheck && status !== 'online') {
       retryTimerRef.current = setTimeout(() => {
         checkHealth();
       }, 4000);

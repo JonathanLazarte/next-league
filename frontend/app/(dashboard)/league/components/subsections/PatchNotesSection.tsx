@@ -1,16 +1,19 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useSound } from '@/hooks/useSound';
+import { useI18n } from '@/hooks/useI18n';
 import { PatchNotesIcon } from '../LeagueIcons';
-import { PATCH_NOTES_DATA } from '../../patchNotesData';
+import { getPatchNotes } from '../../patchNotesData';
 import './PatchNotesSection.css';
 
 export default function PatchNotesSection() {
-  const [activeVersion, setActiveVersion] = useState<string>(PATCH_NOTES_DATA[0].version);
+  const [activeVersion, setActiveVersion] = useState<string>(getPatchNotes("en")[0].version);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const { play: playClick } = useSound('/sfx/menu-click.mp3');
+  const { t, locale } = useI18n();
+  const patches = useMemo(() => getPatchNotes(locale), [locale]);
 
   // Smooth scroll to selected version strictly within the container
   const scrollToVersion = (version: string) => {
@@ -34,14 +37,14 @@ export default function PatchNotesSection() {
     const handleScroll = () => {
       // If reached near bottom, activate the last version
       if (container.scrollTop + container.clientHeight >= container.scrollHeight - 60) {
-        setActiveVersion(PATCH_NOTES_DATA[PATCH_NOTES_DATA.length - 1].version);
+        setActiveVersion(patches[patches.length - 1].version);
         return;
       }
 
       const containerRect = container.getBoundingClientRect();
       const triggerPoint = containerRect.top + 180;
 
-      for (const patch of PATCH_NOTES_DATA) {
+      for (const patch of patches) {
         const el = sectionRefs.current[patch.version];
         if (el) {
           const rect = el.getBoundingClientRect();
@@ -55,14 +58,14 @@ export default function PatchNotesSection() {
 
     container.addEventListener('scroll', handleScroll, { passive: true });
     return () => container.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [patches]);
 
   return (
     <div className="patch-notes-wrapper">
       {/* Scrollable Feed View */}
       <div className="patch-notes-view" ref={containerRef}>
         <div className="patch-notes-feed">
-        {PATCH_NOTES_DATA.map((patch, index) => (
+        {patches.map((patch, index) => (
           <section
             key={patch.version}
             id={`patch-${patch.version}`}
@@ -89,7 +92,7 @@ export default function PatchNotesSection() {
               {/* Dev Quote / Intro Banner */}
               {patch.devQuote && (
                 <div className="patch-dev-quote-box">
-                  <div className="patch-dev-quote-label">Nota del Desarrollador</div>
+                  <div className="patch-dev-quote-label">{t("patch.devNote")}</div>
                   <p className="patch-dev-quote-text">&ldquo;{patch.devQuote}&rdquo;</p>
                 </div>
               )}
@@ -124,7 +127,7 @@ export default function PatchNotesSection() {
             </div>
 
             {/* Visual separator between different versions */}
-            {index < PATCH_NOTES_DATA.length - 1 && (
+            {index < patches.length - 1 && (
               <div className="patch-version-separator">
                 <div className="patch-version-separator-line" />
                 <div className="patch-version-separator-crest">✦</div>
@@ -137,9 +140,9 @@ export default function PatchNotesSection() {
       </div>
 
       {/* Floating TOC Timeline Guide - Fijo y fuera del cálculo del layout */}
-      <aside className="patch-toc-guide" aria-label="Historial de versiones">
-        <div className="patch-toc-header">Versiones</div>
-        {PATCH_NOTES_DATA.map((patch, idx) => {
+      <aside className="patch-toc-guide" aria-label={t("patch.history")}>
+        <div className="patch-toc-header">{t("patch.versions")}</div>
+        {patches.map((patch, idx) => {
           const isActive = activeVersion === patch.version;
           return (
             <button
@@ -150,7 +153,7 @@ export default function PatchNotesSection() {
               <span className="patch-toc-dot" />
               <span className="patch-toc-label">
                 v{patch.version}
-                {idx === 0 && <span className="patch-toc-tag"> (Actual)</span>}
+                {idx === 0 && <span className="patch-toc-tag"> {t("patch.current")}</span>}
               </span>
             </button>
           );

@@ -158,6 +158,15 @@
     position: absolute;
     transform: translateY(-50%);
 }
+.closeButton img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.closeIconHidden {
+    visibility: hidden;
+}
 .closeButton:hover {
     color: var(--color-secundary);
     border-image: linear-gradient(
@@ -182,12 +191,30 @@
     display: flex;
     flex: 1;
     overflow: hidden;
-    background-repeat: no-repeat;
-    background-position: var(--dashboard-sidebar-width);
-    background-size: cover;
+    position: relative;
     animation: appearance 0.7s;
 }
+.splashSlot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--dashboard-sidebar-width) center;
+}
+.splashScrim {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        to right,
+        var(--blue-five) 0%,
+        var(--blue-five) 16%,
+        transparent 100%
+    );
+}
 .leftPanel {
+    position: relative;
+    z-index: 1;
     padding-left: 4rem;
     padding-bottom: 4rem;
     display: flex;
@@ -313,10 +340,14 @@
 }
 .graphTraitIcon {
     position: absolute;
+    width: 100%;
+    height: 100%;
 }
 .graphSegmentLevel {
     position: absolute;
     z-index: 1;
+    width: 100%;
+    height: 100%;
 }
 
 .loreSection {

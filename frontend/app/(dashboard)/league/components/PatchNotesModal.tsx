@@ -3,7 +3,8 @@
 import React from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useSound } from '@/hooks/useSound';
-import { PATCH_NOTES_DATA } from '../patchNotesData';
+import { useI18n } from '@/hooks/useI18n';
+import { getPatchNotes } from '../patchNotesData';
 
 interface PatchNotesModalProps {
   isOpen: boolean;
@@ -12,7 +13,8 @@ interface PatchNotesModalProps {
 
 export default function PatchNotesModal({ isOpen, onClose }: PatchNotesModalProps) {
   const { play: playClick } = useSound('/general/confirm-button-cancel-click.mp3');
-  const latestPatch = PATCH_NOTES_DATA[0];
+  const { t, locale } = useI18n();
+  const latestPatch = getPatchNotes(locale)[0];
 
   if (!isOpen) return null;
 
@@ -26,7 +28,7 @@ export default function PatchNotesModal({ isOpen, onClose }: PatchNotesModalProp
       <div className="league-modal-window" onClick={(e) => e.stopPropagation()}>
         <div className="league-modal-header">
           <h2 className="league-modal-title">
-            NOTAS DE LA VERSIÓN {latestPatch.version} - {latestPatch.season || 'TEMPORADA 2026'}
+            {t("patch.notesTitle")} {latestPatch.version} - {latestPatch.season || t("patch.seasonFallback")}
           </h2>
           <button
             onClick={handleClose}
@@ -44,7 +46,7 @@ export default function PatchNotesModal({ isOpen, onClose }: PatchNotesModalProp
             &ldquo;{latestPatch.devQuote}&rdquo;
           </p>
 
-          <h4 className="text-lg font-bold text-[#c8aa6e] mb-3">Cambios Destacados</h4>
+          <h4 className="text-lg font-bold text-[#c8aa6e] mb-3">{t("patch.highlights")}</h4>
           <div className="space-y-4">
             {latestPatch.changes.map((change, i) => (
               <div key={i} className="border-l-2 border-[var(--gold-two)] pl-3">

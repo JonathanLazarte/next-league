@@ -11,7 +11,7 @@ export default function TooltipTrigger() {
 
 
 
-  const getTriggerProps = ({ content }: { content: string }) => {
+  const getTriggerProps = ({ content, addOnMouseLeave }: { content: string; addOnMouseLeave: () => void | undefined }) => {
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
 
       const el = e.currentTarget.getBoundingClientRect();
@@ -25,10 +25,11 @@ export default function TooltipTrigger() {
     }
 
     const handleMouseLeave = () => {
+      if (addOnMouseLeave) addOnMouseLeave()
       end(() => tooltip.hide())
     }
+
     return {
-      ref,
       onMouseEnter : (e: React.MouseEvent<HTMLDivElement>) => handleMouseEnter(e),
       onMouseLeave : handleMouseLeave
     }

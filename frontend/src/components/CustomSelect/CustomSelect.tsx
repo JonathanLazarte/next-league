@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import './CustomSelect.css';
+import { useI18n } from '@/hooks/useI18n';
 
 export interface SelectOption<T = string> {
   readonly label: string;
@@ -22,10 +23,11 @@ const CustomSelect = <T,>({
   options,
   value,
   onChange,
-  placeholder = "Select...",
+  placeholder = "common.select",
   className = "",
   disabled = false,
 }: CustomSelectProps<T>) => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const selectRef = useRef<HTMLDivElement | null>(null);
@@ -126,10 +128,10 @@ const CustomSelect = <T,>({
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-label={placeholder}
+        aria-label={t(placeholder)}
       >
         <span className="custom-select-value">
-          {selectedOption ? selectedOption.label : placeholder}
+          {selectedOption ? t(selectedOption.label) : t(placeholder)}
         </span>
       </div>
 
@@ -149,7 +151,7 @@ const CustomSelect = <T,>({
               role="option"
               aria-selected={option.value === value}
             >
-              {option.label}
+              {t(option.label)}
             </div>
           ))}
         </div>

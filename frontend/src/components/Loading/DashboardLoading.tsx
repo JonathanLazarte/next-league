@@ -6,6 +6,8 @@ import { useBackendStatus } from '@/hooks/useBackendStatus';
 import BackendDeployingFallback from '@/components/BackendFallback/BackendDeployingFallback';
 import { useAppDispatch } from '@/hooks/hooks';
 import { setUser } from '@/redux/slices/userSlice';
+import { setGuestAuth } from '@/redux/slices/authSlice';
+import { useI18n } from '@/hooks/useI18n';
 
 interface DashboardLoadingProps {
   customMessage?: string;
@@ -13,6 +15,7 @@ interface DashboardLoadingProps {
 
 export default function DashboardLoading({ customMessage }: DashboardLoadingProps) {
   const dispatch = useAppDispatch();
+  const { t } = useI18n();
   const { isDeploying } = useBackendStatus(true);
   const [showDeploymentFallback, setShowDeploymentFallback] = useState(false);
 
@@ -31,6 +34,7 @@ export default function DashboardLoading({ customMessage }: DashboardLoadingProp
   }, [isDeploying]);
 
   const handleContinueAsGuest = () => {
+    dispatch(setGuestAuth());
     dispatch(
       setUser({
         userName: 'Invitado',
@@ -53,6 +57,9 @@ export default function DashboardLoading({ customMessage }: DashboardLoadingProp
         token: 'guest-token',
       })
     );
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', 'guest-token');
+    }
   };
 
   if (showDeploymentFallback) {
@@ -101,7 +108,7 @@ export default function DashboardLoading({ customMessage }: DashboardLoadingProp
           alt="League of Legends logo"
           priority
         />
-        <div className="loading-underlogo"> LOADING </div>
+        <div className="loading-underlogo"> {t("common.loadingWord")} </div>
       </div>
     </div>
   );

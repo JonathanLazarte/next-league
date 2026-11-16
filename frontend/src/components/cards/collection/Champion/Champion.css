@@ -38,6 +38,9 @@
     border: 1px solid #1e2328;
     border-radius: 0px;
 }
+.champion-sprites .media-slot {
+    width: 100%;
+}
 .champion-sprites:hover {
     border-image: linear-gradient(140deg, #f0e6d2, #c8aa6e, var(--gold-four)) 1;
     /*box-shadow: 0 4px 12px rgba(200, 155, 60, 0.3);*/

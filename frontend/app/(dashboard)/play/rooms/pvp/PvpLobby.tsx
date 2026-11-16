@@ -6,24 +6,17 @@ import "./PvpLobby.css";
 import FindMatchButton from "@/components/buttons/FindMatch/FindMatch";
 import { setQueue, selectUserInterfaceData } from "@/redux/slices/userInterfaceSlice";
 import { useSound } from "@/hooks/useSound"
+import { useI18n } from "@/hooks/useI18n"
 import { useUser } from '@/hooks/useUser'
 import { RESOURCES_URL } from '@/utils/constants'
 
 export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
   const user = useUser();
+  const { t } = useI18n();
   const { queueStatus } = useSelector(selectUserInterfaceData)
   const dispatch = useDispatch();
-  const lobbyName = {
-    'ranked_solo_duo': 'SR · Ranked Solo/Duo · Draft',
-    'ranked_flex': 'SR · Ranked Flex · Draft',
-    'swiftplay': 'SR · Swiftplay · BLIND',
-    'aram': 'RNG · ARAM · RANDOM',
-    'aram_mayhem': 'RNG · ARAM: MAYHEM · RANDOM',
-    'intro': 'SR · INTRO · BLIND',
-    'beginner': 'SR · BEGINNER · BLIND',
-    'intermediate': 'SR · Intermediate · Blind',
-  }
   const { play: playTransToGameselect } = useSound('/sfx/sfx-lobby-trans-to-gameselect.ogg')
+  const rankAssetName = user.rank.name.trim().toLowerCase();
 
 
   const handleBack = () => {
@@ -60,7 +53,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
             src={`${RESOURCES_URL}/general/mini-sr.png`}
             alt="Map mini icon"
           />
-          <h3 className="room-title">{lobbyName[roomTitle as keyof typeof lobbyName]}</h3>
+          <h3 className="room-title">{t(`play.queues.${roomTitle}.room`)}</h3>
         </div>
       </div>
       <div className="room-users">
@@ -77,7 +70,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
             <div className="banner-user-icon">
               <Image
                 className="banner-user-border"
-                src={`${RESOURCES_URL}/ranked-emblem/wings/wings_grandmaster_plate.png`}
+                src={`${RESOURCES_URL}/ranked-emblem/wings/wings_${rankAssetName}_plate.png`}
                 sizes={"25rem"}
                 width={500}
                 height={600}
@@ -92,7 +85,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
               />
               <video
                 className="banner-user-border-magic"
-                src="/ranked-emblem/anim/emblem-wings-magic-grandmaster.webm"
+                src={`/ranked-emblem/anim/emblem-wings-magic-${rankAssetName}.webm`}
                 autoPlay
                 loop
                 muted
@@ -105,7 +98,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
           </div>
         </div>
       </div>
-      <div className="party-chat"><input type="text" placeholder="Type here..."></input></div>
+      <div className="party-chat"><input type="text" placeholder={t("common.typeHere")}></input></div>
       <FindMatchButton
         queueStatus={queueStatus}
       ></FindMatchButton>

@@ -414,6 +414,13 @@
     margin-bottom: 10px;
     padding: 2px;
 }
+.spell-image,
+.passive-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 .spell-image-container.selected, .passive-image-container.selected {
     border-image: linear-gradient(45deg, var(--gold-five), var(--gold-four))1;

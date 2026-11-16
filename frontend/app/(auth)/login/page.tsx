@@ -13,11 +13,13 @@ import { FaUser, FaKeyboard } from "react-icons/fa";
 import BackendStatusBanner from "@/components/BackendFallback/BackendStatusBanner";
 import type { User } from '@/types/user'
 import * as Yup from "yup";
+import { useI18n } from "@/hooks/useI18n";
 
 export default memo(function Login() {
   const router = useRouter();
   const tabRefs = useRef<HTMLDivElement[]>([]);
   const { loading, error, login } = useAuth();
+  const { t } = useI18n();
   const [loginOptionSelected, setLoginOptionSelected] = useState("login");
   const tabs = ["login", "guest"];
   const indicatorStyle = {
@@ -40,8 +42,8 @@ export default memo(function Login() {
       return Yup.object().shape({});
     }
     return Yup.object().shape({
-      userName: Yup.string().required("Campo obligatorio"),
-      password: Yup.string().required("Campo obligatorio"),
+      userName: Yup.string().required(t("common.required")),
+      password: Yup.string().required(t("common.required")),
     });
   };
 
@@ -112,7 +114,7 @@ export default memo(function Login() {
             >
               {tab === "login" && <FaKeyboard className="switch-option-icon" />}
               {tab === "guest" && <FaUser className="switch-option-icon" />}
-              <span>{tab === "login" ? "Sign-in" : "Guest"}</span>
+              <span>{tab === "login" ? t("auth.signIn") : t("auth.guest")}</span>
             </div>
           ))}
           <div className="active-indicator"><div style={indicatorStyle} className="active-indicator-inner"></div></div>
@@ -149,7 +151,7 @@ export default memo(function Login() {
                 data-testid="username-input"
               />
               <label className="label-placeholder" >
-                username
+                {t("auth.username")}
               </label>
             </div>
             {/*errors.userName && touched.userName && <div className="error-text">{errors.userName}</div>*/}
@@ -167,7 +169,7 @@ export default memo(function Login() {
                 data-testid="password-input"
               />
               <label className="label-placeholder">
-                password
+                {t("auth.password")}
               </label>
             </div>
           </div>
@@ -183,13 +185,13 @@ export default memo(function Login() {
           >
             <FaArrowRight />
           </button>
-          <a className="auth-link" onClick={() => router.push("/register")}>Create account</a>
+          <a className="auth-link" onClick={() => router.push("/register")}>{t("auth.createAccount")}</a>
           <div className="disclaimer">
             <span className="disclaimer-line">
-              THIS APP IS PROTECTED BY HCAPCHA AND ITS
+              {t("auth.captcha")}
             </span>
             <span className="disclaimer-line">
-              <a>PRIVACY POLICY</a> AND <a>TERMS OF SERVICE</a> APPLY.
+              <a>{t("auth.privacy")}</a> {t("auth.and")} <a>{t("auth.terms")}</a> {t("auth.apply")}
             </span>
           </div>
         </div>

@@ -49,7 +49,9 @@
     position: absolute;
     top: -2rem;
     max-width: unset;
+    pointer-events: none;
 }
+
 .header-sections {
     display: flex;
     flex-direction: row;
@@ -76,6 +78,9 @@
     cursor: pointer;
     background: linear-gradient(transparent 35%, var(--gradient-one));
     transition: --gradient-one 0.5s;
+    --pointer-x: 50%;
+    --pointer-intensity: 0;
+    overflow: hidden;
 }
 
 .header-tab svg {
@@ -101,6 +106,43 @@
     justify-content: center;
     display: flex;
 }
+.tab-pointer-base {
+    position: absolute;
+    bottom: 1px;
+    width: 80%;
+    height: 2px;
+    pointer-events: none;
+    border-radius: 30%;
+    background: linear-gradient(to right, transparent, var(--gold-one), transparent);
+    box-shadow:
+        0 0 calc(0.4rem + 0.8rem * var(--pointer-intensity)) var(--gold-two),
+        0 0 calc(0.8rem + 1.8rem * var(--pointer-intensity)) rgba(200, 155, 60, 0.65);
+    transition: opacity 70ms linear, transform 70ms linear, box-shadow 70ms linear;
+    left: var(--pointer-x);
+      opacity: calc(0 + 0.88 * var(--pointer-intensity));
+      transform: translateX(-50%)
+}
+
+.tab-pointer-light {
+    position: absolute;
+    bottom: 2px;
+    width: 5rem;
+    height: 7rem;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse 58% 92% at 50% 100%,
+        rgba(240, 230, 210, 0.5) 0%,
+        rgba(200, 170, 110, 0.27) 28%,
+        rgba(200, 155, 60, 0.1) 54%,
+        transparent 76%
+      );
+    clip-path: polygon(28% 0%, 72% 0%, 100% 100%, 0% 100%);
+    filter: blur(0.35rem);
+    transition: opacity 70ms linear, transform 70ms linear, box-shadow 70ms linear;
+    left: var(--pointer-x);
+      opacity: calc(0 + 0.85 * var(--pointer-intensity));
+      transform: translateX(-50%)
+}
 
 .header-tab:hover,
 .header-tab.league:hover {
@@ -117,9 +159,9 @@
 .header-tab.actual-section {
     background:
       linear-gradient(rgba(9, 17, 30, 0) 35%, rgba(202, 187, 143, 0.3));
-      pointer-events: none;
       cursor: default;
       color: #F0E6D2;
+      pointer-events: none;
 }
 
 .tab-separator {

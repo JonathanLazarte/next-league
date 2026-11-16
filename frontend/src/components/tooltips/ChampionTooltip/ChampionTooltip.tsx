@@ -4,8 +4,9 @@ import styles from "./ChampionTooltip.module.css";
 import { GiPadlock } from "react-icons/gi";
 import { GiAngelWings } from "react-icons/gi";
 import { memo, forwardRef, useState, useLayoutEffect } from "react";
+import { useI18n } from "@/hooks/useI18n";
 
-type Eternals = "Serie 1" | "Serie 2" | "Serie Inicial"
+type EternalKey = "eternalSeries1" | "eternalSeries2" | "eternalStarter"
 
 interface Champion {
   masteryLevel: number,
@@ -14,7 +15,7 @@ interface Champion {
   startInfo: string,
   maxSeasonRating: string | "N/D",
   freeToPlay: boolean,
-  eternals: Eternals[]
+  eternals: EternalKey[]
 }
 
 interface TooltipProps {
@@ -27,7 +28,13 @@ const Tooltip = (
   { content, tooltipPos, currentDelayType }: TooltipProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) => {
+  const { t } = useI18n();
   const [coords, setCoords] = useState(tooltipPos);
+  const eternalLabels: Record<EternalKey, string> = {
+    eternalSeries1: t("champion.eternalSeries1"),
+    eternalSeries2: t("champion.eternalSeries2"),
+    eternalStarter: t("champion.eternalStarter"),
+  };
 
   console.log(content)
 
@@ -107,10 +114,10 @@ const Tooltip = (
                   <span className={styles.wingIcon}>
                     <GiAngelWings />
                   </span>
-                  <span>{content.masteryPoints} / 1,800 pts.</span>
+                  <span>{content.masteryPoints} / 1,800 {t("champion.masteryPointsSuffix")}</span>
                 </div>
                 <div className={styles.seasonRating}>
-                  <span>Calificación más alta de la temporada:</span>
+                  <span>{t("champion.highestRating")}</span>
                   <span className={styles.ratingValue}>
                     {content.maxSeasonRating}
                   </span>
@@ -120,14 +127,14 @@ const Tooltip = (
 
             {/* Sección media - INICIO */}
             <div className={styles.startSection}>
-              <h4 className={styles.sectionTitle}>INICIO</h4>
+              <h4 className={styles.sectionTitle}>{t("champion.start")}</h4>
               <div className={styles.startButton}>
                 <span>{content.startInfo}</span>
               </div>
               {content.freeToPlay ? (
                 <div className={styles.freePlay}>
                   <span className={styles.hexagonIcon}>6</span>
-                  <span>Juégalo gratis</span>
+                  <span>{t("champion.playFree")}</span>
                 </div>
               ) : null}
             </div>
@@ -135,11 +142,11 @@ const Tooltip = (
             {/* Sección inferior - PROGRESIÓN DE ETERNOS */}
             <div className={styles.eternalsSection}>
               <div className={styles.separator}></div>
-              <h4 className={styles.eternalsTitle}>PROGRESIÓN DE ETERNOS</h4>
+              <h4 className={styles.eternalsTitle}>{t("champion.eternals")}</h4>
               <div className={styles.eternalsList}>
-                {content.eternals.map((eternal: string, index: number) => (
+                {content.eternals.map((eternal, index) => (
                   <div key={index} className={styles.eternalItem}>
-                    <span>{eternal}</span>
+                    <span>{eternalLabels[eternal]}</span>
                     <span className={styles.lockIcon}>
                       <GiPadlock />
                     </span>

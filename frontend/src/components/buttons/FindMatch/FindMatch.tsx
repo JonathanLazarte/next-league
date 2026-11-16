@@ -7,6 +7,7 @@ import { useRouter } from "@/hooks/useRouter";
 import { useUserInterface } from "@/hooks/useUserInterface";
 import { findMatch, leaveParty } from '@/redux/slices/matchmakingSlice'
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 import { QueueStatus } from '@/types/ui'
 
 interface FindMatchButtonProps {
@@ -20,6 +21,7 @@ export default function FindMatchButton({
   const { push } = useRouter()
   const inQueue = queueStatus !== 'idle'
   const dispatch = useDispatch()
+  const { t } = useI18n();
 
   const { play: playHover } = useSound("/sfx/sfx-lobby-button-find-match-hover.ogg");
   const { play: playClick } = useSound("/sfx/sfx-lobby-button-find-match-click.ogg");
@@ -62,8 +64,8 @@ export default function FindMatchButton({
   }
 
   const displayText = inQueue
-    ? `In Queue`
-    : 'FIND MATCH';
+    ? t("buttons.inQueue")
+    : t("buttons.findMatch");
 
 
 

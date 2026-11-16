@@ -95,7 +95,7 @@ export default memo(function Champions() {
             masteryPoints: 0,
             maxSeasonRating: "N/D",
             startInfo: "A",
-            eternals: ["Serie 1", "Serie 2", "Serie Inicial"],
+            eternals: ["eternalSeries1", "eternalSeries2", "eternalStarter"],
             freeToPlay: false,
           }}
           ref={tooltipRef}

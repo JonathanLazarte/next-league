@@ -4,6 +4,7 @@ import React from 'react';
 import { IoVolumeMuteOutline, IoVolumeHighOutline, IoEyeOutline } from 'react-icons/io5';
 import { useSoundState } from '@/hooks/useSoundState';
 import { useSound } from '@/hooks/useSound';
+import { useI18n } from '@/hooks/useI18n';
 
 interface TopControlsProps {
   hideUI: boolean;
@@ -14,6 +15,7 @@ export default function TopControls({
   hideUI,
   onToggleHideUI,
 }: TopControlsProps) {
+  const { t } = useI18n();
   const { music, setMute } = useSoundState();
   const { play: playClick } = useSound('/general/menu-click.mp3');
 
@@ -32,7 +34,7 @@ export default function TopControls({
       <button
         className="league-circle-btn league-show-ui-btn"
         onClick={handleToggleHide}
-        title="Mostrar interfaz"
+        title={t("common.showUi")}
       >
         <IoEyeOutline size={18} />
       </button>
@@ -55,7 +57,7 @@ export default function TopControls({
       <button
         className="league-circle-btn"
         onClick={handleToggleHide}
-        title="Ocultar interfaz"
+        title={t("common.hideUi")}
       >
         <IoEyeOutline size={18} />
       </button>

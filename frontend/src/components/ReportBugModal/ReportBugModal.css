@@ -1,0 +1,122 @@
+.bug-report-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.bug-report-panel {
+  width: min(100%, 48rem);
+  padding: 2.4rem;
+  border: 1px solid var(--gold-six);
+  background: var(--blue-five);
+  box-shadow: 0 2rem 6rem rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(200, 170, 110, 0.08);
+  animation: appearance 0.16s ease-out;
+}
+
+.bug-report-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(200, 170, 110, 0.2);
+}
+
+.bug-report-kicker {
+  color: var(--gold-three);
+  font-family: Bold;
+  font-size: 1.05rem;
+  letter-spacing: 0.16em;
+}
+
+.bug-report-header h2 {
+  margin: 0.35rem 0 0;
+  color: var(--gold-one);
+  font-family: Bold;
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+}
+
+.bug-report-close {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--grey-three);
+  font-size: 2.4rem;
+}
+
+.bug-report-close:hover { color: var(--gold-one); }
+
+.bug-report-description {
+  margin: 1.6rem 0 1.1rem;
+  color: var(--gold-three);
+  font-family: Spiegel-Regular;
+  font-size: 1.3rem;
+  line-height: 1.45;
+}
+
+.bug-report-panel textarea {
+  width: 100%;
+  min-height: 12rem;
+  resize: none;
+  padding: 1.2rem;
+  border: 1px solid var(--gold-six);
+  outline: none !important;
+  box-shadow: none !important;
+  caret-color: var(--gold-one);
+  background: rgba(1, 10, 19, 0.8);
+  color: var(--gold-one);
+  font-family: Spiegel-Regular;
+  font-size: 1.35rem;
+}
+
+.bug-report-panel textarea:focus {
+  border-color: var(--gold-four);
+  outline: none !important;
+  box-shadow: none !important;
+}
+.bug-report-panel textarea::placeholder { color: #5c5b57; }
+
+.bug-report-success {
+  margin: 0.9rem 0 0;
+  color: var(--gold-two);
+  font-family: Spiegel-Regular;
+  font-size: 1.2rem;
+}
+
+.bug-report-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.8rem;
+}
+
+.bug-report-submit {
+  min-width: 13rem;
+  height: 3.8rem;
+  font-family: Bold;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+}
+
+.bug-report-submit {
+  border-width: 0.2rem;
+}
+
+.bug-report-submit:hover:not(:disabled) {
+  border-image: linear-gradient(to bottom, var(--gold-one), var(--gold-four)) 1;
+  background: linear-gradient(to bottom, var(--blue-six) 40%, rgb(69, 63, 44) 100%);
+  color: var(--gold-one);
+}
+
+.bug-report-submit:disabled {
+  border-color: #5c5b57;
+  background: var(--blue-six);
+  color: #5c5b57;
+}

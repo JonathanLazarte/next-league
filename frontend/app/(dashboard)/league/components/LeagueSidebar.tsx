@@ -13,6 +13,7 @@ import {
 } from './LeagueIcons';
 import { RESOURCES_URL } from '@/utils/constants';
 import { useSound } from '@/hooks/useSound';
+import { useI18n } from '@/hooks/useI18n';
 
 interface LeagueSidebarProps {
   activeTab: string;
@@ -26,6 +27,7 @@ export default function LeagueSidebar({
   onOpenPatchNotes,
 }: LeagueSidebarProps) {
   const { play: playClick } = useSound('/general/menu-click.mp3');
+  const { t } = useI18n();
 
   const renderIcon = (item: SidebarItem) => {
     const iconProps = { className: 'league-nav-icon' };
@@ -98,7 +100,7 @@ export default function LeagueSidebar({
           </div>
           <div className="league-nav-title">
             {renderIcon(PATCH_NOTES_ITEM)}
-            <span>{PATCH_NOTES_ITEM.title}</span>
+            <span>{t("patch.notesTitle")}</span>
           </div>
         </div>
       </div>

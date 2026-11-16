@@ -1,5 +1,8 @@
+import { useI18n } from "@/hooks/useI18n";
+
 export default function PartyRequest(username: string) {
-  return <div>TODO: INVITATION</div>
+  const { t } = useI18n();
+  return <div>{t("common.invitation")}</div>
 }
 
 

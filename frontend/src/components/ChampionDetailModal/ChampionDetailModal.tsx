@@ -12,12 +12,15 @@ import "./ChampionDetailModal.css";
 import { usePurchase } from "@/hooks/usePurchase";
 import { useUserChampions } from "@/hooks/useUserChampions";
 import { useUserSkins } from "@/hooks/useUserSkins";
+import { useI18n } from "@/hooks/useI18n";
 /*aspectos imports*/
 import { GiPadlock } from "react-icons/gi";
 import { IoArrowForward } from "react-icons/io5";
 import { RESOURCES_URL } from "@/utils/constants";
 import type { Champion } from '@/types/champion'
 import { useSound } from '@/hooks/useSound'
+import { BUTTON_X_DATA_URI, BUTTON_X_OVER_DATA_URI, BUTTON_X_DOWN_DATA_URI } from '@/utils/uiAssets'
+import MediaSlot from '@/components/MediaSlot/MediaSlot'
 
 
 export const CloseModalButton = ({ onClose }: { onClose: () => void }) => {
@@ -38,51 +41,52 @@ export const CloseModalButton = ({ onClose }: { onClose: () => void }) => {
     onMouseEnter={handleMouseEnter}
     onMouseLeave={handleMouseLeave}
   >
-    {buttonState === 'idle' && <img src={`${RESOURCES_URL}/general/button-x.png`}></img>}
-    {buttonState === 'hovered' && <img src='/general/button-x-over.png'></img>}
-    {buttonState === 'pressed' && <img src='/general/button-x-down.png'></img>}
+    <img src={BUTTON_X_DATA_URI} alt="" className={buttonState === 'idle' ? styles.closeIcon : styles.closeIconHidden} />
+    <img src={BUTTON_X_OVER_DATA_URI} alt="" className={buttonState === 'hovered' ? styles.closeIcon : styles.closeIconHidden} />
+    <img src={BUTTON_X_DOWN_DATA_URI} alt="" className={buttonState === 'pressed' ? styles.closeIcon : styles.closeIconHidden} />
   </div>)
 }
 
 interface ResumenTabProps {
   champion: Champion,
-  championImg: string,
+  splashSrc: string,
   isChampionInCollection: boolean,
   onUnlockChampion: () => void
 }
 
 const ResumenTab = memo(function ResumenTab({
   champion,
-  championImg,
+  splashSrc,
   isChampionInCollection,
   onUnlockChampion,
 }: ResumenTabProps) {
+  const { t } = useI18n();
   const difficulty = champion?.info.difficulty;
 
   return (
-    <div style={{ backgroundImage: `linear-gradient(
-        to right,
-        var(--blue-five) 0%,
-        var(--blue-five) 16%,
-        transparent 100%
-    ), ${championImg}` }} className={styles.content}>
+    <div className={styles.content}>
+      <MediaSlot variant="hero" className={styles.splashSlot}>
+        <img src={splashSrc} alt="" />
+      </MediaSlot>
+      <div className={styles.splashScrim} />
       {/* Left Panel - Information */}
       <div className={styles.leftPanel}>
         <div className={styles.graphics}>
           <div className={styles.info}>
             <div className={styles.damageType}>
-              <span className={styles.damageLabel}>DAMAGE:</span>
-              <span className={styles.damageValue}>Physical</span>
+              <span className={styles.damageLabel}>{t("champion.damage")}</span>
+              <span className={styles.damageValue}>{t("champion.physical")}</span>
             </div>
             <div className={styles.styleSection}>
-              <span className={styles.styleLabel}>STYLE:</span>
+              <span className={styles.styleLabel}>{t("champion.style")}</span>
               <div className={styles.styleSlider}>
                 <div className={styles.meleeIcon}>
-                  <Image
-                    alt="ability power icon"
+                  <img
+                    alt=""
                     src="/champion-details/continuum_icon_attackspeed.png"
                     width={17}
                     height={17}
+                    decoding="sync"
                   />
                 </div>
                 <div className={styles.sliderTrack}>
@@ -92,43 +96,47 @@ const ResumenTab = memo(function ResumenTab({
                   ></div>
                 </div>
                 <div className={styles.rangedIcon}>
-                  <Image
-                    alt="ability power icon"
+                  <img
+                    alt=""
                     src="/champion-details/continuum_icon_abilitypower_grey.png"
                     width={17}
                     height={17}
+                    decoding="sync"
                   />
                 </div>
               </div>
             </div>
             <div className={styles.difficultySection}>
-              <span className={styles.difficultyLabel}>DIFFICULTY:</span>
+              <span className={styles.difficultyLabel}>{t("champion.difficulty")}</span>
               <div className={styles.difficultyBar}>
                 {difficulty > 0 && difficulty <= 4 ? (
-                  <Image
+                  <img
                     src="/champion-details/difficultygraph_difficulty1.png"
                     className={styles.difficultyLevel}
-                    alt="difficulty level graph"
+                    alt=""
                     width={136}
                     height={5}
+                    decoding="sync"
                   />
                   ): null}
                 {difficulty > 4 && difficulty <= 7 ? (
-                  <Image
+                  <img
                     className={styles.difficultyLevel}
                     src="/champion-details/difficultygraph_difficulty2.png"
-                    alt="difficulty level graph"
+                    alt=""
                     width={136}
                     height={5}
+                    decoding="sync"
                     />
                 ) : null}
                 {difficulty > 7 ? (
-                  <Image
+                  <img
                     className={styles.difficultyLevel}
                     src="/champion-details/difficultygraph_difficulty3.png"
-                    alt="difficulty level graph"
+                    alt=""
                     width={136}
                     height={5}
+                    decoding="sync"
                     />
                 ) : null}
               </div>
@@ -146,31 +154,34 @@ const ResumenTab = memo(function ResumenTab({
                 const rotationDegree = index * 72
                 return (
                   <>
-                    <Image
+                    <img
                       className={styles.graphTraitIcon}
                       src={`/champion-details/${stat.hover_icon}.png`}
                       key={index}
                       width={800}
                       height={800}
-                      alt="graph segment icon"
+                      alt=""
+                      decoding="sync"
                       />
-                    <Image
+                    <img
                       src={`/champion-details/cdp-graph-segment-l${stat.value}.png`}
                       className={styles.graphSegmentLevel}
                       style={{ transform: `rotate(${rotationDegree}deg)` }}
-                      alt="graph segment level"
+                      alt=""
                       width={800}
                       height={800}
+                      decoding="sync"
                     />
                   </>
                 );
               })}
-              <Image
+              <img
                 width={800}
                 height={800}
-                alt='graph backing'
-                src='/champion-details/cdp_graph_backing.png'
+                alt=""
+                src="/champion-details/cdp_graph_backing.png"
                 className={styles.radarBackground}
+                decoding="sync"
               />
             </div>
           </div>
@@ -182,10 +193,10 @@ const ResumenTab = memo(function ResumenTab({
         </div>
         <div className={styles.actionButtons}>
           {isChampionInCollection ? (
-            <button className="general-button disabled">EN COLECCIÓN</button>
+            <button className="general-button disabled">{t("common.inCollection")}</button>
           ) : (
             <button className="general-button" onClick={onUnlockChampion}>
-              DESBLOQUEAR
+              {t("buttons.unlock")}
             </button>
           )}
           <button
@@ -198,7 +209,7 @@ const ResumenTab = memo(function ResumenTab({
             }}
             className="general-button"
           >
-            SABER MÁS
+            {t("buttons.learnMore")}
             <IoArrowForward />
           </button>
         </div>
@@ -214,6 +225,7 @@ interface AspectosTabProps {
 }
 
 const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosTabProps) {
+  const { t } = useI18n();
   const [selectedSkin, setSelectedSkin] = useState(0);
   const { userSkins } = useUserSkins();
   const totalSkins = champion.skins.length;
@@ -309,14 +321,16 @@ const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosT
     <div
       className="content"
     >
-      <Image
-        className="skin-background-image"
-        src={`${RESOURCES_URL}/${window.innerWidth < 767 ? "loading" : "splash"}/${champion.id}_${champion.skins[selectedSkin].num}.jpg`}
-        alt={champion.name}
-        onLoad={() => setIsBackgroundImageLoaded(true)}
-        height={'800'}
-        width={'1320'}
-      />
+      <MediaSlot variant="hero">
+        <Image
+          className="skin-background-image"
+          src={`${RESOURCES_URL}/${window.innerWidth < 767 ? "loading" : "splash"}/${champion.id}_${champion.skins[selectedSkin].num}.jpg`}
+          alt={champion.name}
+          onLoad={() => setIsBackgroundImageLoaded(true)}
+          height={'800'}
+          width={'1320'}
+        />
+      </MediaSlot>
       <div className="background-skin-placeholder"
         style={{ visibility: !isBackgroundImageLoaded ? "visible" : "hidden" }}
       >
@@ -343,11 +357,11 @@ const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosT
         </div>
         <div className="actions">
           {isSkinInCollection ? (
-            <div className="unlock-button disabled"> EN COLECCION </div>
+            <div className="unlock-button disabled"> {t("common.inCollection")} </div>
           ) : (
             <div className="unlock-button" onClick={handleUnlockSkin}>
               {" "}
-              DESBLOQUEAR{" "}
+              {t("buttons.unlock")}{" "}
             </div>
           )}
           <div className="skin-changer">
@@ -389,11 +403,13 @@ const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosT
                 >
                   {skinIndex !== null ? (
                     <>
-                      <img
-                        src={`${RESOURCES_URL}/tiles/${champion.id}_${champion.skins[skinIndex].num}.jpg`}
-                        className="skin-minicard-image"
-                        alt={`Skin ${skinIndex + 1} de ${champion.name}`}
-                      />
+                      <MediaSlot variant="tile">
+                        <img
+                          src={`${RESOURCES_URL}/tiles/${champion.id}_${champion.skins[skinIndex].num}.jpg`}
+                          className="skin-minicard-image"
+                          alt={`Skin ${skinIndex + 1} de ${champion.name}`}
+                        />
+                      </MediaSlot>
                       {!isThisSkinInCollection(skinIndex) ? (
                         <GiPadlock
                           className={`skin-locked-icon ${skinIndex === selectedSkin && "selected"}`}
@@ -472,13 +488,15 @@ const HabilidadesTab = memo(function HabilidadesTab({ champion }: { champion: Ch
             <div onClick={() => {
               setSelectedSpell(0);
             }} className={`passive-image-container ${selectedSpell === 0 ? "selected" : null}`}>
-              <Image
-                className='passive-image'
-                src={`${RESOURCES_URL}/passive/${champion.passive.image.full}`}
-                alt="passive sprite"
-                width={32}
-                height={32}
-                />
+              <MediaSlot variant="icon">
+                <Image
+                  className='passive-image'
+                  src={`${RESOURCES_URL}/passive/${champion.passive.image.full}`}
+                  alt="passive sprite"
+                  width={32}
+                  height={32}
+                  />
+              </MediaSlot>
             </div>
             P
           </div>
@@ -492,15 +510,16 @@ const HabilidadesTab = memo(function HabilidadesTab({ champion }: { champion: Ch
                   }}
                   className={`spell-image-container ${selectedSpell === index + 1 ? "selected" : null}`}
                 >
-                  <Image
-                    key={index}
-
-                    className='spell-image'
-                    src={`${RESOURCES_URL}/spell/${spell.image.full}`}
-                    alt="spell sprite"
-                    width={48}
-                    height={48}
-                    />
+                  <MediaSlot variant="icon">
+                    <Image
+                      key={index}
+                      className='spell-image'
+                      src={`${RESOURCES_URL}/spell/${spell.image.full}`}
+                      alt="spell sprite"
+                      width={48}
+                      height={48}
+                      />
+                  </MediaSlot>
                 </div>
                 {spellKeys[index + 1]}
               </div>
@@ -533,6 +552,7 @@ interface ChampionDetailModalProps {
 }
 
 const ChampionDetailModal = ({ champion, onClose }: ChampionDetailModalProps) => {
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState("resumen");
   const { userChampions } = useUserChampions();
   const { openPurchaseModal } = usePurchase();
@@ -554,12 +574,12 @@ const ChampionDetailModal = ({ champion, onClose }: ChampionDetailModalProps) =>
           { id: "aspectos", label: "ASPECTOS" },
         ]
       : [
-          { id: "resumen", label: "RESUMEN" },
-          { id: "habilidades", label: "HABILIDADES" },
-          { id: "aspectos", label: "ASPECTOS" },
+          { id: "resumen", label: t("sections.overview") },
+          { id: "habilidades", label: t("sections.abilities") },
+          { id: "aspectos", label: t("sections.skinsTab") },
         ];
 
-  const championImg = `url('${RESOURCES_URL}/${activeTab === "resumen" ? "centered" : "splash"}/${champion.id}_0.jpg')`;
+  const splashSrc = `${RESOURCES_URL}/${activeTab === "resumen" ? "centered" : "splash"}/${champion.id}_0.jpg`;
   /*const skinFileName = `${champion.id}_`*/
   const handleUnlockChampion = () => {
     openPurchaseModal({ itemId: champion.id, type: "champion" });
@@ -576,8 +596,9 @@ const ChampionDetailModal = ({ champion, onClose }: ChampionDetailModalProps) =>
               <div className={styles.championIcon}>
                 <img
                   src={`/champion-details/role-icon-${champion.tags[0].toLowerCase()}.png`}
-                  alt={champion.name}
+                  alt=""
                   className={styles.iconImage}
+                  decoding="sync"
                 />
               </div>
               <div className={styles.championText}>
@@ -604,7 +625,7 @@ const ChampionDetailModal = ({ champion, onClose }: ChampionDetailModalProps) =>
         {activeTab === "resumen" && (
           <ResumenTab
             champion={champion}
-            championImg={championImg}
+            splashSrc={splashSrc}
             isChampionInCollection={isChampionInCollection}
             onUnlockChampion={handleUnlockChampion}
           />

@@ -1,6 +1,8 @@
 'use client';
 
 import React, { ErrorInfo } from 'react';
+import store from '@/redux/store';
+import { translate } from '@/i18n/messages';
 
 interface ErrorBoundaryProps {
   children: React.ReactNode
@@ -74,7 +76,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
               cursor: 'pointer'
             }}
           >
-            Intentar de nuevo
+            {translate(store.getState().settings.language, "buttons.retry")}
           </button>
           {process.env.NODE_ENV === 'development' && this.state.error && (
             <details style={{

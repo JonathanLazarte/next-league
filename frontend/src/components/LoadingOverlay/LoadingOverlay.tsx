@@ -1,6 +1,9 @@
+"use client";
 import "./LoadingOverlay.css";
+import { useI18n } from "@/hooks/useI18n";
 
 export default function LoadingOverlay() {
+  const { t } = useI18n();
   return (
     <div className="loading-overlay">
       <div className="loading-wrapper">
@@ -39,7 +42,7 @@ export default function LoadingOverlay() {
 
           <div className="loading-square"></div>
 
-        { <p className="loading-text">Loading, please wait.</p> }
+        { <p className="loading-text">{t("common.loadingWait")}</p> }
       </div>
     </div>
   );
