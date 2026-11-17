@@ -9,7 +9,6 @@ import { verifyToken } from "@/redux/slices/authSlice";
 import { setLanguage } from "@/redux/slices/settingsSlice";
 import { useAppSelector, useAppDispatch } from '@/hooks/hooks'
 import { LOCALE_STORAGE_KEY } from "@/hooks/useI18n";
-import RoomAssetsPreloader from "@/components/RoomAssetsPreloader/RoomAssetsPreloader";
 
 
 export const AuthProvider = ({ children }: { children: React.ReactElement}) => {
@@ -72,7 +71,7 @@ export function Providers({ children }: { children: React.ReactElement }) {
 
   return (
     <ReduxProvider store={store}>
-      <AuthProvider><QueryClientProvider client={queryClient}><RoomAssetsPreloader />{children}</QueryClientProvider></AuthProvider>
+      <AuthProvider><QueryClientProvider client={queryClient}>{children}</QueryClientProvider></AuthProvider>
     </ReduxProvider>
   );
 }

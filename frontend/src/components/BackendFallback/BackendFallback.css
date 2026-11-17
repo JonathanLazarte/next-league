@@ -527,6 +527,26 @@
   letter-spacing: 0.12em;
 }
 
+/* Keep the retry action on the shared general-button idle state. */
+.backend-retry-btn.general-button {
+  width: 17.92rem;
+  min-width: 0;
+  height: 4rem;
+  padding: 0;
+  border: 0.2rem solid gray;
+  border-image: linear-gradient(
+    to bottom,
+    var(--gold-two),
+    var(--gold-two),
+    var(--gold-five)
+  ) 1;
+  background: var(--blue-six);
+  color: var(--color-primary);
+  font-family: Bold;
+  font-size: 1.65rem;
+  letter-spacing: 1px;
+}
+
 .backend-retry-btn {
   background: linear-gradient(to bottom, var(--gold-two), var(--gold-four));
   border: 1px solid var(--gold-one);
@@ -588,7 +608,6 @@
 /* Server fallback: single gold segmented ring on the client blue-five base. */
 .backend-fallback-overlay {
   background: var(--blue-five);
-  background-image: radial-gradient(circle at 50% 42%, rgba(200, 155, 60, 0.08), transparent 46%);
 }
 
 .backend-fallback-ring {
@@ -636,6 +655,55 @@
   color: #5c5b57;
 }
 
+/* Must come after fallback-specific rules so the idle state stays identical to general-button. */
+.backend-retry-btn.general-button {
+  width: 17.92rem;
+  min-width: 0;
+  height: 4rem;
+  padding: 0;
+  border: 0.2rem solid gray;
+  border-image: linear-gradient(
+    to bottom,
+    var(--gold-two),
+    var(--gold-two),
+    var(--gold-five)
+  ) 1;
+  background: var(--blue-six);
+  color: var(--color-primary);
+  font-family: Bold;
+  font-size: 1.65rem;
+  letter-spacing: 1px;
+  box-shadow: none;
+}
+
 @keyframes backendRingRotate {
   to { transform: rotate(360deg); }
+}
+
+/* Final fallback typography and shared-button treatment. */
+.backend-fallback-emblem {
+  width: 6.7rem;
+}
+
+.backend-fallback-status-badge {
+  margin: 0 0 1.4rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gold-three);
+  font-family: Spiegel-Regular, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+.backend-fallback-title {
+  font-family: Bold, serif;
+  font-weight: 400;
+}
+
+.backend-fallback-desc,
+.backend-fallback-meta {
+  font-family: Spiegel-Regular, sans-serif;
+  font-weight: 400;
 }

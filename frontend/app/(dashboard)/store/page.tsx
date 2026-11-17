@@ -53,11 +53,11 @@ export default memo(function Store() {
           </div>
         </div>
         <div className="right-items">
-          <button type="button" className="buy-rp-button disabled-control" disabled>{t("common.buyRp")}</button>
-          <button type="button" className="rounded-button disabled-control" disabled aria-label="Gift unavailable">
+          <button type="button" className="buy-rp-button not-available" disabled>{t("common.buyRp")}</button>
+          <button type="button" className="rounded-button not-available" disabled aria-label="Gift unavailable">
             <IoIosGift className="rounded-icon" />
           </button>
-          <button type="button" className="rounded-button disabled-control" disabled aria-label="Account management unavailable">
+          <button type="button" className="rounded-button not-available" disabled aria-label="Account management unavailable">
             <MdOutlineManageAccounts className="rounded-icon" />
           </button>
         </div>

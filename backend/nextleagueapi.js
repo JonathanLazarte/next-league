@@ -1,4 +1,3 @@
-import { require } from "./utils.js";
 import express from "express";
 import { userRouter } from "./routes/user.js";
 import { authRouter } from "./routes/auth.js";
@@ -9,9 +8,8 @@ import { corsMiddleware } from "./middlewares/cors.js";
 import logger from "morgan";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
-import cors from "cors";
-const { MongoClient, ServerApiVersion } = require("mongodb");
 import { v4 as uuidv4 } from "uuid";
+import { connectDatabase } from "./db.js";
 
 const app = express();
 
@@ -24,22 +22,9 @@ const io = new Server(server, {
   },
   connectionStateRecovery: {},
 });
-const uri =
-  "mongodb+srv://theshakadevirgo:JohnShaka151515@leagueoflegendsclone.dwigeek.mongodb.net/?appName=LeagueOfLegendsClone"; //"mongodb+srv://JonathanLazarte:Jonii1543104@pokemonleague.4awnj.mongodb.net/?retryWrites=true&w=majority&appName=PokemonLeague";
-const localurl = "mongodb://localhost:27017/";
-const mocked = "mongodb+srv://LazarteJonathan:Jonii8843104@mycluster.orto15k.mongodb.net/?appName=MyCluster"
-
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
 async function run() {
   try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
+    await connectDatabase();
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!",
     );

@@ -60,7 +60,6 @@ export default function BackendDeployingFallback({
 
         {/* Pulsing Status Badge */}
         <div className="backend-fallback-status-badge">
-          <span className="backend-pulse-dot" />
           <span>{isOnline ? 'Servidor Conectado' : 'Despliegue en curso'}</span>
         </div>
 
@@ -91,25 +90,13 @@ export default function BackendDeployingFallback({
         {/* Actions */}
         <div className="backend-fallback-actions">
           <button
-            className="backend-retry-btn"
+            className="general-button"
             onClick={handleManualRetry}
             disabled={isRetrying}
           >
             <IoReload className={isRetrying ? 'animate-spin' : ''} size={18} />
             <span>{isRetrying ? t("backend.checking") : t("backend.retryNow")}</span>
           </button>
-
-          {onContinueAsGuest && (
-            <button
-              className="backend-guest-btn"
-              onClick={() => {
-                playClick();
-                onContinueAsGuest();
-              }}
-            >
-              {t("backend.guestOffline")}
-            </button>
-          )}
         </div>
 
       </div>

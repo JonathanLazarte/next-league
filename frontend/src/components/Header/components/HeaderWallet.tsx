@@ -17,7 +17,7 @@ export default function HeaderWallet({ trigger }: HeaderWalletProps) {
             ? `${Math.floor(RP / 1000)} K`
             : RP || 0}
         </div>
-        <button type="button" className="header-buy-rp-button disabled-control" disabled aria-label="Buy RP unavailable">
+        <button type="button" className="header-buy-rp-button not-available" disabled aria-label="Buy RP unavailable">
           <div className="buy-rp-icon">
             <svg
               width="10"

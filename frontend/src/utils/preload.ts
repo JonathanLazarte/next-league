@@ -9,8 +9,6 @@
  * no espera red ni rasterización en el primer paint.
  */
 
-import { RESOURCES_URL } from "@/utils/constants";
-
 export const ASSET_GROUPS = {
   championDetails: [
     "/champion-details/cdp_graph_backing.png",
@@ -46,7 +44,21 @@ export const ASSET_GROUPS = {
 
 export type AssetGroupName = keyof typeof ASSET_GROUPS;
 
-const groupPromises = new Map<AssetGroupName, Promise<void>>();
+export type AssetPriority = "required" | "idle";
+
+export interface AssetPreloadPlan {
+  id: string;
+  urls: readonly string[];
+  priority: AssetPriority;
+}
+
+export interface AssetPreloadProgress {
+  completed: number;
+  total: number;
+}
+
+const assetPromises = new Map<string, Promise<void>>();
+const planPromises = new Map<string, Promise<void>>();
 
 const decodeImage = (src: string): Promise<void> => {
   const img = new Image();
@@ -60,46 +72,60 @@ const decodeImage = (src: string): Promise<void> => {
   });
 };
 
-export const decodeAssetGroup = (group: AssetGroupName): Promise<void> => {
-  const pending = groupPromises.get(group);
+const decodeAsset = (src: string): Promise<void> => {
+  const pending = assetPromises.get(src);
   if (pending) return pending;
 
-  const promise = Promise.all(ASSET_GROUPS[group].map(decodeImage)).then(
-    () => undefined,
-  );
-  groupPromises.set(group, promise);
+  const promise = decodeImage(src);
+  assetPromises.set(src, promise);
   return promise;
 };
+
+/** Preloads any set of URLs and optionally reports decode progress. */
+export const preloadAssets = (
+  urls: readonly string[],
+  onProgress?: (progress: AssetPreloadProgress) => void,
+): Promise<void> => {
+  const uniqueUrls = [...new Set(urls)];
+  let completed = 0;
+  const total = uniqueUrls.length;
+
+  if (!total) {
+    onProgress?.({ completed: 0, total: 0 });
+    return Promise.resolve();
+  }
+
+  return Promise.all(
+    uniqueUrls.map((url) =>
+      decodeAsset(url).finally(() => {
+        completed += 1;
+        onProgress?.({ completed, total });
+      }),
+    ),
+  ).then(() => undefined);
+};
+
+/**
+ * Deduplicates a named asset plan. `required` plans can later feed the loading
+ * screen progress, while `idle` plans are safe to schedule after the app paints.
+ */
+export const preloadAssetPlan = (
+  plan: AssetPreloadPlan,
+  onProgress?: (progress: AssetPreloadProgress) => void,
+): Promise<void> => {
+  const key = `${plan.id}:${plan.urls.join("|")}`;
+  const pending = planPromises.get(key);
+  if (pending) return pending;
+
+  const promise = preloadAssets(plan.urls, onProgress);
+  planPromises.set(key, promise);
+  return promise;
+};
+
+export const decodeAssetGroup = (group: AssetGroupName): Promise<void> =>
+  preloadAssetPlan({ id: group, urls: ASSET_GROUPS[group], priority: "idle" });
 
 /** @deprecated usar decodeAssetGroup('championDetails') */
 export const preloadChampionDetailsAssets = () => {
   void decodeAssetGroup("championDetails");
-};
-type RoomAssetUser = {
-  profileIcon?: string;
-  rankName?: string;
-};
-
-const roomAssetPromises = new Map<string, Promise<void>>();
-
-/**
- * Precarga los recursos que la sala PvP muestra inmediatamente.
- * Se invoca durante un período inactivo, nunca en la navegación crítica.
- */
-export const preloadRoomAssets = ({ profileIcon, rankName }: RoomAssetUser): Promise<void> => {
-  const rank = rankName?.trim().toLowerCase() || "bronze";
-  const assets = [
-    `${RESOURCES_URL}/general/mini-sr.png`,
-    `${RESOURCES_URL}/banner/official (27).png`,
-    `${RESOURCES_URL}/ranked-emblem/wings/wings_${rank}_plate.png`,
-    ...(profileIcon ? [`${RESOURCES_URL}/profileicon/${profileIcon}.png`] : []),
-  ];
-  const cacheKey = assets.join("|");
-  const pending = roomAssetPromises.get(cacheKey);
-
-  if (pending) return pending;
-
-  const promise = Promise.all(assets.map(decodeImage)).then(() => undefined);
-  roomAssetPromises.set(cacheKey, promise);
-  return promise;
 };

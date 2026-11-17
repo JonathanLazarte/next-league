@@ -217,8 +217,7 @@ input[type="search"]::-webkit-search-cancel-button {
     color: gray;
 }
 
-.disabled-control,
-button:disabled {
+.not-available {
     border-color: #5c5b57 !important;
     background: var(--blue-six) !important;
     color: #5c5b57 !important;
@@ -227,11 +226,17 @@ button:disabled {
     pointer-events: none;
 }
 
-.disabled-control:hover,
-button:disabled:hover {
+.not-available:hover {
     border-color: #5c5b57 !important;
     background: var(--blue-six) !important;
     color: #5c5b57 !important;
+}
+
+/* For unavailable icon-only controls that are designed without a surface. */
+.not-available.not-available-icon {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 .general-button.disabled {
     border: 0.2rem solid gray;

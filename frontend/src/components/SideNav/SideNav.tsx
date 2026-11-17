@@ -61,10 +61,10 @@ export default memo(function RightNav() {
             <span className="unread-count-badge">{unreadCount}</span>
           )}
         </button>
-        <button className="right-nav-buttom-button news-button disabled-control" disabled aria-label="News unavailable">
+        <button className="right-nav-buttom-button news-button not-available" disabled aria-label="News unavailable">
           <RiFilePaper2Fill />
         </button>
-        <button className="right-nav-buttom-button disabled-control" disabled aria-label="Voice unavailable">
+        <button className="right-nav-buttom-button not-available" disabled aria-label="Voice unavailable">
           <FaMicrophone />
         </button>
         <span className="actual-version">1.1</span>

@@ -126,10 +126,10 @@ export default function SocialPanel() {
         <div className="social-menu">
           {t("nav.social")}
           <div className="social-icons">
-            <button type="button" className="social-icon disabled-control" disabled aria-label="Add friend unavailable"><FaUserPlus /></button>
-            <button type="button" className="social-icon disabled-control" disabled aria-label="Create folder unavailable"><FaFolderPlus /></button>
-            <button type="button" className="social-icon disabled-control" disabled aria-label="Social menu unavailable"><GiHamburgerMenu /></button>
-            <button type="button" className="social-icon disabled-control" disabled aria-label="Search unavailable"><FaSearch /></button>
+            <button type="button" className="social-icon not-available not-available-icon" disabled aria-label="Add friend unavailable"><FaUserPlus /></button>
+            <button type="button" className="social-icon not-available not-available-icon" disabled aria-label="Create folder unavailable"><FaFolderPlus /></button>
+            <button type="button" className="social-icon not-available not-available-icon" disabled aria-label="Social menu unavailable"><GiHamburgerMenu /></button>
+            <button type="button" className="social-icon not-available not-available-icon" disabled aria-label="Search unavailable"><FaSearch /></button>
           </div>
         </div>
         <div
