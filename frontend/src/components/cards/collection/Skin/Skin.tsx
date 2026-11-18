@@ -84,7 +84,7 @@ export default memo(function SkinCard({
       <MediaSlot variant="portrait">
         <Image
           className={`skin-card-image ${isAdquired ? "" : "not-obtained"} ${hasImgError ? "img-fallback" : ""}`}
-          src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/loading/${skin.img}`}
+          src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/champion/loading/${skin.img}`}
           alt={`${skin.name} skin`}
           width={308}
           height={560}

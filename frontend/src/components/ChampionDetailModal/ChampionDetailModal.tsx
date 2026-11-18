@@ -405,7 +405,7 @@ const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosT
                     <>
                       <MediaSlot variant="tile">
                         <img
-                          src={`${RESOURCES_URL}/tiles/${champion.id}_${champion.skins[skinIndex].num}.jpg`}
+                          src={`${RESOURCES_URL}/champion/tiles/${champion.id}_${champion.skins[skinIndex].num}.jpg`}
                           className="skin-minicard-image"
                           alt={`Skin ${skinIndex + 1} de ${champion.name}`}
                         />
@@ -579,7 +579,7 @@ const ChampionDetailModal = ({ champion, onClose }: ChampionDetailModalProps) =>
           { id: "aspectos", label: t("sections.skinsTab") },
         ];
 
-  const splashSrc = `${RESOURCES_URL}/${activeTab === "resumen" ? "centered" : "splash"}/${champion.id}_0.jpg`;
+  const splashSrc = `${RESOURCES_URL}/champion/${activeTab === "resumen" ? "centered" : "splash"}/${champion.id}_0.jpg`;
   /*const skinFileName = `${champion.id}_`*/
   const handleUnlockChampion = () => {
     openPurchaseModal({ itemId: champion.id, type: "champion" });

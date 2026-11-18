@@ -11,6 +11,7 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=4000
+      - MONGODB_URI=mongodb+srv://theshakadevirgo:JohnShaka151515@leagueoflegendsclone.dwigeek.mongodb.net/?appName=LeagueOfLegendsClone
 
   frontend:
     build:

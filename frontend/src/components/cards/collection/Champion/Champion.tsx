@@ -179,14 +179,14 @@ const ChampionCard = ({
             className={`champion-image ${hasImgError ? "img-fallback" : ""}`}
             width={308}
             height={560}
-            src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/loading/${champion.id}_0.jpg`}
+            src={hasImgError ? "/global/poro_sad.png" : `${RESOURCES_URL}/champion/loading/${champion.id}_0.jpg`}
             alt={`${champion.name} sprite`}
             onError={() => setHasImgError(true)}
           />
         </MediaSlot>
         {adquired ? (
           <div className="mastery-box" aria-hidden="true">
-            <Image 
+            <Image
               className="mastery"
               src={MASTERY_FLAG_EMPTY_DATA_URI}
               alt="mastery-flag"

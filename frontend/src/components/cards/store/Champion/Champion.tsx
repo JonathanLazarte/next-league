@@ -16,7 +16,7 @@ const ChampionCard = ({ item: data, owned = false }: { item: Champion, owned?: b
     openPurchaseModal({
       id: data.id,
       type: "champion",
-      img: `${RESOURCES_URL}/splash/${data.id}_0.jpg`,
+      img: `${RESOURCES_URL}/champion/splash/${data.id}_0.jpg`,
       name: data.name,
       subtitle: data.title,
       value: {
@@ -39,7 +39,7 @@ const ChampionCard = ({ item: data, owned = false }: { item: Champion, owned?: b
         <Image
           className="store-champion-image"
           id={data.id}
-          src={`${RESOURCES_URL}/tiles/${data.id}_0.jpg`}
+          src={`${RESOURCES_URL}/champion/tiles/${data.id}_0.jpg`}
           alt={`Sprite of ${data.name}`}
           sizes={'23rem'}
           fill

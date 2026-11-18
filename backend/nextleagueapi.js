@@ -9,7 +9,7 @@ import logger from "morgan";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
 import { v4 as uuidv4 } from "uuid";
-import { connectDatabase } from "./db.js";
+import { connectDatabase, client } from "./db.js";
 
 const app = express();
 

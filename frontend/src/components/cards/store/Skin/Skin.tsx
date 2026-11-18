@@ -18,7 +18,7 @@ export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned
       id: skin.id,
       type: 'skin',
       name: skin.name,
-      img: `${RESOURCES_URL}/splash/${skin.img}`,
+      img: `${RESOURCES_URL}/champion/splash/${skin.img}`,
       subtitle: "Elige este nuevo estilo para tu campeón!",
       value: {
         rp: skin.value,

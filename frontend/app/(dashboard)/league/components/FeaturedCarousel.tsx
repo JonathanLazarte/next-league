@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import { SkinSlide } from '../types';
@@ -8,6 +8,7 @@ import { RpIcon, TierCrestIcon } from './LeagueIcons';
 import { RESOURCES_URL } from '@/utils/constants';
 import { useSound } from '@/hooks/useSound';
 import { useI18n } from '@/hooks/useI18n';
+import { useCarouselAutoplay } from './useCarouselAutoplay';
 
 interface FeaturedCarouselProps {
   slides: SkinSlide[];
@@ -22,38 +23,17 @@ export default function FeaturedCarousel({
   onSelectIndex,
   onBuyCurrent,
 }: FeaturedCarouselProps) {
-  const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const { play: playClick } = useSound('/general/menu-click.mp3');
   const { t } = useI18n();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const currentSlide = slides[currentIndex] || slides[0];
-
-  // Auto-play progress loop (7 seconds duration)
-  useEffect(() => {
-    setProgress(0);
-    if (timerRef.current) clearInterval(timerRef.current);
-
-    if (isPaused || slides.length <= 1) return;
-
-    const intervalMs = 70;
-    const step = 100 / (7000 / intervalMs);
-
-    timerRef.current = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          onSelectIndex((currentIndex + 1) % slides.length);
-          return 0;
-        }
-        return prev + step;
-      });
-    }, intervalMs);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [currentIndex, isPaused, slides.length, onSelectIndex]);
+  const { progress, isAnimating } = useCarouselAutoplay({
+    activeIndex: currentIndex,
+    slideCount: slides.length,
+    isPaused,
+    onAdvance: () => onSelectIndex((currentIndex + 1) % slides.length),
+  });
 
   const handlePrev = () => {
     playClick();
@@ -141,7 +121,7 @@ export default function FeaturedCarousel({
                 onClick={() => handleSelect(slideIdx)}
               >
                 <Image
-                  src={`${RESOURCES_URL}/centered/${slide.img}`}
+                  src={`${RESOURCES_URL}/champion/centered/${slide.img}`}
                   alt={slide.skinName}
                   width={160}
                   height={90}
@@ -152,7 +132,7 @@ export default function FeaturedCarousel({
                 {isActive && (
                   <div className="league-thumb-progress-container">
                     <div
-                      className="league-thumb-progress-bar"
+                      className={`league-thumb-progress-bar ${isAnimating ? 'is-animating' : ''}`}
                       style={{ width: `${progress}%` }}
                     />
                   </div>

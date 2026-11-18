@@ -402,6 +402,10 @@ const es = {
     start: "INICIO",
     playFree: "Juégalo gratis",
     eternals: "PROGRESIÓN DE ETERNOS",
+    masteryPointsSuffix: "pts.",
+    eternalSeries1: "Serie 1",
+    eternalSeries2: "Serie 2",
+    eternalStarter: "Serie inicial",
   },
   purchase: {
     unlocked: "¡Objeto desbloqueado!",

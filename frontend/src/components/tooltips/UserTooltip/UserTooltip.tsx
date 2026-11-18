@@ -44,7 +44,7 @@ export const UserTooltip = ({ hoveredUser, tooltipPos }: UserTooltipProps) => {
     top: tooltipPos.y - tooltipHeight / 2 | 0,
     justifyContent: "center",
     alignItems: "center",
-    backgroundImage: `url('${RESOURCES_URL}/centered/${profile_background}.jpg')`,
+    backgroundImage: `url('${RESOURCES_URL}/champion/centered/${profile_background}.jpg')`,
     pointerEvents: "none",
   } satisfies React.CSSProperties;
 

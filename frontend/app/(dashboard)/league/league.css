@@ -523,7 +523,11 @@
   height: 100%;
   background: linear-gradient(to right, #00b4d8, #00f2ff);
   box-shadow: 0 0 8px #00f2ff;
-  transition: width 0.1s linear;
+  transition: none;
+}
+
+.league-thumb-progress-bar.is-animating {
+  transition: width 7s linear;
 }
 
 /* Simple Patch Notes Modal */
