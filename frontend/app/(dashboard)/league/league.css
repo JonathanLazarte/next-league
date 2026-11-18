@@ -200,7 +200,6 @@
 
 .league-nav-item.active .league-nav-title {
   color: var(--gold-one);
-  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
 }
 
 .league-nav-item.active .league-nav-icon {
@@ -244,7 +243,6 @@
 
 .league-nav-item.active .league-nav-bg-icon {
   color: var(--gold-one);
-  filter: drop-shadow(0 0 6px rgba(200, 170, 110, 0.6));
 }
 
 .league-nav-item:hover .league-nav-bg-icon {

@@ -60,7 +60,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
         <div className="room-user">
           <Image
             className="user-banner"
-            src={`${RESOURCES_URL}/banner/official (27).png`}
+            src={`/bannerskins/worlds_winners_2025_banner.png`}
             sizes={"38rem"}
             width={580}
             height={1480}
@@ -70,7 +70,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
             <div className="banner-user-icon">
               <Image
                 className="banner-user-border"
-                src={`${RESOURCES_URL}/ranked-emblem/wings/wings_${rankAssetName}_plate.png`}
+                src={`/ranked-emblem/wings/wings_${rankAssetName}_plate.png`}
                 sizes={"25rem"}
                 width={500}
                 height={600}
