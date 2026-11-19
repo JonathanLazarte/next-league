@@ -324,11 +324,12 @@ const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosT
       <MediaSlot variant="hero">
         <Image
           className="skin-background-image"
-          src={`${RESOURCES_URL}/${window.innerWidth < 767 ? "loading" : "splash"}/${champion.id}_${champion.skins[selectedSkin].num}.jpg`}
+          src={`${RESOURCES_URL}/champion/${window.innerWidth < 767 ? "loading" : "splash"}/${champion.id}_${champion.skins[selectedSkin].num}.jpg`}
           alt={champion.name}
           onLoad={() => setIsBackgroundImageLoaded(true)}
           height={'800'}
           width={'1320'}
+          unoptimized
         />
       </MediaSlot>
       <div className="background-skin-placeholder"
@@ -491,7 +492,7 @@ const HabilidadesTab = memo(function HabilidadesTab({ champion }: { champion: Ch
               <MediaSlot variant="icon">
                 <Image
                   className='passive-image'
-                  src={`${RESOURCES_URL}/passive/${champion.passive.image.full}`}
+                  src={`/champion-details/passive/${champion.passive.image.full}`}
                   alt="passive sprite"
                   width={32}
                   height={32}
@@ -514,7 +515,7 @@ const HabilidadesTab = memo(function HabilidadesTab({ champion }: { champion: Ch
                     <Image
                       key={index}
                       className='spell-image'
-                      src={`${RESOURCES_URL}/spell/${spell.image.full}`}
+                      src={`/champion-details/spell/${spell.image.full}`}
                       alt="spell sprite"
                       width={48}
                       height={48}

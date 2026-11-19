@@ -68,11 +68,18 @@ export default function LeagueSidebar({
                 <div
                   className="league-nav-thumb-wrapper"
                   style={{
-                    backgroundImage: `linear-gradient(to right, transparent 90%, black), url('${RESOURCES_URL}/champion/tiles/${item.thumbnailUrl || 'Senna_1.jpg'}')`
+                    backgroundImage: `linear-gradient(to right, transparent 90%, transparent), url('${RESOURCES_URL}/champion/tiles/${item.thumbnailUrl || 'Senna_1.jpg'}')`
                   }}
                 >
                 </div>
               </div>
+              <video
+                className="navigation-magic-idle"
+                src="/league/navigation_magic_idle.webm"
+                loop
+                autoPlay
+              >
+              </video>
               <div className="league-nav-title">
                 {renderIcon(item)}
                 <span >{item.title}</span>
