@@ -10,15 +10,17 @@ export default function TooltipTrigger() {
 
 
   const getTriggerProps = ({ content, addOnMouseLeave }: { content: string; addOnMouseLeave: () => void | undefined }) => {
-    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
 
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
       const el = e.currentTarget.getBoundingClientRect();
+
       const startAction = () => {
         tooltip.set({
           position: { x: el.left + el.width / 2, y: el.bottom },
           content
         })
       }
+
       start({ cb: startAction, isTooltipOpened: false })
     }
 

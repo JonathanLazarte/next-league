@@ -45,12 +45,11 @@ export default function useHoverIntent({
 
   const end = (cb: () => void ) => {
     const now = Date.now();
-    lastMouseLeaveRef.current = now
     const timeSinceLast = now - lastShownRef.current;
-
-    if(timeoutRef.current !== null) clearTimeout(timeoutRef.current);
-
     const delay = timeSinceLast < resetAfter ? 100 : 0;
+
+    cancel();
+    lastMouseLeaveRef.current = now
 
     timeoutEndRef.current = setTimeout(() => {
       cb();

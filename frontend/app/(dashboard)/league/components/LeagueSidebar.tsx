@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { SIDEBAR_ITEMS, PATCH_NOTES_ITEM } from '../data';
 import { SidebarItem } from '../types';
 import {
@@ -10,6 +9,7 @@ import {
   MasksIcon,
   TrophyIcon,
   PatchNotesIcon,
+  SpiritBlossomIcon,
 } from './LeagueIcons';
 import { RESOURCES_URL } from '@/utils/constants';
 import { useSound } from '@/hooks/useSound';
@@ -38,7 +38,7 @@ export default function LeagueSidebar({
       case 'crown':
         return <CrownIcon {...iconProps} />;
       case 'masks':
-        return <MasksIcon {...iconProps} />;
+        return <SpiritBlossomIcon {...iconProps} />;
       case 'trophy':
         return <TrophyIcon {...iconProps} />;
       case 'patch-notes':

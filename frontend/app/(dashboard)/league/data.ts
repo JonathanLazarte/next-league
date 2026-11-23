@@ -247,7 +247,7 @@ export const SIDEBAR_ITEMS: SidebarItem[] = [
     title: 'ASPECTOS DE HEARTSTEEL',
     type: 'carousel',
     iconType: 'masks',
-    thumbnailUrl: 'Ezreal_33.jpg',
+    thumbnailUrl: '/league/missions/lux_bloom_objective_banner.png',
     skinSet: HEARTSTEEL_SET,
   },
   {
