@@ -58,7 +58,7 @@ export default memo(function VirtualSkinsGrid({
       const amount =
         (containerWidth + gapValue - paddingRightValue) /
         (cardWidth + gapValue);
-      return Math.max(Math.floor(amount), 1);
+      return Math.max(Math.floor(amount), 2);
     },
     [gapValue, cardWidth],
   );

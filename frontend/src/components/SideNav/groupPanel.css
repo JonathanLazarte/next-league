@@ -84,6 +84,8 @@
 .queue-panel-header {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    padding-right: 10px;
     height: 2rem;
     width: 100%;
 }
@@ -93,7 +95,7 @@
     font-size: 1.5rem;
 }
 .cancel-inqueue-button {
-
+    cursor: pointer;
 }
 
 .queue-panel-main {

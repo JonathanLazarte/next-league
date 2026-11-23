@@ -19,6 +19,8 @@ export default function TopControls({
   const { music, setMute } = useSoundState();
   const { play: playClick } = useSound('/general/menu-click.mp3');
 
+  return;
+
   const toggleSound = () => {
     playClick();
     setMute({ type: 'music', muted: !music.muted });

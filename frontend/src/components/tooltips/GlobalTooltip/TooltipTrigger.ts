@@ -1,9 +1,7 @@
 import { useTooltip } from '@/hooks/useTooltip'
-import { useRef } from 'react'
 import useHoverIntent from '@/hooks/useHoverIntent'
 
 export default function TooltipTrigger() {
-  const ref = useRef(null)
   const tooltip = useTooltip()
   const { start, end } = useHoverIntent({
     resetAfter: 250

@@ -90,10 +90,9 @@
     align-items: center;
     align-content: center;
     text-align: center;
-    width: clamp(250px, 38rem, 340px);
+    width: clamp(250px, 38rem, 350px);
     position: fixed;
-    top: -8rem;
-    height: 95%;
+    top: -9rem;
 }
 .user-banner {
     width: 100%;
@@ -109,7 +108,7 @@
 }
 .banner-user-icon {
     position: relative;
-    width: 16rem;
+    width: clamp(0px, 16rem, 150px);
     height: 16rem;
     display: flex;
     justify-content: center;
@@ -151,8 +150,7 @@
     font-size: 1.2rem;
 }
 .banner-username {
-    font-size: 2.2rem; /* 1.1rem → 1.1vw */
-    margin-top: 0.6rem;
+    font-size: 2.2rem;
     margin-bottom: 0.8rem;
 }
 .banner-alias {

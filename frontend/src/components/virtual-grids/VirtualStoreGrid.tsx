@@ -40,7 +40,7 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
   const getAmountOfColumns = useCallback(
     (containerWidth: number) => {
       const amount = (containerWidth + gapValue + paddingRightValue) / (cardWidth + gapValue);
-      return Math.floor(Math.max(amount, 1));
+      return Math.floor(Math.max(amount, 2));
     },
     [gapValue, cardWidth],
   );
