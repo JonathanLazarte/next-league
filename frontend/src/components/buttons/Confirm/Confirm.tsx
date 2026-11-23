@@ -23,14 +23,14 @@ export default function ConfirmButton({ confirmAction, backAction }: PlayButtonP
 
   // Cancelar / Salir
   const handleCancel = () => {
-    playCancel();
+    if(!queue) playCancel();
     backAction();
   };
 
   // Acción principal del botón
   const handleConfirm = () => {
-    if (!queue) { playConfirm(); }
-      confirmAction();
+    playConfirm();
+    confirmAction();
   };
 
   const displayText = text;

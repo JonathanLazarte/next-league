@@ -136,7 +136,7 @@
 .league-sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .league-nav-item {
@@ -150,7 +150,7 @@
   background: transparent;
   border: 1px solid transparent;
   padding: 1rem 0;
-  min-height: 5rem;
+  min-height: 6rem;
 }
 
 .league-nav-item-background {
@@ -169,11 +169,10 @@
 
 
 .league-nav-icon {
-  font-size: 1.8rem;
+  width: 2.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.2rem;
   transition: color 0.2s ease;
   height: 100%;
 
@@ -227,8 +226,12 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  opacity: 0.8;
+  opacity: 0.85;
   z-index: 1;
+  background-repeat: no-repeat;
+  background-size: contain;
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-image: linear-gradient(to right, black 50%, transparent 100%)
 }
 .navigation-magic-idle {
     width: 100%;
@@ -398,7 +401,6 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.25s ease;
   position: relative;
   outline: none;
 }
@@ -681,15 +683,13 @@
 .league-stage-tab.active {
   color: var(--gold-one);
   border-bottom-color: var(--gold-two);
-  text-shadow: 0 0 8px rgba(200, 170, 110, 0.4);
 }
 
 /* Patch Content Box */
 .league-patch-content-box {
-  background: rgba(15, 23, 31, 0.75);
   border: 1px solid rgba(200, 170, 110, 0.2);
   padding: 1.8rem 2.2rem;
-  border-radius: 4px;
   max-height: 35rem;
   overflow-y: auto;
+  font-family: Spiegel-Regular;
 }

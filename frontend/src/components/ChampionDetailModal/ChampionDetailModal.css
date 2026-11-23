@@ -251,6 +251,7 @@
     font-weight: bold;
     user-select: none;
     outline: none;
+    display: none;
 }
 
 .arrow-icon:hover {

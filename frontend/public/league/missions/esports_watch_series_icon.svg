@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #cdbe91;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Trophy" class="cls-1" d="M19,4.286c0,6.941-5.625,6.857-5.625,6.857l-2.25,4.571L14.5,16.857V18h-9V16.857l3.375-1.143-2.25-4.571S1,11.331,1,4.286H5.5V2h9V4.286H19ZM14.5,8.857s2.25-.025,2.25-3.429H14.5V8.857Zm-9-3.429H3.25C3.25,8.89,5.5,8.857,5.5,8.857V5.429Z"/>
+</svg>

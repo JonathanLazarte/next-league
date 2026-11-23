@@ -37,7 +37,7 @@
         transparent 77%
     );
     transform: translateX(-100%);
-    animation: hextech-sweep 3.8s ease-in-out infinite;
+    animation: hextech-sweep 3s ease-in-out infinite;
     animation-direction: unset;
 }
 

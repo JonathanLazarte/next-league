@@ -5,8 +5,8 @@ import { SIDEBAR_ITEMS, PATCH_NOTES_ITEM } from '../data';
 import { SidebarItem } from '../types';
 import {
   TrueDamageIcon,
-  CrownIcon,
-  MasksIcon,
+  DemaciaIcon,
+  MaskIcon,
   TrophyIcon,
   PatchNotesIcon,
   SpiritBlossomIcon,
@@ -34,10 +34,10 @@ export default function LeagueSidebar({
 
     switch (item.iconType) {
       case 'true-damage':
-        return <TrueDamageIcon {...iconProps} />;
-      case 'crown':
-        return <CrownIcon {...iconProps} />;
-      case 'masks':
+        return <DemaciaIcon {...iconProps} />;
+      case 'mask':
+        return <MaskIcon {...iconProps} />;
+      case 'spirit-blossom':
         return <SpiritBlossomIcon {...iconProps} />;
       case 'trophy':
         return <TrophyIcon {...iconProps} />;
@@ -68,7 +68,7 @@ export default function LeagueSidebar({
                 <div
                   className="league-nav-thumb-wrapper"
                   style={{
-                    backgroundImage: `linear-gradient(to right, transparent 90%, transparent), url('${RESOURCES_URL}/champion/tiles/${item.thumbnailUrl || 'Senna_1.jpg'}')`
+                    backgroundImage: `url('/league/missions/${item.thumbnailUrl || ''}')`
                   }}
                 >
                 </div>
@@ -105,6 +105,13 @@ export default function LeagueSidebar({
               <PatchNotesIcon className="league-nav-bg-icon" width="25" height="25" />
             </div>
           </div>
+          <video
+            className="navigation-magic-idle"
+            src="/league/navigation_magic_idle.webm"
+            loop
+            autoPlay
+          >
+          </video>
           <div className="league-nav-title">
             {renderIcon(PATCH_NOTES_ITEM)}
             <span>{t("patch.notesTitle")}</span>

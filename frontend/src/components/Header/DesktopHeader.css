@@ -106,6 +106,9 @@
     justify-content: center;
     display: flex;
 }
+.header-tab.main:active {
+    color: var(--gold-four);
+}
 .tab-pointer-base {
     position: absolute;
     bottom: 1px;

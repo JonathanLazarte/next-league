@@ -11,7 +11,7 @@ import { FaMicrophone } from "react-icons/fa6";
 import { IoChatboxSharp } from "react-icons/io5";
 
 import ProfileBox from "./ProfileBox";
-import GroupPanel from "./GroupPanel"
+import PartyPanel from "./PartyPanel"
 import SocialPanel from "./SocialPanel";
 
 
@@ -50,7 +50,7 @@ export default memo(function RightNav() {
       className={`sidenav ${actualSection === 'store' || actualSection === 'play' ? "in-store" : ""}`}
     >
       <ProfileBox updateSideNav={updateSideNav} userState={userState} />
-      <GroupPanel></GroupPanel>
+      <PartyPanel></PartyPanel>
       <SocialPanel></SocialPanel>
 
       <div className="right-nav-buttom-buttons">

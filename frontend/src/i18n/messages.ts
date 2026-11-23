@@ -145,6 +145,7 @@ const en = {
   champion: {
     damage: "DAMAGE:",
     physical: "Physical",
+    magical: "Magical",
     style: "STYLE:",
     difficulty: "DIFFICULTY:",
     highestRating: "Highest rating this season:",
@@ -396,6 +397,7 @@ const es = {
   champion: {
     damage: "DAÑO:",
     physical: "Físico",
+    magical: "Mágico",
     style: "ESTILO:",
     difficulty: "DIFICULTAD:",
     highestRating: "Calificación más alta de la temporada:",

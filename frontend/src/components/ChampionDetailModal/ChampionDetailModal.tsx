@@ -69,7 +69,7 @@ const ResumenTab = memo(function ResumenTab({
 }: ResumenTabProps) {
   const { t } = useI18n();
   const difficulty = champion?.info.difficulty;
-
+  const style = champion.info.attack > champion.info.magic ? "physical" : "magical"
   return (
     <div className={styles.content}>
       <MediaSlot variant="hero" className={styles.splashSlot}>
@@ -82,7 +82,7 @@ const ResumenTab = memo(function ResumenTab({
           <div className={styles.info}>
             <div className={styles.damageType}>
               <span className={styles.damageLabel}>{t("champion.damage")}</span>
-              <span className={styles.damageValue}>{t("champion.physical")}</span>
+              <span className={styles.damageValue}>{t(`champion.${style}`)}</span>
             </div>
             <div className={styles.styleSection}>
               <span className={styles.styleLabel}>{t("champion.style")}</span>
@@ -503,7 +503,7 @@ const HabilidadesTab = memo(function HabilidadesTab({ champion }: { champion: Ch
           src={`https://lol.dyn.riotcdn.net/x/videos/champion-abilities/0${champion.key.toString().length < 3 ? `0${champion.key}` : champion.key}/ability_0${champion.key.toString().length < 3 ? `0${champion.key}` : champion.key}_${spellKey}1.mp4`}
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           onLoadedData={() => setIsVideoLoading(false)}
           onLoadStart={() => setIsVideoLoading(true)}
         />

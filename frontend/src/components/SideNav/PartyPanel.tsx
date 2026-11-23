@@ -1,8 +1,8 @@
 import { useMatchmaking } from '@/hooks/useMatchmaking';
-import { useRef, memo } from 'react'
+import { memo } from 'react'
 import { useI18n } from "@/hooks/useI18n"
 import QueueTimer from './QueueTimer'
-import SocialBackground from './SocialBackground'
+import PartyBackground from './PartyBackground'
 import "./groupPanel.css";
 
 
@@ -21,7 +21,7 @@ export const PartyPanel = ({ queue }) => {
   }
 
   return <div className="group-panel">
-    <SocialBackground></SocialBackground>
+    <PartyBackground></PartyBackground>
     <div className="group-header">
       <img className="group-icon" src="/social/party_panel_header_icon.png">
       </img>
@@ -66,7 +66,14 @@ export const QueuePanel = ({ queueStartedAt, handleCancel }) => {
       src="/social/socialpanel_bgloop.webm"
       autoPlay
       loop
-    ></video>
+      preload="metadata"
+    >
+    </video>
+    <img
+      style={{ position: "absolute", width: '100%', zIndex: "-4", top: "0", left: "0", maxWidth: "unset" }}
+        src="/social/static_game_panel_bg.png"
+        alt="bgmagic-fallback"
+      />
     <div className="queue-panel-header">
       <div className="finding-match-title">ENCONTRANDO PARTIDA</div>
       <div className="cancel-inqueue-button" onClick={handleCancel}>
