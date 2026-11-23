@@ -63,7 +63,7 @@ export default memo(function VirtualChampionsGrid({
       const amount =
         (containerWidth + gapValue - paddingRightValue) /
         (cardWidth + gapValue);
-      return Math.max(Math.min(Math.floor(amount), 6), 2);
+      return Math.max(Math.min(Math.floor(amount), 6), 1);
     },
     [gapValue, cardWidth],
   );

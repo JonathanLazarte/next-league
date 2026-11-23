@@ -96,6 +96,7 @@
 }
 .cancel-inqueue-button {
     cursor: pointer;
+    fill: var(--gold-two)
 }
 
 .queue-panel-main {
@@ -126,4 +127,5 @@
     font-family: Spiegel-Regular;
     font-size: 1.4rem;
     width: fit-content;
+    color: #0ac4df;
 }

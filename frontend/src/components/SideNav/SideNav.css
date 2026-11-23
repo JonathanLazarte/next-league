@@ -281,7 +281,7 @@
     top: 0;
     right: 0;
     padding-right: 1.5rem;
-    margin-top: 1rem;
+    margin-top: 0.6rem;
 }
 
 .accountOptionIcon {
@@ -310,18 +310,18 @@
     margin-right: 0.6rem;
 }
 .user-status.active-queue {
-    color: lightskyblue;
+    color: #0ac4df;
 }
 .user-status.active-queue .status-icon{
-    background-color: lightblue;
-    border: lightskyblue;
+    background-color: #025579;
+    border-color: #0ac4df;
 }
 .user-status.offline {
-    color: darkred;
+    color: #a09b8c;
 }
 .user-status.offline .status-icon{
-    background-color: darkred;
-    border: darkred;
+    background-color: #400a12;
+    border-color: #be1e37;
 }
 
 .showPerfilSpan {

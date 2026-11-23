@@ -30,14 +30,15 @@
     pointer-events: none;
     background: linear-gradient(
         110deg,
-        transparent 18%,
-        rgba(200, 170, 110, 0.08) 40%,
+        transparent 23%,
+        rgba(200, 170, 110, 0.08) 55%,
         rgba(240, 198, 101, 0.2) 50%,
-        rgba(200, 170, 110, 0.08) 60%,
-        transparent 82%
+        rgba(200, 170, 110, 0.08) 55%,
+        transparent 77%
     );
     transform: translateX(-100%);
-    animation: hextech-sweep 1.9s ease-in-out infinite;
+    animation: hextech-sweep 3.8s ease-in-out infinite;
+    animation-direction: unset;
 }
 
 .media-slot[data-variant="hero"]::after {
@@ -70,8 +71,21 @@
 }
 
 @keyframes hextech-sweep {
-    100% {
+    0% {
+        transform: translateX(-100%);
+        opacity: 1;
+    }
+    28% {
         transform: translateX(100%);
+        opacity: 1;
+    }
+    28.01% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
     }
 }
 
