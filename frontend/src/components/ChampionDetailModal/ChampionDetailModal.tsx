@@ -2,9 +2,10 @@
 
 
 
-import React, { useState, useEffect, memo, useRef } from "react";
+import React, { useState, useEffect, memo, useRef, useMemo } from "react";
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
+import { AnimatePresence, motion } from "framer-motion";
 import useLoadingDelay from '@/hooks/useLoadingDelay'
 
 import styles from "./ChampionDetailModal.module.css";
@@ -15,8 +16,14 @@ import { useUserSkins } from "@/hooks/useUserSkins";
 import { useI18n } from "@/hooks/useI18n";
 /*aspectos imports*/
 import { GiPadlock } from "react-icons/gi";
-import { IoArrowForward } from "react-icons/io5";
+import { IoArrowForward, IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { RESOURCES_URL } from "@/utils/constants";
+import {
+  circularDirection,
+  getCircularWindow,
+  normalizeIndex,
+  stepIndex,
+} from "@/utils/circularWindow";
 import type { Champion } from '@/types/champion'
 import { useSound } from '@/hooks/useSound'
 import { BUTTON_X_DATA_URI, BUTTON_X_OVER_DATA_URI, BUTTON_X_DOWN_DATA_URI } from '@/utils/uiAssets'
@@ -224,113 +231,130 @@ interface AspectosTabProps {
   activeTab: string
 }
 
+const SKIN_WINDOW = 5;
+
 const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosTabProps) {
   const { t } = useI18n();
   const [selectedSkin, setSelectedSkin] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [trackChampionId, setTrackChampionId] = useState(champion.id);
+  const [missingTiles, setMissingTiles] = useState<string[]>([]);
   const { userSkins } = useUserSkins();
-  const totalSkins = champion.skins.length;
+  const { openPurchaseModal } = usePurchase();
+  const skins = useMemo(
+    () => champion.skins.filter((skin) => skin.parentSkin == null && !missingTiles.includes(skin.id)),
+    [champion.skins, missingTiles],
+  );
+  const totalSkins = skins.length;
   const [isBackgroundImageLoaded, setIsBackgroundImageLoaded] = useState(false);
+  const navigationRef = useRef({
+    previous: () => {},
+    next: () => {},
+  });
+
+  const championChanged = champion.id !== trackChampionId;
+  if (championChanged) {
+    setTrackChampionId(champion.id);
+    setSelectedSkin(0);
+    setDirection(1);
+    setMissingTiles([]);
+    setIsBackgroundImageLoaded(false);
+  }
+
+  const activeSkinIndex = championChanged
+    ? 0
+    : normalizeIndex(selectedSkin, totalSkins);
+  const activeSkin = skins[activeSkinIndex];
 
   const isSkinInCollection =
-    selectedSkin === 0 ||
-    userSkins.some((us) => us.id == champion.skins[selectedSkin]?.id);
-  const { openPurchaseModal } = usePurchase();
+    activeSkinIndex === 0 ||
+    userSkins.some((us) => us.id == activeSkin?.id);
 
   const isThisSkinInCollection = (skinContextIndex: number) => {
     return (
       skinContextIndex == 0 ||
-      userSkins.some((us) => us.id == champion.skins[skinContextIndex].id)
+      userSkins.some((us) => us.id == skins[skinContextIndex]?.id)
     );
   };
   const handleUnlockSkin = () => {
-    const selectedSkinId = champion?.skins[selectedSkin]?.id;
+    const selectedSkinId = activeSkin?.id;
     openPurchaseModal({ itemId: selectedSkinId, type: "skin" });
   };
-  const getVisibleSkins = () => {
-    const visibleSkins: number[] = [];
 
-    if (totalSkins <= 5) {
-      const slotsToShow = Math.min(5, totalSkins);
-      const offset = Math.floor((5 - slotsToShow) / 2);
+  const visibleSkins = useMemo(
+    () => getCircularWindow(activeSkinIndex, totalSkins, SKIN_WINDOW),
+    [activeSkinIndex, totalSkins],
+  );
 
-      for (let i = 0; i < 5; i++) {
-        if (i >= offset && i < offset + slotsToShow) {
-          const skinIndex = i - offset;
-          visibleSkins.push(skinIndex);
-        }
-      }
-      return visibleSkins;
-    }
-
-    const carouselPositions = [0, 1, 2, 3, 4];
-
-    carouselPositions.forEach((position, index) => {
-      if (index === 2) {
-        visibleSkins.push(selectedSkin);
-      } else {
-        let skinIndex;
-        if (index < 2) {
-          skinIndex = selectedSkin - (2 - index);
-          if (skinIndex < 0) skinIndex += totalSkins;
-        } else {
-          skinIndex = selectedSkin + (index - 2);
-          if (skinIndex >= totalSkins) skinIndex -= totalSkins;
-        }
-        visibleSkins.push(skinIndex);
-      }
-    });
-
-    return visibleSkins;
+  const selectSkin = (index: number) => {
+    if (totalSkins <= 0) return;
+    const nextIndex = normalizeIndex(index, totalSkins);
+    if (nextIndex === activeSkinIndex) return;
+    setDirection(circularDirection(activeSkinIndex, nextIndex, totalSkins));
+    setIsBackgroundImageLoaded(false);
+    setSelectedSkin(nextIndex);
   };
 
   const goToPreviousSkin = () => {
-    setSelectedSkin((prev) => (prev - 1 + totalSkins) % totalSkins);
+    if (totalSkins <= 1) return;
+    setDirection(-1);
     setIsBackgroundImageLoaded(false);
+    setSelectedSkin((prev) => stepIndex(prev, totalSkins, -1));
   };
 
   const goToNextSkin = () => {
-    setSelectedSkin((prev) => (prev + 1) % totalSkins);
+    if (totalSkins <= 1) return;
+    setDirection(1);
     setIsBackgroundImageLoaded(false);
+    setSelectedSkin((prev) => stepIndex(prev, totalSkins, 1));
   };
+
+  navigationRef.current.previous = goToPreviousSkin;
+  navigationRef.current.next = goToNextSkin;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (activeTab === "aspectos") {
-        switch (event.key) {
-          case "ArrowLeft":
-            event.preventDefault();
-            goToPreviousSkin();
-            break;
-          case "ArrowRight":
-            event.preventDefault();
-            goToNextSkin();
-            break;
-          default:
-            break;
-        }
+      if (activeTab !== "aspectos") return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        navigationRef.current.previous();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        navigationRef.current.next();
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, selectedSkin, totalSkins]);
+  }, [activeTab]);
 
-  const visibleSkins = getVisibleSkins();
+  useEffect(() => {
+    if (totalSkins <= 1 || !activeSkin) return;
+    const neighbors = [1, -1].map(
+      (delta) => skins[stepIndex(activeSkinIndex, totalSkins, delta)],
+    );
+    neighbors.forEach((skin) => {
+      if (!skin) return;
+      const image = new window.Image();
+      image.src = `${RESOURCES_URL}/champion/splash/${champion.id}_${skin.num}.jpg`;
+    });
+  }, [activeSkin, activeSkinIndex, champion.id, skins, totalSkins]);
 
   return (
     <div
       className="content"
     >
       <MediaSlot variant="hero">
-        <Image
-          className="skin-background-image"
-          src={`${RESOURCES_URL}/champion/${window.innerWidth < 767 ? "loading" : "splash"}/${champion.id}_${champion.skins[selectedSkin].num}.jpg`}
-          alt={champion.name}
-          onLoad={() => setIsBackgroundImageLoaded(true)}
-          height={'800'}
-          width={'1320'}
-          unoptimized
-        />
+        {activeSkin && (
+          <Image
+            className="skin-background-image"
+            src={`${RESOURCES_URL}/champion/${window.innerWidth < 767 ? "loading" : "splash"}/${champion.id}_${activeSkin.num}.jpg`}
+            alt={activeSkinIndex === 0 ? champion.name : activeSkin.name}
+            onLoad={() => setIsBackgroundImageLoaded(true)}
+            height={'800'}
+            width={'1320'}
+            unoptimized
+          />
+        )}
       </MediaSlot>
       <div className="background-skin-placeholder"
         style={{ visibility: !isBackgroundImageLoaded ? "visible" : "hidden" }}
@@ -339,18 +363,18 @@ const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosT
       <div className="bottom-panel">
         <h3 className="skin-name">
           {" "}
-          {selectedSkin != 0
-            ? champion.skins[selectedSkin].name
+          {activeSkinIndex !== 0 && activeSkin
+            ? activeSkin.name
             : champion.name}{" "}
         </h3>
         <div className="skin-navigator">
           <div className="navigator-line"></div>
           <div className="minibuttons-container">
-            {champion.skins.map((_, index) => (
+            {skins.map((skin, index) => (
               <div
-                key={index}
-                onClick={() => { setSelectedSkin(index); setIsBackgroundImageLoaded(false); }}
-                className={`navigator-minibutton ${index == selectedSkin ? "active" : null}`}
+                key={skin.id}
+                onClick={() => selectSkin(index)}
+                className={`navigator-minibutton ${index === activeSkinIndex ? "active" : null}`}
               ></div>
             ))}
           </div>
@@ -366,65 +390,77 @@ const AspectosTab = memo(function AspectosTab({ champion, activeTab }: AspectosT
             </div>
           )}
           <div className="skin-changer">
+            {totalSkins > 1 && (
+              <button
+                type="button"
+                className="arrow-icon"
+                onClick={goToPreviousSkin}
+                aria-label={t("common.previous")}
+              >
+                <IoChevronBack />
+              </button>
+            )}
             <div className="skin-minicards-container">
-              {visibleSkins.map((skinIndex, position) => (
-                <div
-                  key={`${skinIndex}-${position}`}
-                  onClick={() => {
-                    skinIndex !== null && setSelectedSkin(skinIndex);
-                    setIsBackgroundImageLoaded(false);
-                  }}
-                  className={`skin-minicard ${skinIndex === selectedSkin ? "selected" : ""} ${skinIndex === null ? "empty" : ""}`}
-                  style={{
-                    transform:
-                      position === 2 && skinIndex !== null
-                        ? "scale(1.1)"
-                        : "scale(1)",
-                    zIndex: position === 2 ? 10 : 5 - Math.abs(position - 2),
-                    transition: "all 0.3s ease-in-out",
-                    opacity: skinIndex === null ? 0.3 : 1,
-                    cursor: skinIndex === null ? "default" : "pointer",
-                  }}
-                  role={skinIndex !== null ? "button" : undefined}
-                  tabIndex={skinIndex !== null ? 0 : -1}
-                  aria-label={
-                    skinIndex !== null
-                      ? `Skin ${skinIndex + 1} de ${champion.name}`
-                      : "Slot vacío"
-                  }
-                  onKeyDown={(e) => {
-                    if (
-                      skinIndex !== null &&
-                      (e.key === "Enter" || e.key === " ")
-                    ) {
-                      e.preventDefault();
-                      setSelectedSkin(skinIndex);
-                    }
-                  }}
-                >
-                  {skinIndex !== null ? (
-                    <>
-                      <MediaSlot variant="tile">
-                        <img
-                          src={`${RESOURCES_URL}/champion/tiles/${champion.id}_${champion.skins[skinIndex].num}.jpg`}
-                          className="skin-minicard-image"
-                          alt={`Skin ${skinIndex + 1} de ${champion.name}`}
-                        />
-                      </MediaSlot>
-                      {!isThisSkinInCollection(skinIndex) ? (
-                        <GiPadlock
-                          className={`skin-locked-icon ${skinIndex === selectedSkin && "selected"}`}
-                        />
-                      ) : null}
-                    </>
-                  ) : (
-                    <div className="empty-slot">
-                      <span></span>
-                    </div>
-                  )}
-                </div>
-              ))}
+              <AnimatePresence initial={false} mode="popLayout" custom={direction}>
+              {visibleSkins.map((skinIndex) => {
+                const skin = skins[skinIndex];
+                if (!skin) return null;
+                const isSelected = skinIndex === activeSkinIndex;
+                const label = skinIndex === 0 ? champion.name : skin.name;
+                return (
+                  <motion.div
+                    layout
+                    key={skin.id}
+                    custom={direction}
+                    initial={{ x: direction * 56, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: direction * -56, opacity: 0 }}
+                    transition={{ duration: 0.32, ease: "easeOut" }}
+                    onClick={() => selectSkin(skinIndex)}
+                    className={`skin-minicard ${isSelected ? "selected" : ""}`}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={label}
+                    aria-current={isSelected ? "true" : undefined}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        selectSkin(skinIndex);
+                      }
+                    }}
+                  >
+                    <MediaSlot variant="tile">
+                      <img
+                        src={`${RESOURCES_URL}/champion/tiles/${champion.id}_${skin.num}.jpg`}
+                        className="skin-minicard-image"
+                        alt={label}
+                        onError={() => {
+                          setMissingTiles((current) =>
+                            current.includes(skin.id) ? current : [...current, skin.id],
+                          );
+                        }}
+                      />
+                    </MediaSlot>
+                    {!isThisSkinInCollection(skinIndex) ? (
+                      <GiPadlock
+                        className={`skin-locked-icon ${isSelected ? "selected" : ""}`}
+                      />
+                    ) : null}
+                  </motion.div>
+                );
+              })}
+              </AnimatePresence>
             </div>
+            {totalSkins > 1 && (
+              <button
+                type="button"
+                className="arrow-icon"
+                onClick={goToNextSkin}
+                aria-label={t("common.next")}
+              >
+                <IoChevronForward />
+              </button>
+            )}
           </div>
         </div>
       </div>

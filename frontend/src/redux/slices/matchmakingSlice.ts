@@ -1,3 +1,4 @@
+import { Queue, QueueStatus } from '@/types/ui';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface PartyMember {
@@ -12,29 +13,44 @@ export interface PartyMember {
   tag: string;
 }
 
-export type queueState = 'idle' | 'searching' | 'found' | 'champ_select'
-
 export interface MatchmakingState {
-  selectedQueue: string | null;
-  queueState: queueState;
+  partyId: string | null;
   partyMembers: PartyMember[] | null;
+
+  queue: string | null;
+  queueStatus: QueueStatus;
+  queueStartedAt: number | null;
+  estimatedQueueTime: number;
+
 }
 
 const initialState: MatchmakingState = {
-  selectedQueue: null,
-  queueState: 'idle',
+  partyId: null,
+  queue: null,
+  queueStatus: 'idle',
   partyMembers: null,
+
+  queueStartedAt: null,
+  estimatedQueueTime: 0,
+
 };
 
 const matchmakingSlice = createSlice({
   name: 'matchmaking',
   initialState,
   reducers: {
-    setSelectedQueue: (state, action: PayloadAction<string>) => {
-      state.selectedQueue = action.payload;
+    setParty: (state, action: PayloadAction<{ partyId: string, queue: string, partyOwner: PartyMember}>) => {
+      state.partyId = action.payload.partyId;
+      state.queue = action.payload.queue;
+      state.partyMembers = [action.payload.partyOwner]
     },
-    setQueueState: (state, action: PayloadAction<queueState>) => {
-      state.queueState = action.payload;
+    setQueue: (state, action: PayloadAction<Queue>) => {
+      state.queue = action.payload;
+    },
+    setQueueStatus: (state, action: PayloadAction<{ status: QueueStatus; startedAt: number; estimatedTime: number }>) => {
+      state.queueStatus = action.payload.status;
+      state.queueStartedAt = action.payload.startedAt;
+      state.estimatedQueueTime = action.payload.estimatedTime
     },
     setPartyMembers: (state, action: PayloadAction<PartyMember>) => {
       if (!state.partyMembers) {
@@ -43,14 +59,12 @@ const matchmakingSlice = createSlice({
         state.partyMembers.push(action.payload)
       }
     },
-    findMatch: () => {
-
-    },
-    leaveParty: () => {
-
+    leaveParty: (state) => {
+      state.partyId = null;
+      state.queue = null;
     }
   },
 });
 
-export const { setSelectedQueue, setQueueState, setPartyMembers, findMatch, leaveParty } = matchmakingSlice.actions;
+export const { setQueue, setQueueStatus, setParty, setPartyMembers, leaveParty } = matchmakingSlice.actions;
 export default matchmakingSlice.reducer;

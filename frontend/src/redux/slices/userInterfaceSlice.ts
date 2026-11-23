@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import type { Section, UserState, Queue, QueueStatus } from "@/types/ui";
+import type { Section, UserState } from "@/types/ui";
 
 
 interface UserInterfaceState {
@@ -9,16 +9,6 @@ interface UserInterfaceState {
   isNavigating: boolean;
   showSideNav: boolean; // Add this
   sectionTabSelected: string | null; // Add this
-  queue: Queue;
-  queueStatus: QueueStatus;
-  searchTime: number;
-  lobbyId: number | null;
-  partyMembers: [];
-  inChampionSelect: boolean;
-  selectedChampion: number | null;
-  inGame: boolean;
-  gameId: number | null;
-  notifications: [];
   modal: null;
   isSettingsModalOpen: boolean;
 }
@@ -32,26 +22,6 @@ const initialState: UserInterfaceState = {
   isNavigating: false,
   showSideNav: true, // Initial state
   sectionTabSelected: null, // Initial state
-
-  // Matchmaking
-  queue: null, // SoloQ, Flex, ARAM, etc.
-  queueStatus: "idle", // idle | searching | found | accepted
-  searchTime: 0,
-
-  // Lobby
-  lobbyId: null,
-  partyMembers: [],
-
-  // Champ Select
-  inChampionSelect: false,
-  selectedChampion: null,
-
-  // Partida
-  inGame: false,
-  gameId: null,
-
-  // Notificaciones
-  notifications: [],
 
   // Modal global
   modal: null,
@@ -77,12 +47,6 @@ const userInterfaceSlice = createSlice({
     setSectionTabSelected: (state, action) => {
       state.sectionTabSelected = action.payload;
     },
-    setQueue: (state, action) => {
-      state.queue = action.payload;
-    },
-    setQueueStatus: (state, action) => {
-      state.queueStatus = action.payload
-    },
     setIsSettingsModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isSettingsModalOpen = action.payload
     },
@@ -95,8 +59,6 @@ export const {
   setIsNavigating,
   toggleSideNav,
   setSectionTabSelected,
-  setQueue,
-  setQueueStatus,
   setIsSettingsModalOpen,
 } = userInterfaceSlice.actions;
 
@@ -114,10 +76,6 @@ export const selectUserInterfaceShowSideNav = (state: StateProp) =>
   state.userInterface.showSideNav;
 export const selectUserInterfaceSectionTabSelected = (state: StateProp) =>
   state.userInterface.sectionTabSelected;
-export const selectQueue = (state: StateProp) =>
-  state.userInterface.queue;
-export const selectQueueStatus = (state: StateProp) =>
-  state.userInterface.queueStatus;
 export const selectIsSettingsModalOpen = (state: StateProp) =>
   state.userInterface.isSettingsModalOpen
 
@@ -129,18 +87,14 @@ export const selectUserInterfaceData = createSelector(
     selectUserInterfaceIsNavigating,
     selectUserInterfaceShowSideNav,
     selectUserInterfaceSectionTabSelected,
-    selectQueue,
-    selectQueueStatus,
     selectIsSettingsModalOpen,
   ],
-  (userState, actualSection, isNavigating, showSideNav, sectionTabSelected, queue, queueStatus, isSettingsModalOpen) => ({
+  (userState, actualSection, isNavigating, showSideNav, sectionTabSelected, isSettingsModalOpen) => ({
     userState,
     actualSection,
     isNavigating,
     showSideNav,
     sectionTabSelected,
-    queue,
-    queueStatus,
     isSettingsModalOpen,
   }),
 );

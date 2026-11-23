@@ -19,8 +19,10 @@
 .content {
     width: 100%;
     height: 100%;
-    align-content: end;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     animation: appearance 0.7s;
 }
 .skin-background-image{
@@ -39,7 +41,10 @@
     display: none;
 }
 .bottom-panel {
+    position: relative;
+    z-index: 2;
     width: 100%;
+    padding-bottom: 1.6rem;
     background: linear-gradient(to top, var(--blue-five), transparent);
 }
 
@@ -53,11 +58,15 @@
 
 .skin-navigator {
     width: 100%;
+    min-height: 1.6rem;
+    margin-bottom: 1.4rem;
     align-items: center;
     align-content: center;
     justify-content: center;
     display: flex;
     flex-direction: row;
+    position: relative;
+    z-index: 2;
 }
 
 .navigator-line {
@@ -99,20 +108,21 @@
 }
 
 .skin-changer {
-    width: 76.8rem; /* 48vw → 76.8rem */
+    width: auto;
+    max-width: 100%;
     height: 84%;
     display: flex;
-    justify-content: center;;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
 }
 
 .skin-minicards-container {
-    width: 90%;
     height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    justify-self: center;
     align-items: center;
     gap: 1.5rem;
     position: relative;
@@ -121,10 +131,12 @@
 .skin-minicard {
     width: 11rem;
     height: 6rem;
+    flex: 0 0 auto;
     border: 4px solid rgb(75, 75, 75);
     cursor: pointer;
     padding: 1px;
     position: relative;
+    z-index: 1;
 }
 
 .skin-minicard-image:hover {
@@ -142,7 +154,7 @@
     border: 5px solid;
     height: 8rem;
     width: 13.6rem;
-    margin: 0px 5px;
+    z-index: 2;
     border-image: linear-gradient(to top, var(--gold-two), var(--gold-five)) 1;
 }
 
@@ -223,6 +235,7 @@
 
 /* Estilos para las flechas del carrusel */
 .arrow-icon {
+    flex: 0 0 auto;
     width: 40px;
     height: 40px;
     background: rgba(0, 0, 0, 0.9);
@@ -281,42 +294,7 @@
     }
 }
 
-/* Estilos para slots vacíos */
-.skin-card.empty {
-    border: 3px dashed rgba(255, 255, 255, 0.3);
-    background: rgba(0, 0, 0, 0.2);
-    display: none;
-}
 
-.skin-card.empty:hover {
-    transform: none;
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-.empty-slot {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 24px;
-    font-weight: bold;
-    display: none;
-}
-
-/* Mejorar las flechas cuando están deshabilitadas */
-.arrow-icon:disabled {
-    cursor: not-allowed;
-    opacity: 0.3;
-}
-
-.arrow-icon:disabled:hover {
-    transform: none;
-    background: rgba(0, 0, 0, 0.7);
-    border-color: var(--gold-five);
-    color: var(--gold-five);
-}
 
 
 

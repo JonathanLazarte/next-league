@@ -45,6 +45,7 @@ export interface Skin {
   num: number;
   name: string;
   chromas: boolean;
+  parentSkin?: number;
 }
 
 export interface ChampionInfo {

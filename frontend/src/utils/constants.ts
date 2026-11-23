@@ -20,7 +20,7 @@ export const GROUP_MODES = {
 };
 
 export const STORE_SORT_OPTIONS = [
-  { value: null, label: "filters.releaseDateDesc" },
+  { value: "ReleaseDesc", label: "filters.releaseDateDesc" },
   { value: "ReleaseAscend", label: "filters.releaseDateAsc" },
   { value: "PriceRpDescend", label: "filters.priceRpDesc" },
   { value: "PriceRpAscend", label: "filters.priceRpAsc" },
@@ -92,7 +92,7 @@ export const RIGHT_HEADER_TABS = [SECTIONS.COLLECTION, SECTIONS.STORE];
 export const BACKGROUND_URLS = {
   league: "/Jayce_34.webp",
   store: "/store_background.webp",
-  collection: "/collection_background.webp",
+  collection: "/collection_background.png",
   play: ""
 }
 
@@ -143,9 +143,9 @@ export const GAME_DATA = {
       disabledImg: "sr-icon-default.png",
       subTitle: "5v5",
       queues: [
-        { name: "swiftplay" },
-        { name: "ranked_solo_duo" },
-        { name: "ranked_flex" },
+        { name: "swiftplay", max_players: 5 },
+        { name: "ranked_solo_duo", max_players: 2 },
+        { name: "ranked_flex", max_players: 5 },
       ],
     },
     {
@@ -155,8 +155,8 @@ export const GAME_DATA = {
       disabledImg: "aram-default.png",
       subTitle: "5v5",
       queues: [
-        { name: "aram_mayhem" },
-        { name: "aram" },
+        { name: "aram_mayhem", max_players: 5 },
+        { name: "aram", max_players: 5 },
       ],
     },
   ],
@@ -168,9 +168,9 @@ export const GAME_DATA = {
       disabledImg: "sr-icon-default.png",
       subTitle: "5v5",
       queues: [
-        { name: "intro" },
-        { name: "beginner" },
-        { name: "intermediate" },
+        { name: "intro", max_players: 1 },
+        { name: "beginner", max_players: 1 },
+        { name: "intermediate", max_players: 1 },
       ],
     },
   ],

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, CSSProperties, useRef } from "react";
+import { useState, useEffect, CSSProperties, useRef, memo } from "react";
 import { FaUserPlus } from "react-icons/fa6";
 import { FaFolderPlus } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -60,7 +60,7 @@ export const FriendsGroup = ({ group, groupStyle }: FriendsGroupProps) => {
 }
 
 
-export default function SocialPanel() {
+export default memo(function SocialPanel() {
   const { t } = useI18n();
   const [showMenu, setShowMenu] = useState<boolean>(false);
   //const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
@@ -150,4 +150,4 @@ export default function SocialPanel() {
       </div>
     </>
   );
-}
+})

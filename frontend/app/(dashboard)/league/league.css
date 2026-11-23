@@ -214,6 +214,9 @@
 .league-nav-item:hover .league-nav-icon {
   visibility: hidden;
 }
+.league-nav-item:active .league-nav-title{
+    color: var(--gold-two)
+}
 
 /* Special Thumbnail Active Item (e.g. True Damage) */
 .league-nav-thumb-wrapper {
@@ -478,25 +481,27 @@
 .league-carousel-thumbnails {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1.2rem;
+  min-height: 8.8rem;
 }
 
 .league-thumb-card {
   position: relative;
   width: 14rem;
   height: 7.8rem;
+  flex: 0 0 auto;
   border: 1.5px solid var(--gold-six);
   background: #010a13;
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.25s ease;
+  transition: opacity 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   opacity: 0.65;
 }
 
 .league-thumb-card:hover {
   opacity: 0.9;
   border-color: var(--gold-four);
-  transform: scale(1.02);
 }
 
 .league-thumb-card.active {
@@ -505,7 +510,6 @@
   height: 8.8rem;
   border: 2px solid var(--gold-two);
   box-shadow: 0 0 15px rgba(200, 170, 110, 0.4);
-  transform: scale(1.04);
 }
 
 .league-thumb-card-img {
@@ -533,13 +537,21 @@
 
 .league-thumb-progress-bar {
   height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
   background: linear-gradient(to right, #00b4d8, #00f2ff);
   box-shadow: 0 0 8px #00f2ff;
-  transition: none;
+  animation: league-thumb-progress 7s linear forwards;
 }
 
-.league-thumb-progress-bar.is-animating {
-  transition: width 7s linear;
+.league-carousel-wrapper:hover .league-thumb-progress-bar {
+  animation-play-state: paused;
+}
+
+@keyframes league-thumb-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 /* Simple Patch Notes Modal */

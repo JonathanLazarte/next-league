@@ -92,7 +92,7 @@
     text-align: center;
     width: clamp(250px, 38rem, 340px);
     position: fixed;
-    top: -7rem;
+    top: -8rem;
     height: 95%;
 }
 .user-banner {

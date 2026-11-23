@@ -1,13 +1,12 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setQueue } from '@/redux/slices/userInterfaceSlice';
+import { useRouter } from "next/navigation";
+import { useMatchmaking } from '@/hooks/useMatchmaking';
 import ConfirmButton from '@/components/buttons/Confirm/Confirm';
 import { useSound } from '@/hooks/useSound';
 import { useI18n } from '@/hooks/useI18n';
 import { GAME_DATA } from '@/utils/constants';
-import { setSelectedQueue } from '@/redux/slices/matchmakingSlice';
 
 
 type GameMode = typeof GAME_DATA[keyof typeof GAME_DATA][number]
@@ -127,18 +126,31 @@ const RenderGameMode = ({ gameMode, selectedMap, hoveredMap, setSelectedMap, set
 }
 
 interface ModeSelectorProps {
-  data: typeof GAME_DATA[keyof typeof GAME_DATA]
+  data: typeof GAME_DATA[keyof typeof GAME_DATA];
+  comeback: () => void;
 }
 
-export default function ModeSelector({ data : gameModes }: ModeSelectorProps){
+export default function ModeSelector({ data: gameModes, comeback }: ModeSelectorProps) {
+  const router = useRouter();
 	const [ selectedMap, setSelectedMap ] = useState<string>(gameModes[0].id);
 	const [ hoveredMap, setHoveredMap ] = useState('');
-  const dispatch = useDispatch();
-  const [selectedQueueGlobal, setSelectedQueueGlobal] = useState(gameModes[0].queues[0].name);
+  const [ selectedQueueGlobal, setSelectedQueueGlobal ] = useState(gameModes[0].queues[0].name);
+  const { queue, createParty } = useMatchmaking()
+
 
   const handleConfirm = () => {
-    dispatch(setQueue(selectedQueueGlobal));
+    if (queue === selectedQueueGlobal) {
+      comeback()
+    };
+    createParty({ queue: selectedQueueGlobal})
   };
+  const handleBack = () => {
+    if (queue) {
+      comeback()
+    } else {
+      router.push("league");
+    }
+  }
 
   useEffect(() => {
     const selectedMapData = gameModes.find(map => map.id === selectedMap);
@@ -155,8 +167,8 @@ export default function ModeSelector({ data : gameModes }: ModeSelectorProps){
         </div>
         <div className='gamemode-selector-footer'>
           <ConfirmButton
-            type="modeSelection"
-            activeButtonAction={handleConfirm}
+            confirmAction={handleConfirm}
+            backAction={handleBack}
           />
         </div>
       </div>

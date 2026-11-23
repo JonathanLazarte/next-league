@@ -33,7 +33,7 @@ export default function HeaderTab({
 
   const isPointerVisible = sectionTabSelected === section || !isNavigating && (actualSection === section);
   const handleClick = (section: Section) => {
-    if( section === actualSection || section === sectionTabSelected) return
+    //if( section === actualSection || section === sectionTabSelected) return
     /*flushSync(() => {
       setIsMouseUp(true);
     });*/

@@ -131,7 +131,7 @@ const CustomSelect = <T,>({
         aria-label={t(placeholder)}
       >
         <span className="custom-select-value">
-          {selectedOption ? t(selectedOption.label) : t(placeholder)}
+          {selectedOption ? t(selectedOption.label) : t(options[0].label)}
         </span>
       </div>
 

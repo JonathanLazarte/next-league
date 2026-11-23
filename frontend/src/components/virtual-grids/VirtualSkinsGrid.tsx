@@ -7,7 +7,7 @@ import { useResizeObserver } from "@/hooks/useResizeObserver";
 import { useThrottledCallback } from "@/hooks/useThrottle";
 import type { Skin } from '@/types/skin'
 import type { SkinGroupingOptionsValues } from "@/types/ui";
-import type { UserSkin } from '@/redux/slices/userSkinsSlice'
+import type { UserSkin } from '@/types/skin'
 import "./virtualGrid.css";
 import { useI18n } from "@/hooks/useI18n";
 
@@ -135,7 +135,7 @@ export default memo(function VirtualSkinsGrid({
     },
     measureElement: (el) => el.getBoundingClientRect().height,
     gap: columnGap,
-    overscan: 6,
+    overscan: 3,
   });
 
   if (!groupedSkins) return <></>

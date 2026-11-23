@@ -37,6 +37,7 @@ export function useFilterLogic({
   // Filtro + ordenamiento
   const filteredItems = useMemo((): Skin[] => {
     let result = items ? [...items] : [];
+    result.filter((skin) => skin.obtain === 'store' && skin.value > 0);
 
     result = [...result].filter((skin: Skin) => {
       const showInCollectionFilter = inCollection
@@ -96,8 +97,10 @@ export function useFilterLogic({
             return a.name.localeCompare(b.name);
           case "AlphabeticallyAscend":
             return b.name.localeCompare(a.name);
-          case "ReleaseAscend":
+          case "ReleaseDesc":
             return 0; // ya vienen ordenados por defecto (más nuevos primero)
+          case "ReleaseAscend":
+            return Number(a.num) - Number(b.num)
           default:
             return 0;
         }

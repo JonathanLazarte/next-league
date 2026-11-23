@@ -2,25 +2,25 @@
 
 import "./FindMatch.css";
 import { useState } from "react";
-import { useDispatch } from 'react-redux'
 import { useRouter } from "@/hooks/useRouter";
-import { useUserInterface } from "@/hooks/useUserInterface";
-import { findMatch, leaveParty } from '@/redux/slices/matchmakingSlice'
+import { useMatchmaking } from "@/hooks/useMatchmaking";
 import { useSound } from "@/hooks/useSound";
 import { useI18n } from "@/hooks/useI18n";
 import { QueueStatus } from '@/types/ui'
 
 interface FindMatchButtonProps {
+  game: string,
+  partyId: string,
   queueStatus: QueueStatus
 }
 
 export default function FindMatchButton({
+  partyId,
   queueStatus
 }: FindMatchButtonProps) {
-  const { updateQueue, updateQueueStatus } = useUserInterface();
+  const { findMatch, quitParty, cancelFindMatch } = useMatchmaking()
   const { push } = useRouter()
   const inQueue = queueStatus !== 'idle'
-  const dispatch = useDispatch()
   const { t } = useI18n();
 
   const { play: playHover } = useSound("/sfx/sfx-lobby-button-find-match-hover.ogg");
@@ -38,20 +38,18 @@ export default function FindMatchButton({
 
     if (queueStatus === 'idle') {
       push("league");
-      updateQueue(null);
+      quitParty()
     } else {
-      dispatch(leaveParty())
-      updateQueueStatus("idle");
+      cancelFindMatch({ partyId })
       setButtonState("idle")
     }
   };
 
   // Acción principal del botón
   const handleClick = () => {
-    updateQueueStatus('searching');
     playClick();
-    setButtonState('disabled')
-    dispatch(findMatch())
+    setButtonState('disabled');
+    findMatch({ partyId });
   };
   const handleMouseEnter = () => {
     if (buttonState === 'disabled') return;

@@ -1,4 +1,4 @@
-import { io } from 'socket.io-client';
+/*import { io } from 'socket.io-client';
 import type { Socket } from 'socket.io-client'
 import type { RootState } from './store.ts'
 import type { Middleware } from '@reduxjs/toolkit'
@@ -27,6 +27,12 @@ export const socketMiddleware: () => Middleware = () => {
       socket.on('user_status_changed', (status) => {
         store.dispatch({ type: 'chat/userStatusUpdated', payload: status });
       });
+
+      socket.on('party:set', ({ partyId, game, partyOwner }) => {
+        console.log("buenas funcionando")
+        store.dispatch({ type: 'matchmaking/setParty', payload: { partyId, game, partyOwner } })
+
+      })
 
       socket.on("user_joined", ({ room, roomId }) => {
         //setRoomId(roomId);
@@ -69,3 +75,4 @@ export const socketMiddleware: () => Middleware = () => {
     return next(action);
   };
 };
+*/

@@ -1,15 +1,16 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-export const useSocket = (token: string | null): Socket | undefined => {
-  const socket = useRef<Socket | undefined>();
+export const useSocket = (token: string | null): Socket | null => {
+  const [socket, setSocket] = useState<Socket | null>(null)
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     if (!token) return;
-    socket.current = io(API_URL, { auth: { token } });
-    return () => { socket.current?.disconnect(); }
+    const next = io(API_URL, { auth: { token } });
+    setSocket(next)
+    return () => { next.disconnect(); setSocket(null)}
   }, [token]);
 
-  return socket.current;
+  return socket;
 };

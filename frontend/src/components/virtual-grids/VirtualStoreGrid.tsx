@@ -33,7 +33,7 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
   }
   const currentRem = getRem();
   const gapValue = currentRem * 1.3;
-  const cardWidth = currentRem * 21;
+  const cardWidth = currentRem * 21;  // min width
   const paddingRightValue = currentRem * 2.85;
   const [columns, setColumns] = useState<number>();
 
@@ -69,7 +69,6 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
 
   //-----------------------------------------------------------------------------------------------
   // Construcción de filas
-  const itemsCopy = items ? [...items] : [];
 
   interface Row {
     type: string,
@@ -79,10 +78,10 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
   const rows = useMemo((): { type: string; items: T[]; }[] | [] => {
     if (!columns) return []
     const result = [];
-    for (let i = 0; i < itemsCopy.length; i += columns) {
+    for (let i = 0; i < items.length; i += columns) {
       result.push({
         type: "row",
-        items: itemsCopy.slice(i, i + columns),
+        items: items.slice(i, i + columns),
       });
     }
     return result;
@@ -93,11 +92,11 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
     getScrollElement: () => parentRef.current,
     // Altura dinámica según tipo
     estimateSize: () => {
-      return 250;
+      return cardWidth;
     },
     measureElement: (el) => el.getBoundingClientRect().height,
     gap: gapValue,
-    overscan: 6,
+    overscan: 3,
   });
   const ownedChampionsIds = useMemo(
     () => new Set((ownedItems || []).map((champion) => champion.id)),

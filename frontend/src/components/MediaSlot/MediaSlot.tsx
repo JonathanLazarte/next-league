@@ -1,11 +1,8 @@
-"use client";
-
 import {
   cloneElement,
   isValidElement,
   useLayoutEffect,
   useRef,
-  useState,
   type ImgHTMLAttributes,
   type ReactElement,
 } from "react";
@@ -26,24 +23,25 @@ export default function MediaSlot({
   variant = "portrait",
   className = "",
 }: MediaSlotProps) {
-  const src = children.props.src;
   const slotRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
+  const src = children.props.src;
 
+  // 1. Si la imagen ya está en caché al montar, la marcamos como lista de inmediato
   useLayoutEffect(() => {
     const img = slotRef.current?.querySelector("img");
-    if (img?.complete && img.naturalWidth > 0) {
-      setReady(true);
-      return;
+    if (img && img.complete && img.naturalWidth > 0) {
+      slotRef.current?.classList.add("is-ready");
+    } else {
+      slotRef.current?.classList.remove("is-ready");
     }
-    setReady(false);
   }, [src]);
 
   if (!isValidElement(children)) return null;
 
+  // 2. Cuando cargue de forma asíncrona, añadimos la clase directamente al DOM sin usar useState
   const child = cloneElement(children, {
     onLoad: (event) => {
-      setReady(true);
+      slotRef.current?.classList.add("is-ready");
       children.props.onLoad?.(event);
     },
   });
@@ -51,7 +49,7 @@ export default function MediaSlot({
   return (
     <div
       ref={slotRef}
-      className={`media-slot ${ready ? "is-ready" : ""} ${className}`.trim()}
+      className={`media-slot ${className}`.trim()}
       data-variant={variant}
     >
       {child}

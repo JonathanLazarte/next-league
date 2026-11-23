@@ -10,10 +10,11 @@ import { Server } from "socket.io";
 import { createServer } from "node:http";
 import { v4 as uuidv4 } from "uuid";
 import { connectDatabase, client } from "./db.js";
+import { v4 as uuid } from 'uuid'
 
 const app = express();
-
 app.use(corsMiddleware());
+
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
@@ -22,6 +23,7 @@ const io = new Server(server, {
   },
   connectionStateRecovery: {},
 });
+
 async function run() {
   try {
     await connectDatabase();
@@ -49,10 +51,10 @@ app.get(["/health", "/api/v1/health"], (req, res) => {
 });
 
 const adminUser = {
-  alias: "Jonathan Developer",
+  alias: "Jonathan Lazarte",
   tag: "LAS",
   title: "Dev",
-  status: "online",
+  status: "offline",
   messages: [],
   level: 1,
   rank: {
@@ -68,7 +70,7 @@ const adminUser = {
 const connectedUsers = [adminUser];
 const usersChat = [];
 const rooms = {};
-var queque = [];
+const activeQueues = [];
 
 const isValidToken = (token) => {
   return true;
@@ -96,7 +98,7 @@ io.on("connection", (socket) => {
 
   const authenticate = async () => {
     const isAlreadyLogged = connectedUsers.findIndex(
-      (connectedUser) => connectedUser.id == userToken,
+      (connectedUser) => connectedUser.id === userToken,
     );
 
     const userData = await usersCollection.findOne({
@@ -145,68 +147,72 @@ io.on("connection", (socket) => {
     );
     io.to([foundUser?.socketId]).emit("chat-message", msg);
   });
-  socket.on("battle-request", (msg) => {
-    const foundUser = connectedUsers.find((cu) => cu.userName == msg.to);
-    foundUser && io.to(foundUser.socketID).emit("battle-mailbox", msg);
-  });
-  socket.on("attack", (msg) => {
-    io.to(msg.roomId).emit("attack", msg);
-  });
-  socket.on("selectpokemon", (msg) => {
-    io.to(msg.roomId).emit("selectpokemon", msg);
-  });
-  socket.on("setpokemon", (msg) => {
-    io.to(msg.roomId).emit("setpokemon", msg);
-  });
-  socket.on("player-ready", (msg) => {
-    io.to(msg.roomId).emit("player-ready", msg);
-  });
-  socket.on("join-room", (msg) => {
+  socket.on('party:create', ({ queue }) => {
+    const newId = uuid()
+    const ownUser = connectedUsers.find(cu => cu.socketId === socket.id)
+
+    socket.join(newId)
+
+    rooms[newId] = {
+      queue,
+      members: [ownUser],
+    }
+
+    socket.emit('party:set', {
+      partyId: newId,
+      queue,
+      partyOwner: ownUser
+    })
+  })
+  socket.on("party:join", (msg) => {
+    const { roomId } = msg
     const existingRooms = Object.keys(rooms).filter((room) =>
       rooms[room].includes(socket.id),
     );
     if (existingRooms.length > 0) {
       console.log("error", "Ya estás en una sala");
       return;
-    } else {
-      socket.join(msg.roomId);
-      rooms[msg.roomId] = rooms[msg.roomId] || [];
-      rooms[msg.roomId].push(socket.id);
-      const userJoined = connectedUsers.find((cu) => cu.socketID == socket.id);
-      //console.log("Se ha entrado a una sala")
-      io.to(msg.roomId).emit("USER JOINED", {
-        room: rooms[msg.roomId],
-        roomId: msg.roomId,
-        userJoined,
-      });
     }
-    //console.log("ROOM: " + rooms[msg.roomId])
-    /*if(rooms[msg.roomId].length == 2){
-			io.to(msg.roomId).emit('USER JOINED', ({msg : rooms[msg.roomId], roomId : msg.roomId}))
-		}*/
+    socket.join(roomId);
+    socket.data.partyId = partyId;
+
+    rooms[roomId] = rooms[roomId] || [];
+    rooms[roomId].members.push(socket.id);
+    const userJoined = connectedUsers.find((cu) => cu.socketID == socket.id);
+
+    io.to(roomId).emit("USER JOINED", {
+      room: rooms[roomId],
+      roomId: roomId,
+      userJoined,
+    });
+
   });
-  socket.on("leave-room", (msg) => {
-    const existingRooms = Object.keys(rooms).filter((room) =>
-      rooms[room].includes(socket.id),
+  socket.on("party:leave", () => {
+    /*const existingRoom = Object.keys(rooms).filter((room) =>
+      rooms[room].members.some(m => socket.id === m.socketId),
     );
-    const indexInRoom = rooms[existingRooms]?.findIndex(
+    const indexInRoom = rooms[existingRoom]?.members.findIndex(
       (stringindex) => stringindex == socket.id,
     );
-    rooms[existingRooms]?.splice(indexInRoom, 1);
-    const newRoom = rooms[existingRooms];
-    /*console.log("room: " + rooms[msg.roomId])
-		console.log("newroom: " + newRoom)*/
-    io.to(existingRooms).emit("USER-OUT", { newRoom });
+    rooms[existingRoom]?.members.splice(indexInRoom, 1);
+    const newRoom = rooms[existingRoom];*/
+    const partyId = socket.data.partyId;
+    if (!partyId || rooms[partyId]) return
 
-    const imAlreadyInQueque = queque.findIndex((q) => q.id == socket.id);
-    queque.splice(imAlreadyInQueque, 1);
-    imAlreadyInQueque != -1
-      ? console.log("has sido desplazado del index: " + imAlreadyInQueque)
-      : "No estabas en una cola";
-  });
+    const playerIndex = rooms[partyId]?.members.findIndex(
+      (stringindex) => stringindex == socket.id,
+    );
 
-  socket.on("start-match", (msg) => {
-    io.to(msg.roomId).emit("start-match");
+    io.to(partyId).emit("party:player-left", { player: rooms[partyId].members[playerIndex] });
+
+    rooms[partyId].members.splice(playerIndex, 1);
+    socket.leave(partyId)
+    delete socket.data.partyId
+
+    if (rooms[partyId].members.lenght === 0) {
+      delete rooms[partyId]
+    }
+
   });
 
   socket.on("disconnect", () => {
@@ -219,7 +225,7 @@ io.on("connection", (socket) => {
     socket.leave();
 
     const existingRooms = Object.keys(rooms).filter((room) =>
-      rooms[room].includes(socket.id),
+      rooms[room].members.includes(socket.id),
     );
     //const roomIndexInRooms = rooms[existingRooms].findIndex(existingRooms)
     const indexInRoom = rooms[existingRooms]?.findIndex(
@@ -231,31 +237,54 @@ io.on("connection", (socket) => {
     //console.log("newroom: " + newRoom)
     io.to(existingRooms).emit("USER-OUT", { newRoom });
 
-    const imAlreadyInQueque = queque.findIndex((q) => q.id == socket.id);
-    queque.splice(imAlreadyInQueque, 1);
+    const imAlreadyInQueque = activeQueues.findIndex((q) => q.id == socket.id);
+    activeQueues.splice(imAlreadyInQueque, 1);
     imAlreadyInQueque != -1
       ? console.log("has sido desplazado del index: " + imAlreadyInQueque)
       : "No estabas en una cola";
   });
 
-  socket.on("find-opponent", (msg) => {
-    const imAlreadyInQueque = queque.find((q) => q.id == socket.id);
+  /*socket.on("find-opponent", (msg) => {
+    const imAlreadyInQueque = activeQueues.find((q) => q.id == socket.id);
     imAlreadyInQueque
       ? console.log("Ya estas en una cola")
-      : queque.push({ id: socket.id });
-    if (queque.length >= 2) {
+      : activeQueues.push({ id: socket.id });
+    if (activeQueues.length >= 2) {
       const roomId = uuidv4();
-      io.to([socket.id, queque[0].id]).emit("find-opponent", {
+      io.to([socket.id, activeQueues[0].id]).emit("find-opponent", {
         roomId: roomId,
       });
-      const playerIndex = queque.findIndex((player) => player.id == socket.id);
-      queque.splice(playerIndex, 1);
-      queque.splice(0, 1);
+      const playerIndex = activeQueues.findIndex((player) => player.id == socket.id);
+      activeQueues.splice(playerIndex, 1);
+      activeQueues.splice(0, 1);
       //io.to(queque[0]).emit('find-opponent', {roomId})
     } else {
       console.log("Has entrado en la cola");
     }
-  });
+  });*/
+
+  socket.on('queue:start', ({ partyId }) => {
+    const queueData = {
+      startedAt: Date.now(),
+      estimatedTime: 45
+    };
+
+    activeQueues.push({ partyId, queueData })
+
+
+    io.to(partyId).emit('queue:updated', {
+      status: 'searching',
+      ...queueData,
+    })
+  })
+
+  socket.on('queue:cancel', ({ partyId }) => {
+    const queueIndex = activeQueues.findIndex(aq => aq.partyId === partyId);
+    activeQueues.splice(1, queueIndex)
+    io.to(partyId).emit('queue:updated', { status: 'idle', startedAt: null, estimatedTime: null });
+  })
+
+
 });
 
 const PORT = process.env.PORT ?? 3050;

@@ -1,21 +1,19 @@
 "use client";
 
 import "./Confirm.css";
-import { useRouter } from "next/navigation";
-import { useUserInterface } from "@/hooks/useUserInterface";
 import { useSound } from "@/hooks/useSound";
 import { useI18n } from "@/hooks/useI18n";
+import { useMatchmaking } from "@/hooks/useMatchmaking";
 
 interface PlayButtonProps {
-  type: string,
-  activeButtonAction: () => void
+  confirmAction: () => void;
+  backAction: () => void
 }
 
-export default function PlayButton({ type, activeButtonAction }: PlayButtonProps) {
-  const router = useRouter();
-  const { updateQueue } = useUserInterface();
+export default function ConfirmButton({ confirmAction, backAction }: PlayButtonProps) {
   const { t } = useI18n();
   const text = t("buttons.confirm")
+  const { queue } = useMatchmaking()
 
   const { play: playHover } = useSound("/sfx/sfx-gameselect-button-confirm-hover.ogg");
   const { play: playCancel } = useSound(
@@ -26,16 +24,13 @@ export default function PlayButton({ type, activeButtonAction }: PlayButtonProps
   // Cancelar / Salir
   const handleCancel = () => {
     playCancel();
-    updateQueue(null);
-    router.push("league");
+    backAction();
   };
 
   // Acción principal del botón
   const handleConfirm = () => {
-    if (type === "modeSelection") {
-      playConfirm();
-      activeButtonAction();
-    }
+    if (!queue) { playConfirm(); }
+      confirmAction();
   };
 
   const displayText = text;
@@ -45,9 +40,20 @@ export default function PlayButton({ type, activeButtonAction }: PlayButtonProps
       {/* Botón de cancelar/salir */}
       <div className="out-button-border">
         <div translate="no" onClick={handleCancel} className="out-button">
-          <svg style={{pointerEvents: 'none'}} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" clipRule="evenodd" d="M5.7143 4L4.00001 5.71429L8.28573 10L4 14.2858L5.71429 16L10 11.7143L14.2857 16L16 14.2857L11.7143 10L16 5.7143L14.2857 4.00001L10 8.28573L5.7143 4Z" fill="#CDBE91"/>
+          { !queue ? <svg style={{ pointerEvents: 'none' }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M5.7143 4L4.00001 5.71429L8.28573 10L4 14.2858L5.71429 16L10 11.7143L14.2857 16L16 14.2857L11.7143 10L16 5.7143L14.2857 4.00001L10 8.28573L5.7143 4Z" fill="#CDBE91" />
+          </svg> :
+            <svg
+              className="comeback-simbol"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 26 40"
+              width="26"
+              height="40">
+            <path
+              d="M20 0 L26 6 L12 20 L26 34 L20 40 L0 20 Z"
+            />
           </svg>
+          }
         </div>
       </div>
 

@@ -26,11 +26,12 @@ import { usePurchase } from "@/hooks/usePurchase";
 import { useSocket } from '@/socket/useSocket'
 import { useUserListSocket } from '@/socket/useUserListSocket'
 import { useChatSocket } from '@/socket/useChatSocket'
+import { SocketContext } from '@/socket/SocketContext'
 import { useAppHydration } from "@/hooks/useAppHydration";
 import useLoadingDelay from "@/hooks/useLoadingDelay";
 import { useRouteSync } from '@/hooks/useRouteSync'
 import { ReactElement } from "react";
-
+import { useMatchmakingSocket } from "@/socket/useMatchmakingSocket";
 
 
 export default function ProvidersWrapper({ children }: { children: ReactElement}) {
@@ -45,25 +46,28 @@ export default function ProvidersWrapper({ children }: { children: ReactElement}
   useAppHydration(token)
   useUserListSocket(socket)
   useChatSocket(socket)
+  useMatchmakingSocket(socket)
   useRouteSync()
 
   if (isReady) { return <DashboardLoading /> }
 
 
   return (
-    <div className="dashboard-layout w-screen min-h-screen">
-      <BackgroundEngine />
-      <ResponsiveHeader />
-      <SideNav />
-      <Chat socket={socket} />
-      <MusicPlayer />
-      <TooltipLayer />
-      <SettingsModal/>
-      <DashboardAssetsPreloader />
-      {itemToBuy && <ConfirmPurchaseModal />}
-      <main className="dashboard">
-        {children} {showLoading && <LoadingOverlay />}
-      </main>
-    </div>
+    <SocketContext.Provider value={socket}>
+      <div className="dashboard-layout w-screen min-h-screen">
+        <BackgroundEngine />
+        <ResponsiveHeader />
+        <SideNav />
+        <Chat socket={socket} />
+        <MusicPlayer />
+        <TooltipLayer />
+        <SettingsModal/>
+        <DashboardAssetsPreloader />
+        {itemToBuy && <ConfirmPurchaseModal />}
+        <main className="dashboard">
+          {children} {showLoading && <LoadingOverlay />}
+        </main>
+      </div>
+    </SocketContext.Provider>
   );
 }

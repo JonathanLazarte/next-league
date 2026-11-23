@@ -8,7 +8,7 @@ const fetchSkins = async () => {
 };
 
 export default function SkinsData() {
-  const { data: skinsData,
+  const { data,
         isLoading,
         isFetching,
         isError,
@@ -21,7 +21,7 @@ export default function SkinsData() {
   });
 
   return {
-  skinsData,
+  data,
   isLoading,
   isFetching,
   isError,

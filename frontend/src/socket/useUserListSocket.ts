@@ -27,7 +27,7 @@ export function useUserListSocket(socket: Socket | undefined) {
       setFriendsOnline(friendFolders);
     });
     return () => { socket.off("user-list"); }
-  }, [setFriendsOnline]);
+  }, [setFriendsOnline, socket]);
 
   return
 }

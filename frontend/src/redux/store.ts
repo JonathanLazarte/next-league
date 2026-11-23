@@ -39,8 +39,8 @@ const store = configureStore({
     matchmaking: matchmakingReducer,
     notifications: notificationsReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(socketMiddleware())
+  /*middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(socketMiddleware())*/
 });
 
 export type AppDispatch = typeof store.dispatch;

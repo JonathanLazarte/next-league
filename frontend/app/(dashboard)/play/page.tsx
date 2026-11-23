@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, memo } from "react";
+import { useState, memo, useLayoutEffect } from "react";
 import { useSound } from "@/hooks/useSound";
 import { useI18n } from "@/hooks/useI18n";
 
@@ -9,14 +9,14 @@ import Pvp from "./rooms/pvp/PvpLobby";
 import PlayBackground from "./PlayBackground";
 
 import "./play.css";
-import { useUserInterface } from "@/hooks/useUserInterface";
 import { GAME_DATA } from '@/utils/constants'
+import { useMatchmaking } from "@/hooks/useMatchmaking";
 
 
-export default memo(function ModeSelection(){
-  const { queue } = useUserInterface()
-  console.log(queue)
-  const [ categorySelected, setCategorySelected ] = useState("PVP");
+export default memo(function Play(){
+  const { queue } = useMatchmaking()
+  const [categorySelected, setCategorySelected] = useState("PVP");
+  const [ zone, setZone ] = useState<"mode-selector" | "lobby">("mode-selector")
   const { play: playMenuClick } = useSound("/general/menu-click.mp3");
   const { t } = useI18n();
 
@@ -24,7 +24,12 @@ export default memo(function ModeSelection(){
     playMenuClick();
     GAME_DATA[category as keyof typeof GAME_DATA] && setCategorySelected(category)
   };
-  // Si ya eligió modo → mostrar sala o exploración
+  const comebackToSelection = () => {
+    setZone("mode-selector")
+  }
+  const comebackToLobby = () => {
+    setZone("lobby")
+  }
 
   const PlaySelectionLayer = () => {
     return (
@@ -45,27 +50,32 @@ export default memo(function ModeSelection(){
             {t("play.categories.CO_OP_VS_AI")}
           </div>
         </header>
-        <ModeSelector data={GAME_DATA[categorySelected as keyof typeof GAME_DATA]} />
+        <ModeSelector comeback={comebackToLobby} data={GAME_DATA[categorySelected as keyof typeof GAME_DATA]} />
       </section>
     );
   };
 
-  const isQueueSelected =
-    queue !== null;
-    const activeGameMode = Object.keys(GAME_DATA).find(key => GAME_DATA[key as keyof typeof GAME_DATA]?.some(map => map.queues?.some(q => q.name === queue)));
+  useLayoutEffect(() => {
+    if (queue && zone !== "lobby") {
+      setZone("lobby")
+    }
+  }, [queue])
+
+
+  const activeGameMode = Object.keys(GAME_DATA).find(key => GAME_DATA[key as keyof typeof GAME_DATA]?.some(map => map.queues?.some(q => q.name === queue)));
 
   return (
     <div className="play-screen-container">
-      <PlayBackground />
-      {!isQueueSelected && <PlaySelectionLayer />}
-      {activeGameMode === "PVP" && isQueueSelected && (
+      <PlayBackground zone={zone} />
+      {zone === 'mode-selector' && <PlaySelectionLayer />}
+      {activeGameMode === "PVP" && zone === 'lobby' && (
         <Pvp
-          roomTitle={queue}
+          comeback={comebackToSelection}
         />
       )}
-      {activeGameMode === "CO_OP_VS_AI" && isQueueSelected && (
+      {activeGameMode === "CO_OP_VS_AI" && zone === 'lobby' && (
         <Pvp
-          roomTitle={queue}
+          comeback={comebackToSelection}
         />
       )}
     </div>

@@ -48,6 +48,13 @@
     font-size: 2rem;
 }
 
+.comeback-simbol {
+    fill: #CDBE91;
+    width: 1rem;
+    height: 1.5rem;
+    transform: translateX(-10%);
+}
+
 .out-button-border:hover {
     filter: brightness(1.2);
     background: linear-gradient(to bottom, var(--gold-one), var(--gold-two), var(--gold-four));
@@ -222,7 +229,6 @@
     left: -42%;
     top: 0px;
 }
-
 
 @media (max-width: 767px) {
 

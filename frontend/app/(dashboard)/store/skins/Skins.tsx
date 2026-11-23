@@ -14,7 +14,7 @@ import { STORE_SORT_OPTIONS } from "@/utils/constants";
 import "./skins.css";
 
 export default memo(function Skins() {
-  const { skinsData } = useSkins();
+  const { data: skins } = useSkins();
   const { userSkins = [] } = useUserSkins();
   const { userChampions } = useUserChampions();
   const [subsectionSelected, setSubsectionSelected] = useState("SKINS");
@@ -30,7 +30,7 @@ export default memo(function Skins() {
     filteredItems,
     filters
   } = useFilterLogic({
-    items: skinsData,
+    items: skins,
     ownedItems: userSkins,
     ownedChampions: userChampions,
     categoryChecked,

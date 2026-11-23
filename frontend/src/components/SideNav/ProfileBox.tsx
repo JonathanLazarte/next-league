@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, CSSProperties } from "react";
+import { useState, CSSProperties, memo } from "react";
 import { useUserInterface } from "@/hooks/useUserInterface";
 import { IoIosSettings } from "react-icons/io";
 import { MdMinimize, MdOutlineQuestionMark } from "react-icons/md";
@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useUser } from "@/hooks/useUser";
 import { useSound } from "@/hooks/useSound"
 import { useI18n } from "@/hooks/useI18n"
+import { useMatchmaking } from "@/hooks/useMatchmaking";
 
 interface ProfileBoxProps {
   updateSideNav: () => void,
@@ -20,7 +21,8 @@ interface ProfileBoxProps {
 const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
   const { user } = useUser();
   const { t } = useI18n();
-  const { queue, queueStatus, updateUserState, updateSettingsModal } = useUserInterface();
+  const { updateUserState, updateSettingsModal } = useUserInterface();
+  const { queue, queueStatus } = useMatchmaking()
   const [iconIsInHover, setIconIsInHover] = useState(false);
   const { play: playClickGeneric } = useSound("/sfx/sfx-uikit-click-generic.ogg")
   const showPerfilSpanStyle = iconIsInHover
@@ -144,4 +146,4 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
   );
 };
 
-export default ProfileBox;
+export default memo(ProfileBox);

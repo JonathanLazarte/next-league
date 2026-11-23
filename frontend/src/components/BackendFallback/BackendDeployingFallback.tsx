@@ -83,12 +83,12 @@ export default function BackendDeployingFallback({
         </div>
 
         {/* Meta Stats */}
-        <div className="backend-fallback-meta">
+        {/*<div className="backend-fallback-meta">
           <span>{t("backend.retries")} <strong>{retryCount}</strong></span>
-        </div>
+        </div>*/}
 
         {/* Actions */}
-        <div className="backend-fallback-actions">
+        {/*<div className="backend-fallback-actions">
           <button
             className="general-button"
             onClick={handleManualRetry}
@@ -97,7 +97,7 @@ export default function BackendDeployingFallback({
             <IoReload className={isRetrying ? 'animate-spin' : ''} size={18} />
             <span>{isRetrying ? t("backend.checking") : t("backend.retryNow")}</span>
           </button>
-        </div>
+        </div>*/}
 
       </div>
     </div>

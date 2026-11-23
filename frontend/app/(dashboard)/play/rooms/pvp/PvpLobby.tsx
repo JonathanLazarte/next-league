@@ -1,27 +1,24 @@
 import { memo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Image from 'next/image'
 /*import { v4 as uuidv4 } from 'uuid';*/
 import "./PvpLobby.css";
 import FindMatchButton from "@/components/buttons/FindMatch/FindMatch";
-import { setQueue, selectUserInterfaceData } from "@/redux/slices/userInterfaceSlice";
+import { useMatchmaking } from "@/hooks/useMatchmaking";
 import { useSound } from "@/hooks/useSound"
 import { useI18n } from "@/hooks/useI18n"
 import { useUser } from '@/hooks/useUser'
 import { RESOURCES_URL } from '@/utils/constants'
 
-export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
+export default memo(function PvpRoom({ comeback }: { comeback: () => void }) {
   const user = useUser();
   const { t } = useI18n();
-  const { queueStatus } = useSelector(selectUserInterfaceData)
-  const dispatch = useDispatch();
+  const { queue, queueStatus, partyId } = useMatchmaking()
   const { play: playTransToGameselect } = useSound('/sfx/sfx-lobby-trans-to-gameselect.ogg')
   const rankAssetName = user.rank.name.trim().toLowerCase();
 
-
   const handleBack = () => {
     playTransToGameselect();
-    dispatch(setQueue(null));
+    comeback()
   }
 
   return (
@@ -53,7 +50,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
             src={`${RESOURCES_URL}/general/mini-sr.png`}
             alt="Map mini icon"
           />
-          <h3 className="room-title">{t(`play.queues.${roomTitle}.room`)}</h3>
+          <h3 className="room-title">{t(`play.queues.${queue}.room`)}</h3>
         </div>
       </div>
       <div className="room-users">
@@ -101,6 +98,7 @@ export default memo(function PvpRoom({ roomTitle }: { roomTitle: string }) {
       <div className="party-chat"><input type="text" placeholder={t("common.typeHere")}></input></div>
       <FindMatchButton
         queueStatus={queueStatus}
+        partyId={partyId}
       ></FindMatchButton>
     </section>
   );

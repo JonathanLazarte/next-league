@@ -8,7 +8,7 @@ import { SkinGroupingOptionsValues, SortOptionsValues } from "@/types/ui";
 
 export function useSkinsFilter() {
     const { userSkins, loading: loadingUserSkins } = useUserSkins();
-    const { skinsData, isLoading: loadingSkinsData } = useSkins();
+    const { data: skinsData, isLoading: loadingSkinsData } = useSkins();
 
     const [searchKeys, setSearchKeys] = useState<string | null>(null);
     const deferredSearch = useDeferredValue<string | null>(searchKeys);

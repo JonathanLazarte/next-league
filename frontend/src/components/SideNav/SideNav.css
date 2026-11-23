@@ -24,6 +24,7 @@
     inherits: true;
     initial-value: #010a13;
 }
+
 .sidenav {
     height: 100vh;
     width: var(--dashboard-sidebar-width);

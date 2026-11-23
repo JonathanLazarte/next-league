@@ -1,0 +1,127 @@
+.group-panel {
+    height: 10.4rem;
+    width: 100%;
+    padding-top: 0.7rem;
+    padding-left: 1.2rem;
+    position: relative;
+    overflow: hidden;
+}
+.eog-looping-bgmagic {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.group-header {
+    display: flex;
+    flex-direction: row;
+    height: 2.3rem;
+    align-items: start;
+}
+.group-icon {
+    width: 2.4rem;
+    margin-right: 1rem;
+}
+.group-title {
+    font-family: Bold;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+}
+/*----------------------------------------*/
+
+.group-content {
+    display: flex;
+    flex-direction: row;
+    height: 72%;
+    align-items: center;
+}
+.map-icon {
+    width: 4.1rem;
+    margin-right: 1.5rem;
+}
+.group-queue-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+}
+.party-icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.4rem;
+    height: 60%;
+    margin-bottom: 0.2rem;
+}
+.party-icons svg {
+    width: 1.8rem;
+    fill: rgba(255, 255, 255, 0.3);
+    height: 2rem;
+}
+.queue-name {
+    flex-wrap: 1;
+    font-family: Spiegel-Regular;
+    font-size: 1.5rem;
+    align-items: center;
+    display: flex;
+}
+
+
+.queue-panel {
+    height: 10.9rem;
+    width: 100%;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    padding-left: 1.2rem;
+    position: relative;
+    overflow: hidden;
+}
+.queue-panel-header {
+    display: flex;
+    flex-direction: row;
+    height: 2rem;
+    width: 100%;
+}
+.finding-match-title {
+    font-family: Medium;
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+}
+.cancel-inqueue-button {
+
+}
+
+.queue-panel-main {
+    height: 70%;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+}
+.inqueue-timer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    gap: 0.5rem;
+    padding-top: 1rem;
+}
+.inqueue-time {
+    font-family: Bold;
+    font-size: 3.5rem;
+    color: var(--gold-one);
+    line-height: 1;
+    width: fit-content;
+    letter-spacing: 2px;
+
+}
+.estimated-inqueue-time {
+    font-family: Spiegel-Regular;
+    font-size: 1.4rem;
+    width: fit-content;
+}

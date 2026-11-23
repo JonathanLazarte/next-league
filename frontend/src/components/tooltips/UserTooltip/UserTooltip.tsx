@@ -1,7 +1,7 @@
 "use client";
 
 import "./UserTooltip.css";
-import { useRef, useState, useLayoutEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { RESOURCES_URL } from '@/utils/constants'
 import type { ConnectedUser } from "@/types/user"
@@ -23,13 +23,8 @@ export const UserTooltip = ({ hoveredUser, tooltipPos }: UserTooltipProps) => {
     title
   } = hoveredUser
   const ref = useRef<HTMLDivElement | null>(null);
-  const [tooltipHeight, setTooltipHeight] = useState<number>();
 
-  if(!tooltipHeight) return
 
-  useLayoutEffect(() => {
-    setTooltipHeight(ref.current?.getBoundingClientRect().height);
-  }, [tooltipPos]);
 
   const getRem = () => {
     return parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -41,11 +36,12 @@ export const UserTooltip = ({ hoveredUser, tooltipPos }: UserTooltipProps) => {
     //width: windowPosition.width,
     display: `${hoveredUser ? "flex" : "none"}`,
     right: tooltipPos.x + currentRem * 2 | 0,
-    top: tooltipPos.y - tooltipHeight / 2 | 0,
+    top: tooltipPos.y,
     justifyContent: "center",
     alignItems: "center",
     backgroundImage: `url('${RESOURCES_URL}/champion/centered/${profile_background}.jpg')`,
     pointerEvents: "none",
+    transform: 'translateY(-50%)'
   } satisfies React.CSSProperties;
 
   return (
@@ -64,7 +60,7 @@ export const UserTooltip = ({ hoveredUser, tooltipPos }: UserTooltipProps) => {
           <div className="tooltip-user-icon">
             <img
               className="tooltip-user-border"
-              src={`${RESOURCES_URL}/level-border/${profile_border}.png`}
+              src={`/level-border/${profile_border}.png`}
             />
             <Image
               className="tooltip-user-icon-img"

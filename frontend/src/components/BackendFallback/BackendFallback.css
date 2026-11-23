@@ -529,7 +529,7 @@
 
 /* Keep the retry action on the shared general-button idle state. */
 .backend-retry-btn.general-button {
-  width: 17.92rem;
+  width: 20rem;
   min-width: 0;
   height: 4rem;
   padding: 0;
@@ -545,6 +545,7 @@
   font-family: Bold;
   font-size: 1.65rem;
   letter-spacing: 1px;
+  white-space: nowrap;
 }
 
 .backend-retry-btn {

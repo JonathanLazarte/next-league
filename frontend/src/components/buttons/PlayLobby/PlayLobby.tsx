@@ -9,6 +9,7 @@ import { useSound } from "@/hooks/useSound";
 import { useI18n } from "@/hooks/useI18n";
 import Image from 'next/image'
 import { Section } from "@/types/ui";
+import { useMatchmaking } from "../../../hooks/useMatchmaking";
 
 type Button = 'idle' | 'disabled' | 'hovered' | 'lobby' | 'lobby-hovered';
 
@@ -19,8 +20,9 @@ interface LobbyPlayButtonProps {
 export default function LobbyPlayButton({ setSectionTabSelected }: LobbyPlayButtonProps) {
   const route = useRouter();
   const { t } = useI18n();
-  const { actualSection, queue } = useUserInterface();
-  const [buttonState, setButtonState] = useState<Button>('idle')
+  const { actualSection } = useUserInterface();
+  const { queue } = useMatchmaking()
+  const [ buttonState, setButtonState ] = useState<Button>('idle')
   const { play: playHover } = useSound("/sfx/sfx-nav-button-play-hover.ogg");
   const { play: playClick } = useSound("/sfx/sfx-nav-button-play-click.ogg");
   const videoRef = useRef<Record<string, HTMLVideoElement>>({})

@@ -29,16 +29,16 @@ export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned
   return (
     <article
       key={skin.id}
-      className={`store-champion-item ${owned ? "owned" : ""}`}
+      className={`store-skin-item ${owned ? "owned" : ""}`}
       onClick={() => handleClick()}
     >
       <MediaSlot variant="tile">
         <Image
-          src={`${RESOURCES_URL}/tiles/${skin.img}`}
+          src={`${RESOURCES_URL}/champion/tiles/${skin.img}`}
           alt={skin.name}
           fill
           sizes="23rem"
-          className="store-champion-image"
+          className="store-skin-image"
           style={{ objectFit: 'cover' }}
         />
       </MediaSlot>
