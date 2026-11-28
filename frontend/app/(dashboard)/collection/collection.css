@@ -17,11 +17,11 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    padding-left: 4rem; /* 2.5vw = 40px at 1600px */
+    padding-left: 4rem;
     justify-content: flex-start;
     align-items: flex-start;
-    padding-top: 0.9rem; /* 0.44vw = 7.04px at 1600px */
-    height: 4.4rem; /* 2.8vw = 44.8px at 1600px */
+    padding-top: 0.9rem;
+    height: 4.4rem;
     --collection-header-height: 4.4rem;
     position: absolute;
     overflow: hidden;
@@ -31,13 +31,13 @@
     position: relative;
     box-sizing: border-box;
     transition: color 1s;
-    height: 2.7rem; /* 1.7vw = 27.2px at 1600px */
-    padding-left: 1.5rem; /* 1vw = 16px at 1600px */
+    height: 2.7rem;
+    padding-left: 1.5rem;
     padding-right: 1.5rem;
     align-content: center;
     text-align: center;
     cursor: pointer;
-    font-size: 1.5rem; /* 0.95vw = 15.2px at 1600px */
+    font-size: 1.5rem;
     letter-spacing: 1.5px;
     color: #c5b78c;
     transition: color 0.1s;
@@ -49,6 +49,7 @@
         )
         1;
     font-family: "Medium";
+    gap: 1rem;
 }
 .collection-header .collection-tab:active {
     color: var(--gold-four);
@@ -75,56 +76,11 @@
     justify-self: center;
 }
 
-.collection .search-filter {
-    background: #000407;
-    border-image: linear-gradient(#785a28, var(--gold-five)) 1;
-    width: 100%;
-    /*height: 4.1vh;*/
-    height: 4rem; /* 2.35vw → 3.76rem */
-    margin-bottom: 0px;
-    font-family: Regular;
-    letter-spacing: 1px;
-    font-size: 0.78rem;
-    border: 1px solid #785a28;
-    margin-top: 0px;
-    padding-left: 10px;
-    color: #999486;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-family: "Spiegel-Regular";
-    z-index: 1;
-
-}
-.collection .search-filter:focus-within {
-    background: linear-gradient(
-        to bottom,
-        #07111a,
-        #0e171f,
-        #151e25
-    ) !important;
-    border-image: linear-gradient(to bottom, #6c5227, #907747, #c4a66c) 1;
-}
 .collection .checkbox:hover {
     color: var(--gold-one);
 }
 .collection .checkbox:hover .custom-checkbox {
     border-color: var(--gold-five);
-}
-
-.search-filter input {
-    width: 100%;
-    font-size: 1.5rem;
-    color: #999486;
-}
-.search-filter input::placeholder {
-    color: #9f9a8b;
-}
-
-.search-icon {
-    color: var(--gold-one);
-    font-size: 1.5rem;
-    margin-right: 1rem;
 }
 
 .checkbox:hover {

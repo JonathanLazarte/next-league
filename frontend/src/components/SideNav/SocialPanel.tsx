@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, CSSProperties, useRef, memo } from "react";
+import { useState, useEffect, CSSProperties, useRef, useMemo, memo } from "react";
 import { FaUserPlus } from "react-icons/fa6";
 import { FaFolderPlus } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -11,8 +11,9 @@ import { useConnectedUsers } from "@/hooks/useConnectedUsers";
 import { useChat } from "@/hooks/useChat";
 import type { ConnectedUser } from "@/types/user";
 import useHoverIntent from "@/hooks/useHoverIntent";
-import UserTooltip from "@/components/tooltips/UserTooltip/UserTooltip";
+import { useTooltip } from "@/hooks/useTooltip";
 import { useI18n } from "@/hooks/useI18n";
+import { useUser } from "@/hooks/useUser";
 
 interface FriendsGroupProps {
   group: { users: ConnectedUser[] },
@@ -20,27 +21,28 @@ interface FriendsGroupProps {
 }
 
 export const FriendsGroup = ({ group, groupStyle }: FriendsGroupProps) => {
-  const [hoveredUser, setHoveredUser] = useState<ConnectedUser | null>(null);
+  const { set, hide } = useTooltip();
   const { start, cancel } = useHoverIntent({ initialDelay: 400 });
   const tooltipPosRef = useRef<{ x: number, y: number }>({ x: 0, y: 0 });
-  const [toolTipPos, setToolTipPos] = useState({ x: 0, y: 0 });
 
   const onHoverStart = (hovereduser: ConnectedUser) => {
     start({
       cb: () => {
-        // Setear coords y hover juntos evita el "salto" del tooltip en equipos lentos.
-        setToolTipPos({
-          x: tooltipPosRef.current.x,
-          y: tooltipPosRef.current.y,
+        set({
+          type: "user",
+          position: {
+            x: tooltipPosRef.current.x,
+            y: tooltipPosRef.current.y,
+          },
+          content: hovereduser,
         });
-        setHoveredUser(hovereduser);
       },
       isTooltipOpened: false
     });
   };
   const onHoverEnd = () => {
-    setHoveredUser(null);
     cancel();
+    hide();
   };
 
   return <ul className="general-user-list">
@@ -55,20 +57,24 @@ export const FriendsGroup = ({ group, groupStyle }: FriendsGroupProps) => {
         />
       ))}
     </div>
-    {hoveredUser && <UserTooltip hoveredUser={hoveredUser} tooltipPosRef={tooltipPosRef} tooltipPos={toolTipPos} />}
   </ul>
 }
 
 
 export default memo(function SocialPanel() {
   const { t } = useI18n();
+  const { alias } = useUser();
   const [showMenu, setShowMenu] = useState<boolean>(false);
   //const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
   const [isFolderOpen, setIsFolderOpen] = useState<boolean>(true);
   const iconStyle = isFolderOpen ? { transform: "rotate(90deg)" } : undefined;
   const groupStyle = !isFolderOpen ? { display: "none" } : undefined;
   const { friendsOnline } = useConnectedUsers();
-  const onlineCount = friendsOnline[0]?.users.length || 0;
+  const visibleUsers = useMemo(
+    () => (friendsOnline[0]?.users ?? []).filter((user) => user.alias !== alias),
+    [friendsOnline, alias],
+  );
+  const onlineCount = visibleUsers.length;
   const {
     updateChatUser
   } = useChat();
@@ -146,7 +152,7 @@ export default memo(function SocialPanel() {
             <span>{t("chat.nobody")}</span>
           </div>
         )}
-        <FriendsGroup group={friendsOnline[0]} groupStyle={groupStyle}></FriendsGroup>
+        <FriendsGroup group={{ users: visibleUsers }} groupStyle={groupStyle}></FriendsGroup>
       </div>
     </>
   );

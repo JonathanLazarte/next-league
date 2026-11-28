@@ -9,7 +9,6 @@ import type { ConnectedUser } from "@/types/user"
 interface UserTooltipProps {
   hoveredUser: ConnectedUser,
   tooltipPos: { x: number, y: number }
-  tooltipPosRef: React.RefObject<{ x: number, y: number }>
 }
 
 export const UserTooltip = ({ hoveredUser, tooltipPos }: UserTooltipProps) => {
@@ -31,17 +30,21 @@ export const UserTooltip = ({ hoveredUser, tooltipPos }: UserTooltipProps) => {
   };
   const currentRem = getRem();
 
+  const tooltipHeight = 28.8 * currentRem;
+  const margin = currentRem;
+  const centeredTop = tooltipPos.y - tooltipHeight / 2;
+  const maxTop = Math.max(margin, window.innerHeight - tooltipHeight - margin);
+  const top = Math.min(Math.max(margin, centeredTop), maxTop);
+
   const style = {
     position: "fixed",
-    //width: windowPosition.width,
     display: `${hoveredUser ? "flex" : "none"}`,
-    right: tooltipPos.x + currentRem * 2 | 0,
-    top: tooltipPos.y,
+    right: Math.round(tooltipPos.x + currentRem * 2),
+    top: Math.round(top),
     justifyContent: "center",
     alignItems: "center",
     backgroundImage: `url('${RESOURCES_URL}/champion/centered/${profile_background}.jpg')`,
     pointerEvents: "none",
-    transform: 'translateY(-50%)'
   } satisfies React.CSSProperties;
 
   return (
@@ -60,7 +63,7 @@ export const UserTooltip = ({ hoveredUser, tooltipPos }: UserTooltipProps) => {
           <div className="tooltip-user-icon">
             <img
               className="tooltip-user-border"
-              src={`/level-border/${profile_border || "theme-17-border"}.png`}
+              src={`/profile-borders/${profile_border || "theme-17-border"}.png`}
             />
             <Image
               className="tooltip-user-icon-img"

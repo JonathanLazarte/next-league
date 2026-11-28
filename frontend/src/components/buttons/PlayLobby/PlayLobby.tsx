@@ -1,7 +1,7 @@
 "use client";
 
 import "./PlayLobby.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import type { Dispatch } from 'react'
 import { useRouter } from "@/hooks/useRouter";
 import { useUserInterface } from "@/hooks/useUserInterface";
@@ -17,7 +17,7 @@ interface LobbyPlayButtonProps {
   setSectionTabSelected: Dispatch<React.SetStateAction<Section | null>>
 }
 
-export default function LobbyPlayButton({ setSectionTabSelected }: LobbyPlayButtonProps) {
+export default memo(function LobbyPlayButton({ setSectionTabSelected }: LobbyPlayButtonProps) {
   const route = useRouter();
   const { t } = useI18n();
   const { actualSection } = useUserInterface();
@@ -85,6 +85,7 @@ export default function LobbyPlayButton({ setSectionTabSelected }: LobbyPlayButt
         playsInline
         autoPlay
         loop
+        muted
         disablePictureInPicture
         controlsList="nodownload noplaybackrate noremoteplayback"
         className="videobg"
@@ -166,4 +167,4 @@ export default function LobbyPlayButton({ setSectionTabSelected }: LobbyPlayButt
       </div>
     </div>
   );
-}
+})

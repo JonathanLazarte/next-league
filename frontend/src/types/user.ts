@@ -41,6 +41,10 @@ export interface User {
   rank: Rank;
   profile_icon: string;
   profile_background: string;
+  profile_banner?: string;
+  profile_border?: string;
+  profile_title?: string;
+  icons?: { id: string }[];
   loading: boolean;
   token: string
 }
@@ -63,6 +67,10 @@ export interface DatabaseUser {
   rank: Rank;
   profile_icon: string;
   profile_background: string;
+  profile_banner?: string;
+  profile_border?: string;
+  profile_title?: string;
+  icons?: { id: string }[];
   loading: boolean;
   token: string;
   messages: Message[],

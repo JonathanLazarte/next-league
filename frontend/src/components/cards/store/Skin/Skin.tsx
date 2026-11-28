@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { usePurchase } from '@/hooks/usePurchase'
 import { useI18n } from '@/hooks/useI18n'
+import '../StoreCard.css'
 import './Skin.css'
 import { RESOURCES_URL } from '@/utils/constants';
 import { Skin } from '@/types/skin'
@@ -29,7 +30,7 @@ export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned
   return (
     <article
       key={skin.id}
-      className={`store-skin-item ${owned ? "owned" : ""}`}
+      className={`store-card store-skin-item ${owned ? "owned" : ""}`}
       onClick={() => handleClick()}
     >
       <MediaSlot variant="tile">
@@ -38,7 +39,7 @@ export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned
           alt={skin.name}
           fill
           sizes="23rem"
-          className="store-skin-image"
+          className="store-card-media store-skin-image"
           style={{ objectFit: 'cover' }}
         />
       </MediaSlot>
@@ -61,6 +62,11 @@ export default function SkinStoreItem({ item: skin, owned }: { item: Skin, owned
           </div>
         )}
       </div>
+      {!owned && (
+        <div className="unlock-icon-box">
+          <Image width={50} height={50} alt="unlock icon" className="unlock-product-icon" src='/unlock-icon.png' />
+        </div>
+      )}
     </article>
   )
 }

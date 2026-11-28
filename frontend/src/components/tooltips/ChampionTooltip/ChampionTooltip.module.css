@@ -10,20 +10,20 @@
 .tooltip {
     background-color: rgb(26, 28, 33);
     color: white;
-    width: 35.6rem; /* 20vw * 1.6 */
+    width: 35.6rem;
     height: auto;
-    padding: 2.4rem; /* 1.5vw * 1.6 */
-    padding-bottom: 4rem; /* 2.5vw * 1.6 */
+    padding: 2.4rem;
+    padding-bottom: 4rem;
     z-index: 1000;
     pointer-events: none;
     font-family: Spiegel-Regular;
     display: flex;
     flex-direction: column;
     gap: 0rem;
-    border: 0.1rem solid var(--gold-five); /* 0.0625vw * 1.6 */
+    border: 0.1rem solid var(--gold-five);
     justify-content: flex-start;
     position: fixed;
-    /*animation: opacity 0.2s;*/
+    container-type: inline-size;
 }
 .initial-delay {
     animation: opacity 1s;
@@ -43,27 +43,27 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 1rem; /* 0.625vw * 1.6 */
-    margin-top: 0.5rem; /* 0.3125vw * 1.6 */
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
 }
 
 .masteryIcon {
-    width: 5.5rem; /* 2.8125vw * 1.6 */
-    height: 5.5rem; /* 2.8125vw * 1.6 */
-    border: 0.3rem solid rgb(10, 50, 60); /* 0.1875vw * 1.6 */
+    width: 5.5rem;
+    height: 5.5rem;
+    border: 0.3rem solid rgb(10, 50, 60);
     border-radius: 50%;
     background-color: rgb(1, 10, 19);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    margin-right: 2rem; /* 1.25vw * 1.6 */
+    margin-right: 2rem;
 }
 
 .masteryLevel {
     color: var(--gold-one);
     font-family: Bold;
-    font-size: 2.2rem; /* 1.125vw * 1.6 */
+    font-size: 2.2rem;
 }
 
 .championInfo {
@@ -75,42 +75,42 @@
 
 .championName {
     color: var(--gold-one);
-    font-size: 2.4rem; /* 1.3vw * 1.6 */
+    font-size: 2.4rem;
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.1rem; /* 0.0625vw * 1.6 */
+    letter-spacing: 0.1rem;
     font-family: Bold;
 }
 
 .separator {
-    height: 0.1rem; /* 0.0625vw * 1.6 */
+    height: 0.1rem;
     background: var(--gold-five);
     width: 100%;
-    margin-top: 0.8rem; /* 0.5vw * 1.6 */
-    margin-bottom: 0.8rem; /* 0.5vw * 1.6 */
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
 }
 
 .masteryPoints {
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 0rem;
-    font-size: 1.5rem; /* 0.875vw * 1.6 */
+    font-size: 1.5rem;
     color: #a09b8c;
-    margin-bottom: 0.7rem; /* 0.28125vw * 1.6 */
-    margin-top: 0.7rem; /* 0.2vw * 1.6 */
+    margin-bottom: 0.5cqh;
+    margin-top: 0.7rem;
 }
 
 .wingIcon {
     color: var(--gold-one);
-    font-size: 1.7rem; /* 0.9vw * 1.6 */
-    margin-right: 1rem; /* 0.3125vw * 1.6 */
+    width: 6.5cqw;
+    margin-right: 1rem;
 }
 
 .seasonRating {
     display: flex;
     flex-direction: row;
     gap: 0rem;
-    font-size: 1.5rem; /* 0.9vw * 1.6 */
+    font-size: 1.5rem;
     color: #a09b8c;
 }
 
@@ -124,52 +124,52 @@
 .startSection {
     display: flex;
     flex-direction: column;
-    margin-top: 1.2rem; /* 0.75vw * 1.6 */
+    margin-top: 0.8cqh;
 }
 
 .sectionTitle {
     color: #c4a76c;
-    font-size: 1.8rem; /* 0.9375vw * 1.6 */
+    font-size: 1.8rem;
     font-weight: bold;
     margin: 0;
-    margin-bottom: 0.8rem; /* 0.4vw * 1.6 */
+    margin-bottom: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.1rem; /* 0.03125vw * 1.6 */
+    letter-spacing: 0.1rem;
     font-family: Bold;
 }
 
 .startButton {
-    width: 3.2rem; /* 1.625vw * 1.6 */
-    height: 3.2rem; /* 1.625vw * 1.6 */
-    border: 0.2rem solid #485053; /* 0.0625vw * 1.6 */
+    width: 3.2rem;
+    height: 3.2rem;
+    border: 0.2rem solid #485053;
     background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #485053;
     font-weight: bold;
-    font-size: 1.4rem; /* 0.875vw * 1.6 */
-    margin-bottom: 0.7rem; /* 0.4vw * 1.6 */
+    font-size: 1.4rem;
+    margin-bottom: 0.7rem;
 }
 
 .freePlay {
     display: flex;
     align-items: center;
-    gap: 0.8rem; /* 0.5vw * 1.6 */
-    font-size: 1.2rem; /* 0.75vw * 1.6 */
+    gap: 0.8rem;
+    font-size: 1.2rem;
     color: #a09b8c;
 }
 
 .hexagonIcon {
-    width: 1.8rem; /* 1.125vw * 1.6 */
-    height: 1.8rem; /* 1.125vw * 1.6 */
+    width: 1.8rem;
+    height: 1.8rem;
     background-color: #0ac8b9;
     color: white;
-    border-radius: 1.5rem; /* 0.9375vw * 1.6 */
+    border-radius: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem; /* 0.75vw * 1.6 */
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
@@ -182,12 +182,12 @@
 .eternalsTitle {
     font-family: Bold;
     color: #c4a76c;
-    font-size: 1.6rem; /* 0.75vw * 1.6 */
+    font-size: 1.6rem;
     font-weight: bold;
-    margin-bottom: 0.8rem; /* 0.4vw * 1.6 */
-    padding-top: 0.32rem; /* 0.2vw * 1.6 */
+    margin-bottom: 0.8rem;
+    padding-top: 0.32rem;
     text-transform: uppercase;
-    letter-spacing: 0.1rem; /* 0.03125vw * 1.6 */
+    letter-spacing: 0.1rem;
 }
 
 .eternalsList {
@@ -199,12 +199,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.5rem; /* 0.9vw * 1.6 */
+    font-size: 1.5rem;
     color: #a09b8c;
     margin-bottom: 0.3rem;
 }
 
-.lockIcon {
-    color: #a09b8c;
-    font-size: 1.5rem; /* 0.75vw * 1.6 */
+.lockIcon svg{
+    fill: #a09b8c;
+    width: 1rem;
 }

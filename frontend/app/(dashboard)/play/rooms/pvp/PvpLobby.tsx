@@ -57,7 +57,7 @@ export default memo(function PvpRoom({ comeback }: { comeback: () => void }) {
         <div className="room-user">
           <Image
             className="user-banner"
-            src={`/bannerskins/worlds_winners_2025_banner.png`}
+            src={`/bannerskins/${user.profile_banner}.png`}
             sizes={"38rem"}
             width={580}
             height={1480}

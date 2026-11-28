@@ -106,10 +106,15 @@
     text-align: center;
     align-content: center;
     z-index: 1;
-    /*font-size: 0.8rem;*/
     font-size: 1.6rem;
-    /* 1vw → 1.6rem */
     font-family: "Bold";
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.exit-button svg {
+    transform: translateX(-4%);
+    fill: var(--gold-one);
 }
 
 .exit-button:hover {

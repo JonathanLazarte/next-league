@@ -51,9 +51,9 @@ export default function LeaguePage() {
   const backgroundUrl = useMemo(() => {
     if (activeItem.type === 'carousel') {
       if (currentSlide?.img) {
-        return `${RESOURCES_URL}/champion/splash/${currentSlide.img}`;
+        return `${RESOURCES_URL}/champion/centered/${currentSlide.img}`;
       }
-      return `${RESOURCES_URL}/champion/splash/Senna_1.jpg`;
+      return `${RESOURCES_URL}/champion/centered/Senna_1.jpg`;
     }
     return activeItem.bgImage || '/collection_background.webp';
   }, [activeItem, currentSlide]);

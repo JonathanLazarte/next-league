@@ -280,15 +280,15 @@ input[type="search"]::-webkit-search-cancel-button {
     color: var(--gold-one);
 }
 
-.active-subheader-tab {
+.active-subheader-tab, .active-subheader-tab-small {
     color: #f0e6d2;
 }
 
-.subheader-tab:active {
+.subheader-tab:active{
     color: var(--gold-four);
 }
 
-.active-subheader-tab:active {
+.active-subheader-tab:active, .active-subheader-tab-small:active {
     color: #f0e6d2;
 }
 
@@ -298,7 +298,18 @@ input[type="search"]::-webkit-search-cancel-button {
     bottom: -0.2rem;
     left: 0;
     right: 0;
-    height: 0.2rem;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #cdbe91, transparent);
+    width: 90%;
+    justify-self: center;
+}
+.active-subheader-tab-small::after {
+    content: "";
+    position: absolute;
+    bottom: -0.1rem;
+    left: 0;
+    right: 0;
+    height: 1px;
     background: linear-gradient(to right, transparent, #cdbe91, transparent);
     width: 90%;
     justify-self: center;
@@ -491,6 +502,21 @@ img,
 video {
     max-width: unset;
     pointer-events: none;
+}
+
+/* Edge pinta play + fullscreen en videos sin controls mientras están en pausa. */
+video::-webkit-media-controls,
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 ::-webkit-scrollbar {

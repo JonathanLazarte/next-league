@@ -45,7 +45,7 @@
     transition: padding 0.3s;
 }
 .header-pointer {
-    width: 9.5rem;
+    width: 9.9rem;
     position: absolute;
     top: -2rem;
     max-width: unset;

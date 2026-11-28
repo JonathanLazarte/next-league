@@ -53,6 +53,70 @@
     padding-left: 14rem;
 }
 
+.profile-icons-grid {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding-right: 0.6rem;
+    scrollbar-gutter: stable;
+}
+
+.profile-icons-row {
+    display: grid;
+    padding-bottom: 0.8rem;
+}
+
+.profile-icon {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    padding: 0 0 1.6rem;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.profile-icon img.icon {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: #0a141c;
+}
+
+.profile-icon.is-selected img.icon,
+.profile-icon:hover img.icon {
+    outline: 2px solid var(--gold-two);
+    outline-offset: 2px;
+}
+
+.profile-icon-gem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 1.7rem;
+    height: 1.7rem;
+    transform: translateX(-50%);
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.profile-icon.is-locked {
+    cursor: default;
+}
+
+.profile-icon.is-locked img.icon {
+    filter: grayscale(0.45) brightness(0.62);
+}
+
+.profile-icon-gem-rare {
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 50%;
+    background: #1f8b4c;
+    box-shadow: 0 0 0 1px #0c3c22, 0 0 0.6rem rgba(31, 139, 76, 0.7);
+}
+
 .virtual-store-grid {
     flex-grow: 1;
     overflow: auto;

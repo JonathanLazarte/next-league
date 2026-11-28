@@ -156,11 +156,11 @@
     height: auto;
 }
 .user-folder-name {
-    font-size: 1.5rem; /* antes ~0.91vw ≈ 1.456rem */
+    font-size: 1.5rem;
     letter-spacing: 1px;
     font-family: Bold;
     padding-left: 1rem;
-    height: 3.04rem; /* 1.9vw → 3.04rem */
+    height: 3.04rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -176,7 +176,7 @@
 .user-info {
     display: flex;
     height: calc(var(--dashboard-header-height) - 2px);
-    padding-left: 0.5rem; /* 0.5vw → 0.8rem */
+    padding-left: 0.5rem;
     border-bottom: 1px solid rgba(150, 150, 150, 0.4);
     text-align: left;
     justify-content: flex-start;
@@ -205,6 +205,9 @@
     position: relative;
 
 }
+.user-icon-wrapper:active .profile_icon_image{
+    opacity: 0.5;
+}
 @property --hextech-metal-start {
   syntax: '<color>';
   inherits: true;
@@ -219,6 +222,7 @@
 .user-icon-border-svg {
     top: 0;
     left: 0;
+    display: block;
     width: 8.1rem;
     fill: #1e2328;
     --hextech-metal-start: var(--gold-two);
@@ -239,21 +243,21 @@
     fill: url('#hextech-metal-gradient');
 }
 
-.user-level-wrapper {
-    position: absolute;
-    /*inset: 0;
-
-    display: grid;
-    place-items: center;*/
-    left: 50%;
-    transform: translateX(-50%) translateY(200%);
-    z-index: 1;
+.user-icon-frame {
+    position: relative;
+    width: 8.1rem;
 }
 .user-level {
+    position: absolute;
+    left: 50.45%;
+    top: 87.23%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
     color: #9f9a8b;
     font-family: "Bold";
     font-size: 1.5rem;
     line-height: 1;
+    pointer-events: none;
 }
 
 
@@ -275,7 +279,7 @@
     justify-content: flex-end;
     gap: 2.5rem;
     align-items: flex-end;
-    padding-left: 3rem; /* 1.2vw → 1.92rem */
+    padding-left: 3rem;
     color: #a09b8c;
     position: absolute;
     top: 0;
@@ -336,6 +340,12 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+}
+.showPerfilSpan svg {
+    width: 1.5rem;
 }
 
 .online-users ul {
@@ -348,7 +358,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    height: 6.24rem; /* 3.9vw → 6.24rem */
+    height: 6.24rem;
     border-radius: 2px;
     padding-left: 3%;
     margin-bottom: 5px;

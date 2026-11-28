@@ -106,7 +106,7 @@ export default function ConfirmPurchaseModal() {
             </div>
           </div>
 
-          {itemToBuy?.type === "champion" && (
+          {(itemToBuy?.type === "champion" || itemToBuy?.type === "icon") && (
             <div className="button-container">
               <div
                 onClick={() => {
@@ -191,7 +191,9 @@ export default function ConfirmPurchaseModal() {
             <div className="confirm-purchase-window">
               <div className="confirm-purchase-window-content">
                 <button className="exit-button" onClick={closeWindow}>
-                  X
+                  <svg style={{ pointerEvents: 'none' }} width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M5.7143 4L4.00001 5.71429L8.28573 10L4 14.2858L5.71429 16L10 11.7143L14.2857 16L16 14.2857L11.7143 10L16 5.7143L14.2857 4.00001L10 8.28573L5.7143 4Z" />
+                  </svg>
                 </button>
 
                 <div className="image-container">

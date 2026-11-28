@@ -180,52 +180,6 @@
     font-size: 1.6rem;
 }
 
-.store .search-filter {
-    font-family: "Spiegel-Regular";
-    letter-spacing: 1px;
-    color: #999486;
-    background: #000407;
-    border-image: linear-gradient(#785a28, var(--gold-five)) 1 !important;
-    width: 100%;
-    height: 3.7rem;
-    margin-bottom: 0px;
-    color: var(--color-secundary);
-    padding-left: 0.96rem;
-    margin-top: 2.48rem;
-}
-
-.store .search-filter:focus-within {
-    background: linear-gradient(to bottom,
-            #07111a,
-            #0e171f,
-            #151e25) !important;
-    border-image: linear-gradient(to bottom, #6c5227, #907747, #c4a66c) 1;
-}
-
-.store .search-filter::placeholder {
-    color: #999486;
-}
-
-.search-filter input {
-    width: 100%;
-    font-size: 1.5rem;
-    /* 0.97vw → 1.552rem */
-    color: #999486;
-}
-
-.store .search-icon {
-    color: var(--gold-one);
-    font-size: 1.6rem;
-    margin-right: 0.5rem;
-}
-
-
-
-
-
-
-
-
 .store .filter-nav {
     display: flex;
     flex-direction: column;
@@ -241,7 +195,6 @@
     margin-top: 2.5rem;
 }
 
-.store .search-filter,
 .store .checkbox {
     border: 1px solid #c8aa6e;
     margin-top: 0px;

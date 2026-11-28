@@ -3,13 +3,20 @@
 import "./collection.css";
 import { useState, memo } from "react";
 import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/hooks/useI18n";
 import dynamic from "next/dynamic";
 import Loading from "@/components/Loading/Loading";
 import ChampionsSection from './champions/Champions'
 import { useDecodeAssetGroup } from "@/hooks/useDecodeAssetGroup";
-import { Section } from "@/types/ui";
 const SkinsSection = dynamic(
   () => import("./skins/Skins"),
+  {
+    loading: () => <Loading />,
+    ssr: false,
+  },
+);
+const IconsSection = dynamic(
+  () => import("./icons/Icons"),
   {
     loading: () => <Loading />,
     ssr: false,
@@ -18,15 +25,17 @@ const SkinsSection = dynamic(
 
 export default memo(function Collection() {
   useDecodeAssetGroup("championDetails");
+  const { t } = useI18n();
   const [actualSubSection, setActualSubSection] = useState("campeones");
   const subSections = [
-    "campeones",
-    "aspectos",
+    { id: "campeones", label: "sections.champions" },
+    { id: "aspectos", label: "sections.skins" },
+    { id: "iconos", label: "sections.icons" },
   ] as const;
   const { play } = useSound("/sfx/menu-click.mp3");
-  type SubSections = typeof subSections[number]
+  type SubSectionId = (typeof subSections)[number]["id"]
 
-  const handleClick = (section: SubSections) => {
+  const handleClick = (section: SubSectionId) => {
     play();
     setActualSubSection(section);
   }
@@ -34,18 +43,19 @@ export default memo(function Collection() {
   return (
     <section className="collection">
       <header className="collection-header">
-        {subSections.map((section: SubSections) => (
+        {subSections.map((section) => (
           <div
-            key={section}
-            className={`subheader-tab ${actualSubSection === section ? "active-subheader-tab" : null}`}
-            onClick={() => handleClick(section)}
+            key={section.id}
+            className={`subheader-tab ${actualSubSection === section.id ? "active-subheader-tab" : null}`}
+            onClick={() => handleClick(section.id)}
           >
-            {section.toUpperCase()}
+            {t(section.label)}
           </div>
         ))}
       </header>
       {actualSubSection == "aspectos" && <SkinsSection></SkinsSection>}
       {actualSubSection == "campeones" && <ChampionsSection></ChampionsSection>}
+      {actualSubSection == "iconos" && <IconsSection />}
     </section>
   );
 });

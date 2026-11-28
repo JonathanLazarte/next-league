@@ -66,6 +66,9 @@ export const QueuePanel = ({ queueStartedAt, handleCancel }) => {
       src="/social/socialpanel_bgloop.webm"
       autoPlay
       loop
+      muted
+      playsInline
+      disablePictureInPicture
       preload="metadata"
     >
     </video>

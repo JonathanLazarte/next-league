@@ -78,6 +78,9 @@ export default function LeagueSidebar({
                 src="/league/navigation_magic_idle.webm"
                 loop
                 autoPlay
+                muted
+                playsInline
+                disablePictureInPicture
               >
               </video>
               <div className="league-nav-title">
@@ -110,6 +113,9 @@ export default function LeagueSidebar({
             src="/league/navigation_magic_idle.webm"
             loop
             autoPlay
+            muted
+            playsInline
+            disablePictureInPicture
           >
           </video>
           <div className="league-nav-title">

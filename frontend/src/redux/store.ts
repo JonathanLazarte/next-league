@@ -5,6 +5,7 @@ import { socketMiddleware } from './socketMiddleware'
 import userReducer from './slices/userSlice';
 import championsReducer from './slices/userChampionsSlice';
 import skinsReducer from './slices/userSkinsSlice';
+import iconsReducer from './slices/userIconsSlice';
 import interfaceReducer from './slices/userInterfaceSlice';
 import authReducer from './slices/authSlice';
 import soundReducer from './slices/soundSlice';
@@ -25,6 +26,7 @@ const store = configureStore({
     user: userReducer,
     userChampions: championsReducer,
     userSkins: skinsReducer,
+    userIcons: iconsReducer,
     userInterface: interfaceReducer,
     auth: authReducer,
     sound: soundReducer,

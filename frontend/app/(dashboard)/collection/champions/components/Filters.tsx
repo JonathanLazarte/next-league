@@ -1,6 +1,6 @@
-import { FaSearch } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
+import SearchField from "@/components/SearchField/SearchField";
 import { ChampionGroupingOptionsValues, SortOptionsValues } from "@/types/ui";
 import { CHAMPION_SORT_OPTIONS, CHAMPION_GROUP_OPTIONS } from "@/utils/constants";
 import { useI18n } from "@/hooks/useI18n";
@@ -70,14 +70,10 @@ export default function Filters({
                 </div>
             </div>
             <div className="right-place">
-                <div className="search-filter">
-                    <FaSearch className="search-icon" />
-                    <input
-                        placeholder={t("common.search")}
-                        type="search"
-                        onKeyUp={(event) => setSearchKeys(event.currentTarget.value)}
-                    ></input>
-                </div>
+                <SearchField
+                    placeholder={t("common.search")}
+                    onChange={setSearchKeys}
+                />
 
                 {groupedBy !== "possession" ? (
                     <div

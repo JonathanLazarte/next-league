@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, CSSProperties, memo } from "react";
+import { useState, useCallback, useRef, CSSProperties, memo } from "react";
 import { useUserInterface } from "@/hooks/useUserInterface";
 import { IoIosSettings } from "react-icons/io";
 import { MdMinimize, MdOutlineQuestionMark } from "react-icons/md";
@@ -12,6 +12,10 @@ import { useUser } from "@/hooks/useUser";
 import { useSound } from "@/hooks/useSound"
 import { useI18n } from "@/hooks/useI18n"
 import { useMatchmaking } from "@/hooks/useMatchmaking";
+import { useTooltip } from "@/hooks/useTooltip";
+import useHoverIntent from "@/hooks/useHoverIntent";
+import ProfileIdentityModal from "@/components/ProfileIdentityModal/ProfileIdentityModal";
+import type { ConnectedUser } from "@/types/user";
 
 interface ProfileBoxProps {
   updateSideNav: () => void,
@@ -24,6 +28,48 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
   const { updateUserState, updateSettingsModal } = useUserInterface();
   const { queue, queueStatus } = useMatchmaking()
   const [iconIsInHover, setIconIsInHover] = useState(false);
+  const [identityOpen, setIdentityOpen] = useState(false);
+  const iconRef = useRef<HTMLDivElement>(null);
+  const { set: setTooltip, hide: hideTooltip } = useTooltip();
+  const { start, cancel } = useHoverIntent({ initialDelay: 400 });
+  const closeIdentity = useCallback(() => setIdentityOpen(false), []);
+  const showOwnTooltip = useCallback(() => {
+    const icon = iconRef.current;
+    if (!icon) return;
+    const rect = icon.getBoundingClientRect();
+    const nav = icon.closest(".sidenav")?.getBoundingClientRect();
+    const anchorRight = nav ? window.innerWidth - nav.left : window.innerWidth - rect.left;
+    const status = userState === "offline" || userState === "away" ? userState : "online";
+    const hovered: ConnectedUser = {
+      id: user.id,
+      alias: user.alias,
+      tag: user.tag,
+      title: user.title,
+      rank: { name: user.rank.name, points: user.rank.points },
+      profile_icon: Number(user.profile_icon) || 5,
+      profile_background: user.profile_background,
+      profile_border: user.profile_border || "theme-17-border",
+      status,
+      activity: "idle",
+    };
+    setTooltip({
+      type: "user",
+      position: {
+        x: anchorRight,
+        y: rect.top + rect.height / 2,
+      },
+      content: hovered,
+    });
+  }, [setTooltip, user, userState]);
+  const onIconEnter = () => {
+    setIconIsInHover(true);
+    start({ cb: showOwnTooltip, isTooltipOpened: false });
+  };
+  const onIconLeave = () => {
+    setIconIsInHover(false);
+    cancel();
+    hideTooltip();
+  };
   const { play: playClickGeneric } = useSound("/sfx/sfx-uikit-click-generic.ogg")
   const showPerfilSpanStyle = iconIsInHover
     ? { marginLeft: "1rem", visibility: "visible" }
@@ -51,13 +97,28 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
   return (
     <div style={{ position: "relative" }} className="user-info">
       <div
-        onMouseEnter={() => setIconIsInHover(true)}
-        onMouseLeave={() => setIconIsInHover(false)}
+        role="button"
+        tabIndex={0}
+        aria-label={t("profile.customize")}
+        ref={iconRef}
+        onMouseEnter={onIconEnter}
+        onMouseLeave={onIconLeave}
+        onClick={() => {
+          cancel();
+          hideTooltip();
+          playClickGeneric();
+          setIdentityOpen(true);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            playClickGeneric();
+            setIdentityOpen(true);
+          }
+        }}
         className="user-icon-wrapper"
       >
-        <div className="user-level-wrapper">
-          <span className="user-level">{/*user.level*/}</span>
-        </div>
+        <div className="user-icon-frame">
         <svg
           className="user-icon-border-svg"
           id="Capa_2"
@@ -81,7 +142,8 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
                 width="750"
                 height="750"
                 x="2%"
-                preserveAspectRatio="xMidYMid slice"
+                  preserveAspectRatio="xMidYMid slice"
+                  className="profile_icon_image"
               />
             </pattern>
           </defs>
@@ -104,6 +166,8 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
           </g>
 
         </svg>
+        <span className="user-level">{user.level}</span>
+        </div>
       </div>
 
       <div className="user-state">
@@ -138,10 +202,13 @@ const ProfileBox = ({ updateSideNav, userState }: ProfileBoxProps) => {
             </div>
           </>
         )}
-        <span className="showPerfilSpan" style={showPerfilSpanStyle as CSSProperties}>
-          {t("profile.view")}
-        </span>
+        <div className="showPerfilSpan" style={showPerfilSpanStyle as CSSProperties}>
+          <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5577 21.601C23.3399 19.3798 25.1224 15.9593 25.1224 12.1224C25.1224 5.42738 19.695 0 13 0C6.305 0 0.877625 5.42738 0.877625 12.1224C0.877625 15.9593 2.66018 19.3798 5.44231 21.601C6.04402 20.0168 8.40739 14.6938 13 14.6938C17.5926 14.6938 19.956 20.0168 20.5577 21.601ZM10.7959 11.4723C11.4483 11.8962 12.2154 12.1224 13 12.1224C14.0522 12.1224 15.0613 11.716 15.8053 10.9927C16.5494 10.2693 16.9673 9.28824 16.9673 8.26527C16.9673 7.5024 16.7347 6.75666 16.2987 6.12236C15.8628 5.48806 15.2432 4.99369 14.5182 4.70175C13.7933 4.40981 12.9956 4.33343 12.226 4.48226C11.4564 4.63108 10.7495 4.99844 10.1947 5.53787C9.63985 6.0773 9.262 6.76457 9.10892 7.51278C8.95584 8.26099 9.0344 9.03653 9.33468 9.74132C9.63496 10.4461 10.1435 11.0485 10.7959 11.4723Z" fill="#CDBE91"/>
+          </svg> {t("profile.edit")}
+        </div>
       </div>
+      <ProfileIdentityModal open={identityOpen} onClose={closeIdentity} />
     </div>
   );
 };

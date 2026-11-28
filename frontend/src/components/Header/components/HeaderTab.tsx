@@ -29,7 +29,7 @@ export default function HeaderTab({
   const { isNavigating, actualSection } = useUserInterface()
   const [pointer, setPointer] = useState<{ x: number | undefined, intensity: number }>({ x: undefined, intensity: 1 })
   const lightRef = useRef<HTMLDivElement | null>(null)
-  /*const [isMouseUp, setIsMouseUp] = useState();*/
+  const [isMouseUp, setIsMouseUp] = useState<boolean>(false);
 
   const isPointerVisible = sectionTabSelected === section || !isNavigating && (actualSection === section);
   const handleClick = (section: Section) => {
@@ -74,7 +74,10 @@ export default function HeaderTab({
   if (section === "league")
     return (
       <div
-        onMouseUp={() => handleClick("league")}
+        onMouseUp={() => {
+          handleClick("league");
+          setIsMouseUp(true)
+        }}
         onMouseMove={handleMouseMove}
         className={`header-tab ${getTabClass('league')} main`}
         data-testid={`tab-${section}`}
@@ -88,18 +91,19 @@ export default function HeaderTab({
           className="tab-pointer-light"
         />
         {t("sections.league")}
-        <img
-          style={{
-            display: isPointerVisible ? "block" : "none",
-          }}
-          className="header-pointer"
-          src="/header-pointer.png"
-        />
+        {isPointerVisible && (
+          <img
+            className="header-pointer"
+            src="/header-pointer.png"
+            alt=""
+          />
+        )}
       </div>
     );
 
   return (
     <div
+      style={{ animation: isMouseUp ? 'reduction 3s' : 'unset'}}
       className={`header-tab ${getTabClass(section)}`}
       onMouseUp={() => handleClick(section)}
       onMouseMove={handleMouseMove}
@@ -113,13 +117,13 @@ export default function HeaderTab({
       <div
         className="tab-pointer-light"
       />
-      <img
-        style={{
-          display: isPointerVisible ? "block" : "none",
-        }}
-        className="header-pointer"
-        src="/header-pointer.png"
-      />
+      {isPointerVisible && (
+        <img
+          className="header-pointer"
+          src="/header-pointer.png"
+          alt=""
+        />
+      )}
       <svg fill="currentColor">
         <use href={`/icon.svg#${section}`} />
       </svg>

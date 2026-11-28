@@ -1,0 +1,188 @@
+.store-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid #3c3c41;
+    background: #010a13;
+    box-shadow: inset 0 0 0 1px #32281e, 0 4px 15px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    cursor: pointer;
+    container-type: inline-size;
+}
+
+.store-card:hover {
+    border-image: linear-gradient(to bottom, #f0e6d2, #c8aa6e, var(--gold-four)) 1;
+}
+
+.store-card:hover .store-card-media {
+    filter: brightness(1.2);
+}
+
+.store-card .product-info {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    padding: 4%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 20%);
+    line-height: 1.1;
+}
+
+.store-card .card-name {
+    margin: 0;
+    color: var(--gold-one);
+    font-family: Spiegel-SemiBold;
+    font-size: 8cqw;
+}
+
+.store-card .price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 75%;
+    height: 10%;
+    margin-top: 0.6rem;
+}
+
+.store-card .essences-price,
+.store-card .rp-price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.store-card .currency-icon-wrapper {
+    width: 8cqw;
+}
+
+.store-card .rp-icon-card {
+    width: 100%;
+    fill: #e3ba3d;
+}
+
+.store-card .be-icon-card {
+    width: 80%;
+    fill: #0acbe6;
+}
+
+.store-card .price-number {
+    margin-left: 3px;
+    color: #c8aa6e;
+    font-family: Bold;
+    font-size: 7.5cqw;
+    letter-spacing: 1px;
+}
+
+.store-card .essences-price .price-number {
+    color: #a09b8c;
+}
+
+.store-card .unlock-icon-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    width: 23cqw;
+    height: 23cqw;
+    border: 2px solid;
+    border-image: linear-gradient(120deg, var(--gold-one), var(--gold-five)) 1;
+    background-image: linear-gradient(320deg, rgba(226, 193, 92, 0.4), rgba(226, 193, 92, 0.05));
+    transform: translateY(-50%) translateX(-50%) rotate(45deg);
+}
+
+.store-card .unlock-product-icon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    width: 13cqw;
+    color: var(--gold-five);
+    font-size: 2.5rem;
+    place-self: center;
+    transform: rotate(-45deg);
+}
+
+.store-card:hover .unlock-icon-box {
+    display: block;
+}
+
+.store-card.owned {
+    border-color: #2e2e33;
+    cursor: default;
+}
+
+.store-card.owned:hover {
+    border-image: none;
+    border-color: #3c3c41;
+}
+
+.store-card.owned .store-card-media {
+    filter: brightness(0.65) grayscale(0.25);
+}
+
+.store-card.owned:hover .store-card-media {
+    filter: brightness(0.75) grayscale(0.2);
+}
+
+.store-card.owned .card-name {
+    color: #a09b8c;
+}
+
+.store-card .owned-status-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10%;
+    margin-top: 0.6rem;
+}
+
+.store-card .owned-status-badge {
+    color: #a09b8c;
+    font-family: Spiegel-Regular;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+}
+
+.store-card.is-icon {
+    justify-content: space-between;
+    padding: 8% 7% 6%;
+}
+
+.store-card.is-icon .store-card-portrait {
+    width: 62%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    margin-top: 4%;
+}
+
+.store-card.is-icon .product-info {
+    position: relative;
+    height: auto;
+    padding: 0;
+    background: none;
+}
+
+.store-card.is-icon .card-name {
+    display: -webkit-box;
+    min-height: 2.3em;
+    overflow: hidden;
+    font-size: 7.2cqw;
+    line-height: 1.15;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.store-card.is-icon .price {
+    width: auto;
+    height: auto;
+}

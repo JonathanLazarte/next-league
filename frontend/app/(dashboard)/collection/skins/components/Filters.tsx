@@ -1,5 +1,5 @@
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
-import { FaSearch } from "react-icons/fa";
+import SearchField from "@/components/SearchField/SearchField";
 import { FaCheck } from "react-icons/fa6";
 import { FILTER_OPTIONS_BY_GROUPING, SKIN_FILTER_OPTIONS } from "@/utils/constants";
 import type { SkinGroupingOptionsValues, SortOptionsValues } from '@/types/ui'
@@ -28,15 +28,11 @@ export default function Filters({
   const { t } = useI18n();
 
   return <div>
-  <div className="search-filter">
-    <FaSearch className="search-icon" />
-    <input
-      placeholder={t("common.search")}
-      type="search"
-      onChange={(event) => setSearchKeys(event.currentTarget.value)}
-      aria-label={t("filters.searchSkins")}
-    />
-  </div>
+  <SearchField
+    placeholder={t("common.search")}
+    ariaLabel={t("filters.searchSkins")}
+    onChange={setSearchKeys}
+  />
   <div className="checkbox-container">
     {groupedBy !== "collection" ? (
       <div

@@ -23,6 +23,10 @@ const SkinsStore = dynamic(() => import("./skins/Skins"), {
   loading: () => <Loading />,
   ssr: false,
 });
+const IconsStore = dynamic(() => import("./icons/Icons"), {
+  loading: () => <Loading />,
+  ssr: false,
+});
 
 export default memo(function Store() {
   const [actualSection, setActualSection] = useState("campeones");
@@ -51,6 +55,15 @@ export default memo(function Store() {
           >
             {t("sections.skins")}
           </div>
+          <div
+            className={`subheader-tab ${actualSection === "accesorios" ? "active-subheader-tab" : null}`}
+            onClick={() => {
+              setActualSection("accesorios");
+              play();
+            }}
+          >
+            {t("sections.accessories")}
+          </div>
         </div>
         <div className="right-items">
           <button type="button" className="buy-rp-button not-available" disabled>{t("common.buyRp")}</button>
@@ -65,6 +78,7 @@ export default memo(function Store() {
 
       {actualSection == "campeones" && <ChampionsStore />}
       {actualSection == "aspectos" && <SkinsStore />}
+      {actualSection == "accesorios" && <IconsStore />}
     </section>
   );
 });

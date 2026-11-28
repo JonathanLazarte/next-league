@@ -11,6 +11,8 @@ import settingsReducer from '@/redux/slices/settingsSlice';
 import purchaseReducer from '@/redux/slices/purchaseSlice';
 import championsReducer from '@/redux/slices/userChampionsSlice';
 import skinsReducer from '@/redux/slices/userSkinsSlice';
+import iconsReducer from '@/redux/slices/userIconsSlice';
+
 import connectedUsersReducer from '@/redux/slices/connectedUsersSlice';
 import chatReducer from '@/redux/slices/chatSlice';
 import profileReducer from '@/redux/slices/profileSlice';
@@ -45,6 +47,7 @@ export const setupTestStore = (preloadedState?: Partial<RootState>) =>
       user: userReducer,
       userChampions: championsReducer,
       userSkins: skinsReducer,
+      userIcons: iconsReducer,
       userInterface: userInterfaceReducer,
       auth: authReducer,
       sound: soundReducer,

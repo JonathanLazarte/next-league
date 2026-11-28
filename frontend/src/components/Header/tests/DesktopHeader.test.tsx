@@ -9,6 +9,7 @@ import { useSound } from '@/hooks/useSound';
 
 import userReducer from '@/redux/slices/userSlice';
 import userInterfaceReducer from '@/redux/slices/userInterfaceSlice';
+import settingsReducer from '@/redux/slices/settingsSlice';
 import { RootState } from '@/redux/store';
 
 // Mock de los hooks useRouter y useSound
@@ -43,6 +44,7 @@ describe('DesktopHeader', () => {
       reducer: {
         user: userReducer, // Usar tu reducer real
         userInterface: userInterfaceReducer, // Usar tu reducer real
+        settings: settingsReducer,
         // ...otros reducers que DesktopHeader pueda necesitar
       } as any,
       preloadedState: initialState as any,
@@ -128,8 +130,8 @@ describe('DesktopHeader', () => {
 
     // Verificar que la clase 'selected' se aplica
     expect(leagueTab).toHaveClass('selected');
-    const pointerImage = leagueTab.querySelector('.header-pointer');
-    expect(pointerImage).toHaveStyle('display: block');
+    expect(leagueTab.querySelector('.header-pointer')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-store').querySelector('.header-pointer')).not.toBeInTheDocument();
 
     // Si el componente despacha una acción para actualizar `sectionTabSelected`
     // en `userInterfaceSlice`, el estado real de la tienda se actualizaría.

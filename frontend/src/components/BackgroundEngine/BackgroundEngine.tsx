@@ -20,9 +20,9 @@ export default function BackgroundEngine() {
       className="background-engine"
       style={{
         backgroundImage: showLoading || actualSection === 'league'
-          ? "var(--blue-five)"
+          ? 'unset'
           : backgroundImage,
-        backgroundRepeat: "no-repeat",
+        backgroundRepeat: 'no-repeat',
         backgroundSize: "cover",
       }}
     />

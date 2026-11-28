@@ -37,6 +37,9 @@ export interface UserState {
   },
   profile_icon: string,
   profile_background: string,
+  profile_banner: string,
+  profile_border: string,
+  profile_title: string,
   loading: boolean,
   token: string,
 }
@@ -58,6 +61,9 @@ const initialState: UserState = {
   },
   profile_icon: "",
   profile_background: "",
+  profile_banner: "",
+  profile_border: "",
+  profile_title: "",
   loading: false,
   token: "",
 };
@@ -87,6 +93,46 @@ export const fetchUser = createAsyncThunk<
   }
 )
 
+export interface ProfileIdentity {
+  profile_icon: string;
+  title: string;
+  profile_title: string;
+  profile_banner: string;
+  profile_border: string;
+}
+
+export const saveIdentity = createAsyncThunk<
+  ProfileIdentity,
+  ProfileIdentity & { userId: string },
+  { rejectValue: string }
+>(
+  "user/saveIdentity",
+  async ({ userId, ...identity }, { rejectWithValue }) => {
+    if (!userId || userId === "guest-token" || userId === "guest-offline") {
+      return identity;
+    }
+    try {
+      const response = await fetch(`${API_URL}/api/v1/user/save-identity`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, ...identity }),
+      });
+      if (!response.ok) return rejectWithValue("fetch failed");
+      return identity;
+    } catch (error) {
+      return rejectWithValue(String(error));
+    }
+  },
+);
+
+const applyIdentity = (state: UserState, identity: ProfileIdentity) => {
+  state.profile_icon = identity.profile_icon;
+  state.title = identity.title;
+  state.profile_title = identity.profile_title;
+  state.profile_banner = identity.profile_banner;
+  state.profile_border = identity.profile_border;
+};
+
 const updateUserFields = (state: User, action: PayloadAction<User>) => {
   const { payload } = action;
   state.userName = payload.userName;
@@ -100,6 +146,9 @@ const updateUserFields = (state: User, action: PayloadAction<User>) => {
   state.RP = payload.RP;
   state.profile_icon = payload.profile_icon;
   state.profile_background = payload.profile_background;
+  state.profile_banner = payload.profile_banner ?? "";
+  state.profile_border = payload.profile_border ?? "";
+  state.profile_title = payload.profile_title ?? "";
   state.rank = payload.rank;
 }
 
@@ -113,6 +162,9 @@ const userSlice = createSlice({
     },
     updateUser: (state, action: PayloadAction<User>) => {
       Object.assign(state, action.payload)
+    },
+    setProfileIcon: (state, action: PayloadAction<string>) => {
+      state.profile_icon = action.payload;
     },
     updateCoins: (
       state,
@@ -156,17 +208,23 @@ const userSlice = createSlice({
         state.RP = user.RP;
         state.profile_icon = user.profile_icon;
         state.profile_background = user.profile_background;
+        state.profile_banner = user.profile_banner ?? "";
+        state.profile_border = user.profile_border ?? "";
+        state.profile_title = user.profile_title ?? "";
         state.rank = user.rank;
 
       })
       .addCase(confirmPurchase.fulfilled, (state, action: PayloadAction<PurchasePayload>) => {
         const { coin, price } = action.payload
         state[coin] = state[coin] - price;
+      })
+      .addCase(saveIdentity.pending, (state, action) => {
+        applyIdentity(state, action.meta.arg);
       });
   },
 });
 
-export const { setUser, updateUser, updateCoins } =
+export const { setUser, updateUser, updateCoins, setProfileIcon } =
   userSlice.actions;
 
 export const selectRP = (state: RootState) => state.user.RP;

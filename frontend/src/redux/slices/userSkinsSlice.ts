@@ -68,9 +68,8 @@ const userSkinsSlice = createSlice({
       .addCase(confirmPurchase.fulfilled, (state, action) => {
         const { newInventoryItem, type } = action.payload;
         if (type === "skin") {
-          const updatedSkins = [...state.skins];
-          updatedSkins.push(newInventoryItem);
-          state.skins = updatedSkins;
+          const item = newInventoryItem as UserSkin;
+          state.skins.push(item);
         }
       });
   },

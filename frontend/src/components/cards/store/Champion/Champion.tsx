@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { usePurchase } from "@/hooks/usePurchase";
 import { useI18n } from "@/hooks/useI18n";
+import "../StoreCard.css";
 import "./Champion.css";
 import Image from 'next/image'
 import { RESOURCES_URL } from "@/utils/constants";
@@ -28,7 +29,7 @@ const ChampionCard = ({ item: data, owned = false }: { item: Champion, owned?: b
   return (
     <article
       id={data.id}
-      className={`store-champion-item ${owned ? "owned" : ""}`}
+      className={`store-card store-champion-item ${owned ? "owned" : ""}`}
       onClick={() => {
         handleClick();
       }}
@@ -37,7 +38,7 @@ const ChampionCard = ({ item: data, owned = false }: { item: Champion, owned?: b
       {/* Unique key and card class */}
       <MediaSlot variant="tile">
         <Image
-          className="store-champion-image"
+          className="store-card-media store-champion-image"
           id={data.id}
           src={`${RESOURCES_URL}/champion/tiles/${data.id}_0.jpg`}
           alt={`Sprite of ${data.name}`}

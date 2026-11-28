@@ -1,6 +1,6 @@
-import { FaSearch } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import CustomSelect from "@/components/CustomSelect/CustomSelect";
+import SearchField from "@/components/SearchField/SearchField";
 import { useI18n } from "@/hooks/useI18n";
 import type { Dispatch, SetStateAction } from "react";
 import type { SortOptions, SortOptionsValues, FilterCategories } from "@/types/ui";
@@ -18,10 +18,13 @@ interface StoreSidePanelProps {
   sortOptions: SortOptions;
   sortedBy: SortOptionsValues | null;
   setSortedBy: Dispatch<SetStateAction<SortOptionsValues | null>>;
-  itemCategoryChecked: ChampionRoles | SkinFilterCategories;
-  setItemCategoryChecked: Dispatch<SetStateAction<FilterCategories>>;
+  itemCategoryChecked?: ChampionRoles | SkinFilterCategories;
+  setItemCategoryChecked?: Dispatch<SetStateAction<FilterCategories>>;
   championInCollection?: boolean;
   setChampionInCollection?: Dispatch<SetStateAction<boolean>>;
+  showOnSale?: boolean;
+  blueEssence?: boolean;
+  onToggleBlueEssence?: () => void;
 }
 
 export default function StoreSidePanel({
@@ -38,11 +41,15 @@ export default function StoreSidePanel({
   itemCategoryChecked,
   setItemCategoryChecked,
   championInCollection,
-  setChampionInCollection
+  setChampionInCollection,
+  showOnSale = true,
+  blueEssence = false,
+  onToggleBlueEssence,
 }: StoreSidePanelProps) {
   const { t } = useI18n();
 
   const handleCheckboxChange = (role: keyof FilterCategories) => {
+    if (!setItemCategoryChecked) return;
     setItemCategoryChecked((prev) => ({
       ...prev,
       [role as keyof typeof prev]: !prev[role as keyof typeof prev],
@@ -74,15 +81,11 @@ export default function StoreSidePanel({
     </section>
 
     <section className="nav-section">
-      <div className="search-filter">
-        <FaSearch className="search-icon" />
-        <input
-          placeholder={t("common.search")}
-          type="search"
-          value={searchKeys}
-          onChange={(e) => setSearchKeys(e.target.value)}
-        />
-      </div>
+      <SearchField
+        placeholder={t("common.search")}
+        value={searchKeys}
+        onChange={setSearchKeys}
+      />
       <div
         onClick={() => setInCollection((prev) => !prev)}
         className="checkbox incollection"
@@ -114,7 +117,7 @@ export default function StoreSidePanel({
         </div>
       )}
 
-      {(Object.keys(itemCategoryChecked) as Array<keyof FilterCategories>).map((cat) => (
+      {itemCategoryChecked && (Object.keys(itemCategoryChecked) as Array<keyof FilterCategories>).map((cat) => (
         <div
           key={cat}
           className="checkbox"
@@ -126,13 +129,23 @@ export default function StoreSidePanel({
           {t(`store.categories.${String(cat)}`)}
         </div>
       ))}
+      {onToggleBlueEssence && (
+        <div className="checkbox checkbox-wrap" onClick={onToggleBlueEssence}>
+          <div className="custom-checkbox">
+            {blueEssence && <FaCheck className="check-icon" />}
+          </div>
+          {t("store.blueEssence")}
+        </div>
+      )}
     </section>
 
-    <section className="nav-section last">
-      <div className="checkbox">
-        <div className="custom-checkbox" />
-        {t("store.onSale")}
-      </div>
-    </section>
+    {showOnSale && (
+      <section className="nav-section last">
+        <div className="checkbox">
+          <div className="custom-checkbox" />
+          {t("store.onSale")}
+        </div>
+      </section>
+    )}
   </div>
 }

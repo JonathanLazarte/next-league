@@ -1,0 +1,122 @@
+.collection-icons {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 100%;
+    min-height: 0;
+    padding: calc(3rem + 4.4rem) 1.2rem 2rem 4rem;
+}
+
+.collection-icons-panel {
+    display: flex;
+    flex: 0 0 24.32rem;
+    flex-direction: column;
+    width: 24.32rem;
+    margin-right: 4.8rem;
+}
+
+.collection-icons-summary {
+    height: 22rem;
+    margin-bottom: 1.6rem;
+}
+
+.collection-icons-summary .maestry-etern-levels {
+    height: 100%;
+    justify-content: center;
+}
+
+.collection-icons-rarities {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem 1.1rem;
+    margin-bottom: 1.2rem;
+}
+
+.collection-icons-rarity,
+.collection-icons-legacy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    color: #a09b8c;
+    font-family: Spiegel-Regular;
+    font-size: 1.35rem;
+}
+
+.collection-icons-rarity img {
+    width: 1.6rem;
+    height: 1.6rem;
+    object-fit: contain;
+}
+
+.collection-icons-legacy-dot {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #1f8b4c;
+    box-shadow: 0 0 0 1px #0c3c22, 0 0 0.6rem rgba(31, 139, 76, 0.7);
+}
+
+.collection-icons-legacy {
+    width: 100%;
+    margin-bottom: 1.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(120, 90, 40, 0.45);
+    font-family: Bold;
+    font-size: 1.6rem;
+}
+
+.collection-icons-panel .search-filter {
+    margin-bottom: 1.6rem;
+}
+
+.collection-icons-panel .custom-select {
+    margin-bottom: 1.2rem;
+}
+
+.collection-icons-main {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+}
+
+.collection-icons-save {
+    position: absolute;
+    top: 0.4rem;
+    right: 1.4rem;
+    z-index: 2;
+    min-width: 12rem;
+    height: 3.4rem;
+    padding: 0 1.4rem;
+    border: 1px solid #785a28;
+    background: rgba(1, 10, 19, 0.9);
+    color: #c8aa6e;
+    font-family: Spiegel-Regular;
+    font-size: 1.35rem;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+}
+
+.collection-icons-save:hover {
+    border-color: var(--gold-two);
+    color: var(--gold-one);
+}
+
+.collection-icons .identity-year {
+    padding-right: 15rem;
+}
+
+.collection-icons .profile-icons-grid {
+    flex: 1;
+}
+
+.collection-icons .identity-status {
+    margin: 4rem 0;
+    color: var(--gold-three);
+    font-family: Spiegel-Regular;
+    font-size: 1.6rem;
+    text-align: center;
+}

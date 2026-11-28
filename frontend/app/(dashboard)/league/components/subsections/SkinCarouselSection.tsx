@@ -52,7 +52,7 @@ export default function SkinCarouselSection({
     const upcoming = slides[stepIndex(currentIndex, slides.length, 1)];
     if (!upcoming) return;
     const splash = new window.Image();
-    splash.src = `${RESOURCES_URL}/champion/splash/${upcoming.img}`;
+    splash.src = `${RESOURCES_URL}/champion/centered/${upcoming.img}`;
     const thumb = new window.Image();
     thumb.src = `${RESOURCES_URL}/champion/centered/${upcoming.img}`;
   }, [currentIndex, slides]);

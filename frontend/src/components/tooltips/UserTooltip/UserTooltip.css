@@ -9,7 +9,7 @@
 
 .out-box {
   background-size: contain;
-  background-repeat: no-repeat;                 /* -0.5vw → -0.8rem */
+  background-repeat: no-repeat;
   animation: opacity 0.2s;
   border: 2px solid var(--gold-five);
 }
@@ -19,6 +19,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  background-position-y: -2px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,6 +30,7 @@
   height: 28.8rem;
   animation: appearance 0.2s;
   border: 2px solid var(--gold-five);
+  z-index: 2;
 }
 
 .tooltip-user-container {

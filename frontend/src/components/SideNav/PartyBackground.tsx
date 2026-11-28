@@ -6,6 +6,9 @@ export default function PartyBackground() {
     src="/social/party-status-bg-loop.webm"
     autoPlay
     loop
+    muted
+    playsInline
+    disablePictureInPicture
     preload="metadata"
   ></video>
 }

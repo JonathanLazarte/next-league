@@ -19,12 +19,16 @@ interface VirtualSkinsProps<T> {
   items: T[];
   ownedItems?: { id: string }[];
   StoreCard: React.ElementType<{ item: T; owned?: boolean }>;
+  cardWidthRem?: number;
+  maxColumns?: number;
 }
 
 export default function VirtualSkinsGrid<T extends { id: string }>({
   items,
   ownedItems = [],
   StoreCard,
+  cardWidthRem = 21,
+  maxColumns = 5,
 }: VirtualSkinsProps<T>) {
   const parentRef = useRef<HTMLDivElement | null>(null);
 
@@ -33,16 +37,16 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
   }
   const currentRem = getRem();
   const gapValue = currentRem * 1.3;
-  const cardWidth = currentRem * 21;  // min width
+  const cardWidth = currentRem * cardWidthRem;
   const paddingRightValue = currentRem * 2.85;
   const [columns, setColumns] = useState<number>();
 
   const getAmountOfColumns = useCallback(
     (containerWidth: number) => {
       const amount = (containerWidth + gapValue + paddingRightValue) / (cardWidth + gapValue);
-      return Math.floor(Math.max(amount, 1));
+      return Math.min(maxColumns, Math.floor(Math.max(amount, 1)));
     },
-    [gapValue, cardWidth],
+    [gapValue, cardWidth, paddingRightValue, maxColumns],
   );
 
   useLayoutEffect(() => {
@@ -59,7 +63,7 @@ export default function VirtualSkinsGrid<T extends { id: string }>({
       const newCols = getAmountOfColumns(width);
 
       if (newCols !== columns) {
-        newCols > 5 ? setColumns(5) : setColumns(newCols);
+        setColumns(newCols);
       }
     },
     [columns, getAmountOfColumns],

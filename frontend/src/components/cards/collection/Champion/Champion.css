@@ -9,13 +9,14 @@
     display: flex;
     height: 100%;
     border: 0px;
-    /*min-height: 19.5vw;*/
-    width: 18rem;
+    /*min-height: 19.5vw;
+    width: 18rem;*/
     width: 100%;
     overflow: hidden;
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease;
+    container-type: inline-size;
 }
 
 .champion-card:active {
@@ -25,7 +26,7 @@
 .champion-name {
     width: 100%;
     transition: all 0.3s;
-    font-size: 1.8rem;
+    font-size: 10cqw;
     color: #949083;
     height: 6.3rem;
     align-content: center;
@@ -62,7 +63,7 @@
 .mastery-box {
     position: absolute;
     bottom: 0px;
-    height: 16.5%;
+    height: 17%;
     width: 100%;
     background-color: rgb(1, 10, 19, 0.7);
     border-top: 1px solid rgba(40, 40, 40, 1);
@@ -80,7 +81,7 @@
     display: flex;
 }
 .mastery-icon {
-    width: 45%;
+    width: 20cqw;
     fill: #0f0e0e;
 }
 .eternals {
@@ -93,18 +94,18 @@
 }
 .eternals-content {
     display: flex;
-    width: 35%;
+    gap: 5cqw;
     justify-content: space-between;
     align-items: end;
 }
 .eternals-icon {
-    width: 1.5rem;
+    width: 8cqw;
     fill: #4e4e53;
     display: grid;
     place-self: center;
 }
 .eternals-value {
-    font-size: 1.5rem;
+    font-size: 8.5cqw;
     color: #4e4e53;
     font-family: Spiegel-Regular;
     line-height: 1;

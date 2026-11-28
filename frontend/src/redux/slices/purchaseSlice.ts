@@ -7,7 +7,7 @@ import {
 import { RootState } from "../store";
 import { Champion } from "@/types/champion";
 
-export type ItemType = "skin" | "champion"
+export type ItemType = "skin" | "champion" | "icon"
 
 export interface SkinItem {
   availability: string
@@ -64,7 +64,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const confirmPurchase = createAsyncThunk<
   {
     type: ItemType;
-    newInventoryItem: SkinItem | Champion;
+    newInventoryItem: SkinItem | Champion | { id: string };
     coin: Coin;
     price: number;
   },
@@ -84,20 +84,16 @@ export const confirmPurchase = createAsyncThunk<
 
     const body =
       itemToBuy.type === "champion"
-        ? {
-          userId: token,
-          championId: itemToBuy.id,
-          coin,
-          price,
-        }
-        : {
-          userId: token,
-          skinId: itemToBuy.id,
-          price,
-          coin,
-        };
+        ? { userId: token, championId: itemToBuy.id, coin, price }
+        : itemToBuy.type === "icon"
+          ? { userId: token, iconId: itemToBuy.id, coin, price }
+          : { userId: token, skinId: itemToBuy.id, price, coin };
     const apiRoute =
-      itemToBuy.type === "champion" ? "/api/v1/store/champion" : "/api/v1/store/skin";
+      itemToBuy.type === "champion"
+        ? "/api/v1/store/champion"
+        : itemToBuy.type === "icon"
+          ? "/api/v1/store/icon"
+          : "/api/v1/store/skin";
 
 
     try {
